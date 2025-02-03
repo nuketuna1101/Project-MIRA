@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "MIRA.h"
 #include "GameFramework/GameModeBase.h"
 #include "MIRAGameMode.generated.h"
 
@@ -13,6 +13,8 @@ class AMIRAGameMode : public AGameModeBase
 
 public:
 	AMIRAGameMode();
+
+	virtual void PostLogin(APlayerController* NewPlayer) override;
 };
 
 
