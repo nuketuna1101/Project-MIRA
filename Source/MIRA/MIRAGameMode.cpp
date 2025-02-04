@@ -18,7 +18,7 @@ AMIRAGameMode::AMIRAGameMode()
 	*/
 
 	// settings for default class
-	DefaultPawnClass = AMIRAPawn::StaticClass();
+	DefaultPawnClass = AMIRACharacter::StaticClass();
 	PlayerControllerClass = AMIRAPlayerController::StaticClass();
 	
 }

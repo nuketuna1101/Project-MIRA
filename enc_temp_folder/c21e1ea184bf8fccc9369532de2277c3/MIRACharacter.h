@@ -6,12 +6,6 @@
 #include "GameFramework/Character.h"
 #include "MIRACharacter.generated.h"
 
-UENUM()
-enum class ECameraMode : uint8
-{
-	FreeTPS,
-};
-
 UCLASS()
 class MIRA_API AMIRACharacter : public ACharacter
 {
@@ -24,18 +18,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	// camera mode
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
-	ECameraMode CurrentControlMode = ECameraMode::FreeTPS;
-
-	void SetCameraMode(ECameraMode CameraMode);
-
-	FRotator SpringArmRotation = FRotator::ZeroRotator;
-	float SpringArmLength = 0.0f;
-	float SpringArmRotationSpeed = 0.0f;
-	float SpringArmLengthSpeed = 0.0f;
-
 
 public:	
 	// Called every frame
@@ -55,7 +37,5 @@ private:
 	// movement logics by player input 
 	void UpDown(float NewAxisValue);
 	void LeftRight(float NewAxisValue);
-	void Turn(float NewAxisValue);
-	void LookUp(float NewAxisValue);
 
 };

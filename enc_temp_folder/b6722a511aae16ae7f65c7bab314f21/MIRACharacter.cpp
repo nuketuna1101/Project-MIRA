@@ -39,11 +39,6 @@ AMIRACharacter::AMIRACharacter()
 	{
 		GetMesh()->SetAnimInstanceClass(MIRAPLAYER_ANIM.Class);
 	}
-
-	// camera mode
-	SetCameraMode(ECameraMode::FreeTPS);
-	SpringArmRotationSpeed = 10.0f;
-	SpringArmLengthSpeed = 3.0f;
 }
 
 // Called when the game starts or when spawned
@@ -53,35 +48,11 @@ void AMIRACharacter::BeginPlay()
 	
 }
 
-void AMIRACharacter::SetCameraMode(ECameraMode CameraMode)
-{
-	CurrentControlMode = CameraMode;
-
-	switch (CurrentControlMode)
-	{
-	case ECameraMode::FreeTPS:
-		SpringArmLength = 450.0f;
-		SpringArm->bUsePawnControlRotation = true;
-		SpringArm->bInheritPitch = true; 
-		SpringArm->bInheritRoll = true; 
-		SpringArm->bInheritYaw = true;
-		SpringArm->bDoCollisionTest = true;
-		bUseControllerRotationYaw = false;
-		GetCharacterMovement()->bOrientRotationToMovement = true; 
-		GetCharacterMovement()->bUseControllerDesiredRotation = false;
-		GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
-		break;
-	}
-}
-
 // Called every frame
 void AMIRACharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// spring arm interpolation
-	SpringArm->TargetArmLength = FMath::FInterpTo(SpringArm->TargetArmLength,
-		SpringArmLength, DeltaTime, SpringArmLengthSpeed);
 }
 
 // Called to bind functionality to input
@@ -89,31 +60,17 @@ void AMIRACharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	// bindings for axis mapping
+	// bindings
 	PlayerInputComponent->BindAxis(TEXT("UpDown"), this, &AMIRACharacter::UpDown);
 	PlayerInputComponent->BindAxis(TEXT("LeftRight"), this, &AMIRACharacter::LeftRight);
-	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AMIRACharacter::Turn);
-	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AMIRACharacter::LookUp);
 }
 
 void AMIRACharacter::UpDown(float NewAxisValue)
 {
-	//AddMovementInput(GetActorForwardVector(), NewAxisValue);
-	AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::X), NewAxisValue);
+	AddMovementInput(GetActorForwardVector(), NewAxisValue);
 }
 
 void AMIRACharacter::LeftRight(float NewAxisValue)
 {
-	//AddMovementInput(GetActorRightVector(), NewAxisValue);
-	AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::Y), NewAxisValue);
-}
-
-void AMIRACharacter::Turn(float NewAxisValue)
-{
-	AddControllerYawInput(NewAxisValue);
-}
-
-void AMIRACharacter::LookUp(float NewAxisValue)
-{
-	AddControllerPitchInput(NewAxisValue);
+	AddMovementInput(GetActorRightVector(), NewAxisValue);
 }
