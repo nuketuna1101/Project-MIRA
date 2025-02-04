@@ -20,4 +20,8 @@ public:
 	// use pawn by possessing
 	virtual void OnPossess(APawn* aPawn) override;
 
+
+protected:
+	virtual void BeginPlay() override;
+
 };
