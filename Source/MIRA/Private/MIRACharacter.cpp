@@ -25,16 +25,23 @@ AMIRACharacter::AMIRACharacter()
 
 	// mesh
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
-		SK_Wraith(TEXT("/Game/ParagonWraith/Characters/Heroes/Wraith/Meshes/Wraith.Wraith"));
-	if (SK_Wraith.Succeeded())
+		SK_Kallari(TEXT("/Game/ParagonKallari/Characters/Heroes/Kallari/Meshes/Kallari.Kallari"));
+	if (SK_Kallari.Succeeded())
 	{
-		GetMesh()->SetSkeletalMesh(SK_Wraith.Object);
+		GetMesh()->SetSkeletalMesh(SK_Kallari.Object);
 	}
+
+	//static ConstructorHelpers::FObjectFinder<USkeletalMesh>
+	//	SK_Wraith(TEXT("/Game/ParagonWraith/Characters/Heroes/Wraith/Meshes/Wraith.Wraith"));
+	//if (SK_Wraith.Succeeded())
+	//{
+	//	GetMesh()->SetSkeletalMesh(SK_Wraith.Object);
+	//}
 
 	// setting for animations
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	static ConstructorHelpers::FClassFinder<UAnimInstance>
-		MIRAPLAYER_ANIM(TEXT("/Game/MIRA/Characters/Animations/MIRAPlayerAnimBlueprint.MIRAPlayerAnimBlueprint_C"));
+		MIRAPLAYER_ANIM(TEXT("/Game/MIRA/Characters/Animations/MPlayerAnimBlueprint.MPlayerAnimBlueprint_C"));
 	if (MIRAPLAYER_ANIM.Succeeded())
 	{
 		GetMesh()->SetAnimInstanceClass(MIRAPLAYER_ANIM.Class);

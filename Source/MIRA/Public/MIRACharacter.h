@@ -53,9 +53,12 @@ public:
 
 private:
 	// movement logics by player input 
+
+	// basic movement
 	void UpDown(float NewAxisValue);
 	void LeftRight(float NewAxisValue);
 	void Turn(float NewAxisValue);
 	void LookUp(float NewAxisValue);
+
 
 };
