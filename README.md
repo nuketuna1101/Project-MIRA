@@ -104,3 +104,10 @@ Idle, 플레이어 발견 시 도망 등
 mouse left btn : basic attack
 
 mouse right btn : forward view lock on
+
++ 벽 타기 추가하기
+
+# player character skill system
+
+1: dash     : Melee_Fail
+2: 범위 공격 : 3개 정도의 검기 날리기 : 캐스팅 애니메이션 Attack_Melee_C_Dash

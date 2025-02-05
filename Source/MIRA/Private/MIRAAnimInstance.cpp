@@ -5,10 +5,17 @@
 
 UMIRAAnimInstance::UMIRAAnimInstance()
 {
-	// pawn speed
+	// setting varaibles for basic movement
 	CurrentPawnSpeed = 0.0f;
-	// is in air?
 	IsInAir = false;
+
+	// set montage : attack
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> 
+		ATTACK_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MPlayerAnimMontage.MPlayerAnimMontage"));
+	if (ATTACK_MONTAGE.Succeeded())
+	{
+		AttackMontage = ATTACK_MONTAGE.Object;
+	}
 }
 
 void UMIRAAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -28,4 +35,37 @@ void UMIRAAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 			IsInAir = Character->GetMovementComponent()->IsFalling();
 		}
 	}
+}
+
+void UMIRAAnimInstance::PlayAttackMontage()
+{
+	//Montage_Play(AttackMontage, 1.0f);
+
+	if (!Montage_IsPlaying(AttackMontage))
+	{
+		Montage_Play(AttackMontage, 1.0f);
+	}
+}
+
+void UMIRAAnimInstance::JumpToAttackMontageSection(int32 NewSection)
+{
+	//
+	Montage_JumpToSection(GetAttackMontageSectionName(NewSection), AttackMontage);
+}
+
+void UMIRAAnimInstance::AnimNotify_AttackHitCheck()
+{
+	// delegate broadcast
+	OnAttackHitCheck.Broadcast();
+}
+
+void UMIRAAnimInstance::AnimNotify_NextAttackCheck()
+{
+	// delegate broadcast
+	OnNextAttackCheck.Broadcast();
+}
+
+FName UMIRAAnimInstance::GetAttackMontageSectionName(int32 Section)
+{
+	return FName(*FString::Printf(TEXT("Attack %d"), Section));
 }

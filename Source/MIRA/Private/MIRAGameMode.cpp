@@ -8,15 +8,6 @@
 
 AMIRAGameMode::AMIRAGameMode()
 {
-	/*
-	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter"));
-	if (PlayerPawnBPClass.Class != NULL)
-	{
-		DefaultPawnClass = PlayerPawnBPClass.Class;
-	}
-	*/
-
 	// settings for default class
 	DefaultPawnClass = AMIRACharacter::StaticClass();
 	PlayerControllerClass = AMIRAPlayerController::StaticClass();
@@ -25,7 +16,7 @@ AMIRAGameMode::AMIRAGameMode()
 
 void AMIRAGameMode::PostLogin(APlayerController* NewPlayer)
 {
-	// 
+	// post login on game mode
 	MIRALOG(Warning, TEXT("[PostLogin] called"));
 	Super::PostLogin(NewPlayer);
 }

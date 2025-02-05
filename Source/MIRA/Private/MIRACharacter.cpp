@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "MIRACharacter.h"
+#include "MIRAAnimInstance.h"
 
 // Sets default values
 AMIRACharacter::AMIRACharacter()
@@ -25,18 +25,11 @@ AMIRACharacter::AMIRACharacter()
 
 	// mesh
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
-		SK_Kallari(TEXT("/Game/ParagonKallari/Characters/Heroes/Kallari/Meshes/Kallari.Kallari"));
-	if (SK_Kallari.Succeeded())
+		SK_KALLARI(TEXT("/Game/ParagonKallari/Characters/Heroes/Kallari/Meshes/Kallari.Kallari"));
+	if (SK_KALLARI.Succeeded())
 	{
-		GetMesh()->SetSkeletalMesh(SK_Kallari.Object);
+		GetMesh()->SetSkeletalMesh(SK_KALLARI.Object);
 	}
-
-	//static ConstructorHelpers::FObjectFinder<USkeletalMesh>
-	//	SK_Wraith(TEXT("/Game/ParagonWraith/Characters/Heroes/Wraith/Meshes/Wraith.Wraith"));
-	//if (SK_Wraith.Succeeded())
-	//{
-	//	GetMesh()->SetSkeletalMesh(SK_Wraith.Object);
-	//}
 
 	// setting for animations
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
@@ -54,6 +47,13 @@ AMIRACharacter::AMIRACharacter()
 
 	// jump velocity
 	GetCharacterMovement()->JumpZVelocity = 500.0f;
+
+	// bool variable for attack
+	IsAttacking = false;
+
+	// attack combo
+	MaxCombo = 2;
+	AttackEndComboState();
 }
 
 // Called when the game starts or when spawned
@@ -94,6 +94,29 @@ void AMIRACharacter::Tick(float DeltaTime)
 		SpringArmLength, DeltaTime, SpringArmLengthSpeed);
 }
 
+void AMIRACharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	MIRAAnim = Cast<UMIRAAnimInstance>(GetMesh()->GetAnimInstance());
+	MIRACHECK(nullptr != MIRAAnim);
+
+	// event binding on montage end
+	if (!MIRAAnim) return;
+	MIRAAnim->OnMontageEnded.AddDynamic(this, &AMIRACharacter::OnAttackMontageEnded);
+
+	// when nextattackcheck, delegate execution
+	MIRAAnim->OnNextAttackCheck.AddLambda([this]() -> void {
+		MIRALOG(Warning, TEXT("[OnNextAttackCheck]"));
+		CanNextCombo = false;
+		if (IsComboInputOn)
+		{
+			AttackStartComboState();
+			MIRAAnim->JumpToAttackMontageSection(CurrentCombo);
+		}
+	});
+}
+
 // Called to bind functionality to input
 void AMIRACharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -101,6 +124,7 @@ void AMIRACharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	// bindings for action mapping
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Attack);
 
 
 	// bindings for axis mapping
@@ -130,4 +154,58 @@ void AMIRACharacter::Turn(float NewAxisValue)
 void AMIRACharacter::LookUp(float NewAxisValue)
 {
 	AddControllerPitchInput(NewAxisValue);
+}
+
+void AMIRACharacter::Attack()
+{
+	if (IsAttacking)
+	{
+		//MIRACHECK(FMath::IsWithinInclusive<int32>(CurrentCombo, 1, MaxCombo));
+		if (CanNextCombo)
+		{
+			IsComboInputOn = true;
+		}
+	}
+	else
+	{
+		MIRACHECK(CurrentCombo == 0);
+		AttackStartComboState();
+		MIRAAnim->PlayAttackMontage();
+		MIRAAnim->JumpToAttackMontageSection(CurrentCombo);
+		IsAttacking = true;
+	}
+	/*
+	// bool check
+	if (IsAttacking) return;
+
+	// basic attack
+	MIRALOG(Warning, TEXT("[MIRACharacter] on Attack called"));
+
+	// handling by attack montage in anim instance
+	MIRAAnim->PlayAttackMontage();
+
+	// set bool
+	IsAttacking = true;
+	*/
+}
+
+void AMIRACharacter::AttackStartComboState()
+{
+	CanNextCombo = true;
+	IsComboInputOn = false;
+	CurrentCombo = FMath::Clamp<int32>(CurrentCombo + 1, 1, MaxCombo);
+}
+
+void AMIRACharacter::AttackEndComboState()
+{
+	IsComboInputOn = false;
+	CanNextCombo = false;
+	CurrentCombo = 0;
+}
+
+void AMIRACharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	MIRACHECK(IsAttacking);
+	IsAttacking = false;
+	AttackEndComboState();
 }
