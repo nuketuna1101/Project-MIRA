@@ -1,36 +1,45 @@
 # Project MIRA
- 프로젝트 MIRA
-- 개발할 게임 프로젝트에 대한 기획
-
-### 임시 명명: Project MIRA
 
 `Mirage In Ruined Age`
 
-### 장르
+<br>
 
-오픈월드 액션
+### Genre
 
-(사이버펑크2077, 어쌔신 크리드: 오디세이, 레드데드리뎀션2 등을 참고할 예정)
+3D Open world action
+(Motive: Cyberpunk 2077, Assassin's Creed: Odessey, Red Dead Redemption 2)
 
+<br>
 
-### 컨셉
+### Concept
 
-사이버펑크 기반 세계관 속
+- Cyberpunk Universe
+- You are an unfamouse fixer.
+- You should take on some dangerous requests from unknown clients.
 
-무명의 해결사인 주인공이 의뢰를 해결해 나가는 이야기.
+<br>
 
+### Missions
 
-### 미션 구성
+> mission 1 : Operation Shadow
+> 
+> - assassinate the target
+> - you would rather fix as quietly as possible without being exposed to guards
+> - you must survive
+> 
+> 
+> mission 2 : Operation Hammering
+> 
+> - eliminate all the enemies
+> - enter the room and eliminate the boss
+> - you must survive
 
-미션1
+<br><br><br>
 
-조용한 암살
-(들키지 않고 몰래 타겟을 암살하고 복귀하기)
+# Details
 
-미션2
+## 1) Player Character
 
-정면돌파
-(레벨 내에 플레이어를 추적하는 적들을 모두 섬멸하고, 보스와의 1대1까지)
 
 
 ### 시스템 구성
