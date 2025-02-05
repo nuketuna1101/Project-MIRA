@@ -40,29 +40,36 @@
 
 ## 1) Player Character
 
+### input system
 
+mouse left btn : basic attack
+mouse right btn : forward view lock on
 
-### 시스템 구성
+## 2) Enemies
 
-#### 캐릭터 구성
+### Rifle Trooper
 
-1) 플레이어 캐릭터
+- most basic trooper
+- only ranged attack with his rifle
+- asset: paragon wraith
 
-단일 플레이어 캐릭터
+### Assualt Trooper
 
-(단, 확장 가능하도록 코드 설계)
+- armored trooper stronger than rifle trooper
+- melee attack
 
+### Grumpy Joe
 
-2) 적 캐릭터
+- unarmed target in mission 1
+- if noticing your approach, he runs away with screaming
 
-- 라이플 보병
-(에셋: paragon wraith)
+### Ivan, the Darkwater
 
-- 근접 공격 보병
+- boss character in mission 2
+- asset: paragon revenant
 
-- 미션1 타겟 (비무장)
+- phase 1: 
 
-- 미션2 보스
 
 
 #### 주요 시스템 구현 과제
@@ -108,11 +115,7 @@ Idle, 플레이어 발견 시 도망 등
 
 
 
-# input system
 
-mouse left btn : basic attack
-
-mouse right btn : forward view lock on
 
 + 벽 타기 추가하기
 
@@ -120,3 +123,16 @@ mouse right btn : forward view lock on
 
 1: dash     : Melee_Fail
 2: 범위 공격 : 3개 정도의 검기 날리기 : 캐스팅 애니메이션 Attack_Melee_C_Dash
+
+
+보스 패턴
+- 사라졌다가 뒤에 나타나기
+- 분신술
+
+
+
+채택해볼만한 환경 후보군
+- Modular Scifi Season 2 Starter Bundle
+- Unfinished Building
+- Modular Military Operation Urban Training Environment - Arabian Pack
+- Big Star Station [LUMEN]
