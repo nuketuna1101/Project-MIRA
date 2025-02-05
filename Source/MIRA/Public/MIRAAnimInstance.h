@@ -17,8 +17,13 @@ class MIRA_API UMIRAAnimInstance : public UAnimInstance
 public:
 	UMIRAAnimInstance();
 
+	// 
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
 	float CurrentPawnSpeed;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
+	bool IsInAir;
 };

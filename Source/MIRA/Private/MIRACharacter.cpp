@@ -44,6 +44,9 @@ AMIRACharacter::AMIRACharacter()
 	SetCameraMode(ECameraMode::FreeTPS);
 	SpringArmRotationSpeed = 10.0f;
 	SpringArmLengthSpeed = 3.0f;
+
+	// jump velocity
+	GetCharacterMovement()->JumpZVelocity = 500.0f;
 }
 
 // Called when the game starts or when spawned
@@ -88,6 +91,10 @@ void AMIRACharacter::Tick(float DeltaTime)
 void AMIRACharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	// bindings for action mapping
+	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
+
 
 	// bindings for axis mapping
 	PlayerInputComponent->BindAxis(TEXT("UpDown"), this, &AMIRACharacter::UpDown);
