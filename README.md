@@ -44,6 +44,13 @@
 
 mouse left btn : basic attack
 mouse right btn : forward view lock on
+WASD : baisc movement
+space bar : jump
+'R' key : dodge by quick backward moving
+'F' key : interact
+'V' key : assassinate target / execute victim
+'G' key : skill DASH attack
+
 
 ## 2) Enemies
 
