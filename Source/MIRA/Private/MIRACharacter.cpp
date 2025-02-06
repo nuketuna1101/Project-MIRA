@@ -54,6 +54,9 @@ AMIRACharacter::AMIRACharacter()
 	// attack combo
 	MaxCombo = 2;
 	AttackEndComboState();
+
+	// setting for collision channel
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("MIRACharacter"));
 }
 
 // Called when the game starts or when spawned

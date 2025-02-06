@@ -26,4 +26,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+
+	// ui widgets
+	UPROPERTY(VisibleAnywhere, Category = "UI")
+	class UWidgetComponent* HPBar;
 };

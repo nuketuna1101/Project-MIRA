@@ -17,7 +17,7 @@ AMIRAEnemyBaseCharacter::AMIRAEnemyBaseCharacter()
 	HPBar->SetupAttachment(GetMesh());
 
 	// transform
-	HPBar->SetRelativeLocation(FVector(0.0f, 0.0f, 250.0f));
+	HPBar->SetRelativeLocation(FVector(0.0f, 0.0f, 180.0f));
 	HPBar->SetWidgetSpace(EWidgetSpace::Screen);
 
 	// set widget
@@ -26,7 +26,6 @@ AMIRAEnemyBaseCharacter::AMIRAEnemyBaseCharacter()
 	if (UI_HPBAR.Succeeded())
 	{
 		HPBar->SetWidgetClass(UI_HPBAR.Class);
-		HPBar->SetDrawSize(FVector2D(300.0f, 100.0f));
 	}
 
 }
