@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "MIRA.h"
 #include "AIController.h"
 #include "TrooperAIController.generated.h"
 
@@ -14,4 +14,17 @@ class MIRA_API ATrooperAIController : public AAIController
 {
 	GENERATED_BODY()
 	
+public:
+	ATrooperAIController();
+
+	virtual void OnPossess(APawn* InPawn) override;
+
+	virtual void OnUnPossess() override;
+
+
+private:
+	void OnRepeatTimer();
+
+	FTimerHandle RepeatTimerHandle;
+	float RepeatInterval;
 };

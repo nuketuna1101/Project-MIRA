@@ -9,7 +9,7 @@ public class MIRA : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[] 
-			{ "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG" }
+			{ "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG", "NavigationSystem" }
 		);
 	}
 }

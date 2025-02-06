@@ -15,7 +15,6 @@ void ATrooperAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 
-	// set timer by calling OnRepeatTimer func for RepeatInterval loop
 	GetWorld()->GetTimerManager().SetTimer(RepeatTimerHandle, this, &ATrooperAIController::OnRepeatTimer, RepeatInterval, true);
 }
 
@@ -28,13 +27,11 @@ void ATrooperAIController::OnUnPossess()
 
 void ATrooperAIController::OnRepeatTimer()
 {
-	// get pawn
 	auto CurrentPawn = GetPawn();
-	// get nav system
+
 	UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetNavigationSystem(GetWorld());
 	if (nullptr == NavSystem) return;
 
-	// get rand point and order to move
 	FNavLocation NextLocation;
 	if (NavSystem->GetRandomPointInNavigableRadius(FVector::ZeroVector, 500.0f, NextLocation))
 	{

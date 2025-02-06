@@ -3,6 +3,7 @@
 
 #include "MIRAEnemyBaseCharacter.h"
 #include "Components/WidgetComponent.h"
+#include "TrooperAIController.h"
 
 // Sets default values
 AMIRAEnemyBaseCharacter::AMIRAEnemyBaseCharacter()
@@ -29,6 +30,9 @@ AMIRAEnemyBaseCharacter::AMIRAEnemyBaseCharacter()
 		HPBar->SetDrawSize(FVector2D(300.0f, 100.0f));
 	}
 
+	// ai controller
+	AIControllerClass = ATrooperAIController::StaticClass();
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 // Called when the game starts or when spawned
