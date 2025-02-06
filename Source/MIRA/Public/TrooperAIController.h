@@ -27,4 +27,12 @@ private:
 
 	FTimerHandle RepeatTimerHandle;
 	float RepeatInterval;
+
+
+	// ai module: BB and BT
+	UPROPERTY()
+	class UBlackboardData* BBAsset;
+
+	UPROPERTY()
+	class UBehaviorTree* BTAsset;
 };

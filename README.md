@@ -78,6 +78,13 @@ space bar : jump
 - phase 1: 
 
 
+`additional`
+
+### Guard Turret
+
+- stationary turrect
+- guarding his own area
+
 
 #### 주요 시스템 구현 과제
 

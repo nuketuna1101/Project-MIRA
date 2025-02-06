@@ -4,11 +4,27 @@
 #include "TrooperAIController.h"
 #include "NavigationSystem.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "BehaviorTree/BlackboardData.h"
+#include "BehaviorTree/BehaviorTree.h"
 
 ATrooperAIController::ATrooperAIController()
 {
-	RepeatInterval = 3.0f;
+	// setting for BB and BB assets
+	static ConstructorHelpers::FObjectFinder<UBlackboardData>
+		BBObject(TEXT("/Game/MIRA/Characters/AI/BB_Trooper.BB_Trooper"));
+	if (BBObject.Succeeded())
+	{
+		BBAsset = BBObject.Object;
+	}
 
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree>
+		BTObject(TEXT("/Game/MIRA/Characters/AI/BT_Trooper.BT_Trooper"));
+	if (BTObject.Succeeded())
+	{
+		BTAsset = BTObject.Object;
+	}
+
+	//RepeatInterval = 3.0f;
 }
 
 void ATrooperAIController::OnPossess(APawn* InPawn)
@@ -16,7 +32,17 @@ void ATrooperAIController::OnPossess(APawn* InPawn)
 	Super::OnPossess(InPawn);
 
 	// set timer by calling OnRepeatTimer func for RepeatInterval loop
-	GetWorld()->GetTimerManager().SetTimer(RepeatTimerHandle, this, &ATrooperAIController::OnRepeatTimer, RepeatInterval, true);
+	//GetWorld()->GetTimerManager().SetTimer(RepeatTimerHandle, this, &ATrooperAIController::OnRepeatTimer, RepeatInterval, true);
+
+	//
+	auto BBComponent = GetBlackboardComponent();
+	if (UseBlackboard(BBAsset, BBComponent))
+	{
+		if (!RunBehaviorTree(BTAsset))
+		{
+			MIRALOG(Error, TEXT("AIController couldn't run behavior tree!"));
+		}
+	}
 }
 
 void ATrooperAIController::OnUnPossess()
