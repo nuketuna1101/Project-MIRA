@@ -41,7 +41,7 @@ AMIRAPawn::AMIRAPawn()
 	// setting for animations
 	Mesh->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	static ConstructorHelpers::FClassFinder<UAnimInstance> 
-		MIRAPLAYER_ANIM(TEXT("/Game/MIRA/Characters/Animations/MIRAPlayerAnimBlueprint.MIRAPlayerAnimBlueprint_C"));
+		MIRAPLAYER_ANIM(TEXT("/Game/MIRA/Characters/Animations/MPlayerAnimBlueprint.MPlayerAnimBlueprint_C"));
 	if (MIRAPLAYER_ANIM.Succeeded())
 	{
 		Mesh->SetAnimInstanceClass(MIRAPLAYER_ANIM.Class);
