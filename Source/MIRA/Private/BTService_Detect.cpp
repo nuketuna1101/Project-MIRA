@@ -35,7 +35,7 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 
 	FVector TrooperLocation = ControllingPawn->GetActorLocation();
 
-	float DetectRadius = 400.0f;
+	float DetectRadius = 800.0f;
 
 	// step1. sphere trace
 	TArray<FOverlapResult> OverlapResults;
