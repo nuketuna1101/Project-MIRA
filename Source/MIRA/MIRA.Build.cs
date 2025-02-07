@@ -10,7 +10,7 @@ public class MIRA : ModuleRules
 
 		PublicDependencyModuleNames.AddRange(new string[] 
 			{ "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", 
-				"UMG", "NavigationSystem", "AIModule" }
+				"UMG", "NavigationSystem", "AIModule", "GameplayTasks" }
 		);
 	}
 }

@@ -6,6 +6,11 @@
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
+
+const FName ATrooperAIController::HomePosKey(TEXT("HomePosKey"));
+const FName ATrooperAIController::PatrolPosKey(TEXT("PatrolPosKey"));
+const FName ATrooperAIController::TargetKey(TEXT("TargetKey"));
 
 ATrooperAIController::ATrooperAIController()
 {
@@ -35,9 +40,12 @@ void ATrooperAIController::OnPossess(APawn* InPawn)
 	//GetWorld()->GetTimerManager().SetTimer(RepeatTimerHandle, this, &ATrooperAIController::OnRepeatTimer, RepeatInterval, true);
 
 	//
+	MIRALOG(Warning, TEXT("[ATrooperAIController] OnPossess"));
 	auto BBComponent = GetBlackboardComponent();
 	if (UseBlackboard(BBAsset, BBComponent))
 	{
+		BBComponent->SetValueAsVector(HomePosKey, InPawn->GetActorLocation());
+
 		if (!RunBehaviorTree(BTAsset))
 		{
 			MIRALOG(Error, TEXT("AIController couldn't run behavior tree!"));
