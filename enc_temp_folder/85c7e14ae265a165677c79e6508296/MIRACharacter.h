@@ -7,7 +7,7 @@
 #include "MIRACharacter.generated.h"
 
 // declare delegates
-//DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
 
 UENUM()
 enum class ECameraMode : uint8
@@ -58,7 +58,7 @@ public:
 
 	// attack action
 	void Attack();
-	//FOnAttackEndDelegate OnAttackEnd;
+	FOnAttackEndDelegate OnAttackEnd;
 
 private:
 	// movement logics by player input 

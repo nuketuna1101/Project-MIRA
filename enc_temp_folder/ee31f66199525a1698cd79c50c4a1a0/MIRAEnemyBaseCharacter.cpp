@@ -55,3 +55,4 @@ void AMIRAEnemyBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
+

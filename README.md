@@ -89,13 +89,13 @@
 - guarding his own area
 
 
-### Temporary Memos
+## 3) Temporary Memos
 
 check for the details => [Temporary Memos](./docs/tempmemos.md)
 
 <br>
 
-### Troubleshooting Issue / Remarkable Issue
+## 4) Troubleshooting Issue / Remarkable Issue
 
 check for the details => [Troubleshooting Issue / Remarkable Issue](./docs/TroubleshootingAndErrors.md)
 

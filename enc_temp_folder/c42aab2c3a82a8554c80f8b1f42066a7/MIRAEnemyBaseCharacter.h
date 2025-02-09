@@ -6,9 +6,6 @@
 #include "GameFramework/Character.h"
 #include "MIRAEnemyBaseCharacter.generated.h"
 
-// declare delegates
-DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
-
 UCLASS()
 class MIRA_API AMIRAEnemyBaseCharacter : public ACharacter
 {
@@ -33,7 +30,4 @@ public:
 	// ui widgets
 	UPROPERTY(VisibleAnywhere, Category = "UI")
 	class UWidgetComponent* HPBar;
-
-	// attack
-	FOnAttackEndDelegate OnAttackEnd;
 };

@@ -211,6 +211,5 @@ void AMIRACharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupt
 	MIRACHECK(IsAttacking);
 	IsAttacking = false;
 	AttackEndComboState();
-	// delegate broadcast
-	//OnAttackEnd.Broadcast();
+	OnAttackEnd.Broadcast();
 }
