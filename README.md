@@ -1,5 +1,7 @@
 # Project MIRA
 
+![](https://velog.velcdn.com/images/nuketuna/post/c0c91d6b-27b5-4fac-8380-a1f262956e74/image.png)
+
 `Mirage In Ruined Age`
 
 ### Genre
@@ -89,13 +91,13 @@
 
 ### Temporary Memos
 
-[Temporary Memos](./docs/tempmemos.md)
+check for the details => [Temporary Memos](./docs/tempmemos.md)
 
 <br>
 
 ### Troubleshooting Issue / Remarkable Issue
 
-[Troubleshooting Issue / Remarkable Issue](./docs/TroubleshootingAndErrors.md)
+check for the details => [Troubleshooting Issue / Remarkable Issue](./docs/TroubleshootingAndErrors.md)
 
 
 <!-- <details>
