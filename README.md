@@ -150,3 +150,23 @@ Idle, 플레이어 발견 시 도망 등
 - Unfinished Building
 - Modular Military Operation Urban Training Environment - Arabian Pack
 - Big Star Station [LUMEN]
+
+
+
+
+<details>
+    <summary> Troubleshooting Issue / Remarkable Issue </summary>
+    <div markdown="1">
+
+    1. Main Error : Trooper AI Behavior Tree
+
+    - Even though either BT service or decorator condition satisfied, "Move To" basic task did NOT work.
+
+    => possible causes or solutions
+    1) NavMesh Issue
+    2) AIController does not include PathFollowingComponent
+
+    
+
+    </div>
+</details>
