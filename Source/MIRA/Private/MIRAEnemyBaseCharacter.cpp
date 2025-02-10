@@ -4,6 +4,7 @@
 #include "MIRAEnemyBaseCharacter.h"
 #include "Components/WidgetComponent.h"
 #include "TrooperAIController.h"
+#include "TrooperAnimInstance.h"
 
 // Sets default values
 AMIRAEnemyBaseCharacter::AMIRAEnemyBaseCharacter()
@@ -42,16 +43,37 @@ void AMIRAEnemyBaseCharacter::BeginPlay()
 	
 }
 
-// Called every frame
-void AMIRAEnemyBaseCharacter::Tick(float DeltaTime)
+void AMIRAEnemyBaseCharacter::PostInitializeComponents()
 {
-	Super::Tick(DeltaTime);
+	Super::PostInitializeComponents();
 
+	TrooperAnim = Cast<UTrooperAnimInstance>(GetMesh()->GetAnimInstance());
+	MIRACHECK(nullptr != TrooperAnim);
+
+	// event binding on montage end
+	if (!TrooperAnim) return;
+	TrooperAnim->OnMontageEnded.AddDynamic(this, &AMIRAEnemyBaseCharacter::OnAttackMontageEnded);
 }
 
-// Called to bind functionality to input
-void AMIRAEnemyBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AMIRAEnemyBaseCharacter::Attack()
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	if (!IsAttacking)
+	{
+		MIRALOG(Warning, TEXT("[AMIRAEnemyBaseCharacter] Attack"));
+		// handling by attack montage in anim instance
+		TrooperAnim->PlayAttackMontage();
+		IsAttacking = true;
+	}
+	else
+	{
+		MIRALOG(Warning, TEXT("Already attacking, skipping new attack."));
+	}
+}
 
+void AMIRAEnemyBaseCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	MIRACHECK(IsAttacking);
+	IsAttacking = false;
+	// delegate broadcast
+	OnAttackEnd.Broadcast();
 }

@@ -7,6 +7,7 @@
 
 UBTTask_EnemyAttack::UBTTask_EnemyAttack()
 {
+	NodeName = TEXT("Trooper Attack");
 	bNotifyTick = true;
 	IsAttacking = false;
 }
@@ -19,7 +20,10 @@ EBTNodeResult::Type UBTTask_EnemyAttack::ExecuteTask(UBehaviorTreeComponent& Own
 	auto Trooper = Cast<AMIRAEnemyBaseCharacter>(OwnerComp.GetAIOwner()->GetPawn());
 	if (nullptr == Trooper)	return EBTNodeResult::Failed;
 
-	//Trooper->Attack();
+	Trooper->Attack();
+	Trooper->OnAttackEnd.AddLambda([this]() -> void {
+		IsAttacking = false;
+	});
 	IsAttacking = true;
 
 

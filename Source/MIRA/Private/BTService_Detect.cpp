@@ -55,7 +55,6 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	// if nothing on sphere raycast, missed
 	if (!bSphereTraceResult)
 	{
-		MIRALOG(Warning, TEXT("[Detect] not detect on sphere: set value as null"));
 		BBComp->SetValueAsObject(ATrooperAIController::TargetKey, nullptr);
 	}
 	else
@@ -103,11 +102,9 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 			{
 				DrawDebugLine(World, TrooperLocation, PlayerLocation, FColor::Blue, false, 0.1f, 0, 2.0f);
 				BBComp->SetValueAsObject(ATrooperAIController::TargetKey, PlayerCharacter);
-				MIRALOG(Warning, TEXT("[Detect] success"));
 				return;
 			}
 		}
-		MIRALOG(Warning, TEXT("[Detect] set value as null"));
 		BBComp->SetValueAsObject(ATrooperAIController::TargetKey, nullptr);
 	}
 }

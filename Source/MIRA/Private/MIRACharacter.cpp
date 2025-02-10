@@ -173,23 +173,11 @@ void AMIRACharacter::Attack()
 	{
 		MIRACHECK(CurrentCombo == 0);
 		AttackStartComboState();
+		// handling by attack montage in anim instance
 		MIRAAnim->PlayAttackMontage();
 		MIRAAnim->JumpToAttackMontageSection(CurrentCombo);
 		IsAttacking = true;
 	}
-	/*
-	// bool check
-	if (IsAttacking) return;
-
-	// basic attack
-	MIRALOG(Warning, TEXT("[MIRACharacter] on Attack called"));
-
-	// handling by attack montage in anim instance
-	MIRAAnim->PlayAttackMontage();
-
-	// set bool
-	IsAttacking = true;
-	*/
 }
 
 void AMIRACharacter::AttackStartComboState()

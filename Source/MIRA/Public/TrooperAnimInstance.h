@@ -22,8 +22,6 @@ class MIRA_API UTrooperAnimInstance : public UAnimInstance
 
 	//
 	void PlayAttackMontage();
-	void JumpToAttackMontageSection(int32 NewSection);
-
 
 private:
 	// anim notify

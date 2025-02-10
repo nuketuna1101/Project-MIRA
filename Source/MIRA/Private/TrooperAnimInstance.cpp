@@ -10,12 +10,12 @@ UTrooperAnimInstance::UTrooperAnimInstance()
 	IsInAir = false;
 
 	// set montage : attack
-	//static ConstructorHelpers::FObjectFinder<UAnimMontage>
-	//	ATTACK_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MPlayerAnimMontage.MPlayerAnimMontage"));
-	//if (ATTACK_MONTAGE.Succeeded())
-	//{
-	//	AttackMontage = ATTACK_MONTAGE.Object;
-	//}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>
+		ATTACK_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MarksmanTrooperAttackAnimMontage.MarksmanTrooperAttackAnimMontage"));
+	if (ATTACK_MONTAGE.Succeeded())
+	{
+		AttackMontage = ATTACK_MONTAGE.Object;
+	}
 }
 
 void UTrooperAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -39,13 +39,37 @@ void UTrooperAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void UTrooperAnimInstance::PlayAttackMontage()
 {
+	Montage_Play(AttackMontage, 1.0f);
+
+	//if (!AttackMontage)
+	//{
+	//	MIRALOG(Error, TEXT("AttackMontage is nullptr!"));
+	//	return;
+	//}
+
 	//if (!Montage_IsPlaying(AttackMontage))
 	//{
+	//	MIRALOG(Warning, TEXT("PlayAttackMontage"));
 	//	Montage_Play(AttackMontage, 1.0f);
+	//	Montage_JumpToSection(FName("Attack"), AttackMontage);
 	//}
+	//else
+	//{
+	//	MIRALOG(Warning, TEXT("Attack Montage is already playing"));
+	//}
+
+	//// 애니메이션이 재생 중인지를 확인하는 로그 추가
+	//if (Montage_IsPlaying(AttackMontage))
+	//{
+	//	MIRALOG(Warning, TEXT("Attack Montage is now playing!"));
+	//}
+
+
+	if (!Montage_IsPlaying(AttackMontage))
+	{
+		MIRALOG(Warning, TEXT("PlayAttackMontage"));
+		Montage_Play(AttackMontage, 1.0f);
+		Montage_JumpToSection(FName("Attack"), AttackMontage);
+	}
 }
 
-void UTrooperAnimInstance::JumpToAttackMontageSection(int32 NewSection)
-{
-	//Montage_JumpToSection(GetAttackMontageSectionName(NewSection), AttackMontage);
-}

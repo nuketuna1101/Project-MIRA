@@ -4,22 +4,25 @@
 
 #include "MIRA.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "BTTask_EnemyAttack.generated.h"
+#include "BTTask_FocusTarget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MIRA_API UBTTask_EnemyAttack : public UBTTaskNode
+class MIRA_API UBTTask_FocusTarget : public UBTTaskNode
 {
 	GENERATED_BODY()
 	
 public:
-	UBTTask_EnemyAttack();
+	UBTTask_FocusTarget();
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
 protected:
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
-	
+
+private:
+	float FocusTime;
+	float ElapsedTime;
 };

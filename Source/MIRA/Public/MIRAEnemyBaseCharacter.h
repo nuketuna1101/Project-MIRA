@@ -23,17 +23,26 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	// post initial
+	virtual void PostInitializeComponents() override;
 
 	// ui widgets
 	UPROPERTY(VisibleAnywhere, Category = "UI")
 	class UWidgetComponent* HPBar;
 
 	// attack
+	void Attack();
 	FOnAttackEndDelegate OnAttackEnd;
+
+
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	bool IsAttacking;
+
+	// anim montage
+	UFUNCTION()
+	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
+	UPROPERTY()
+	class UTrooperAnimInstance* TrooperAnim;
 };
