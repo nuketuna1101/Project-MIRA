@@ -31,7 +31,7 @@ public:
 	class UWidgetComponent* HPBar;
 
 	// attack
-	void Attack();
+	virtual void Attack();
 	FOnAttackEndDelegate OnAttackEnd;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))

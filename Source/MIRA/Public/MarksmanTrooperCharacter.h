@@ -17,4 +17,7 @@ class MIRA_API AMarksmanTrooperCharacter : public AMIRAEnemyBaseCharacter
 public:
 	// Sets default values for this character's properties
 	AMarksmanTrooperCharacter();
+
+	// attack
+	virtual void Attack() override;
 };

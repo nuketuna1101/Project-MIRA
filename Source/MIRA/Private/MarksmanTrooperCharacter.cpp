@@ -2,6 +2,9 @@
 
 
 #include "MarksmanTrooperCharacter.h"
+#include "TrooperAnimInstance.h"
+#include "Projectile.h"
+#include "Kismet/KismetMathLibrary.h"
 
 AMarksmanTrooperCharacter::AMarksmanTrooperCharacter()
 {
@@ -23,4 +26,32 @@ AMarksmanTrooperCharacter::AMarksmanTrooperCharacter()
 	{
 		GetMesh()->SetAnimInstanceClass(MARKSMANTROOPER_ANIM.Class);
 	}
+}
+
+void AMarksmanTrooperCharacter::Attack()
+{
+	if (!IsAttacking)
+	{
+		MIRALOG(Warning, TEXT("[AMIRAEnemyBaseCharacter] Attack"));
+		// handling by attack montage in anim instance
+		TrooperAnim->PlayAttackMontage();
+		IsAttacking = true;
+
+		// bullet
+		auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(AProjectile::StaticClass()));
+		auto Target = GetWorld()->GetFirstPlayerController()->GetPawn();
+
+		FVector TrooperLocation = GetActorLocation();
+		TrooperLocation.Z += 100.0f;
+		FVector targetLocation = Target->GetActorLocation();
+		targetLocation.Z = TrooperLocation.Z;
+		FRotator rotation = UKismetMathLibrary::FindLookAtRotation(TrooperLocation, targetLocation);
+		Bullet->SetActorLocation(TrooperLocation);
+		Bullet->SetActorRotation(rotation);
+	}
+	else
+	{
+		MIRALOG(Warning, TEXT("Already attacking, skipping new attack."));
+	}
+
 }
