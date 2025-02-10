@@ -8,7 +8,6 @@ UTrooperAnimInstance::UTrooperAnimInstance()
 	// setting varaibles for basic movement
 	CurrentPawnSpeed = 0.0f;
 	IsInAir = false;
-	IsStrafing = false;
 
 	// set montage : attack
 	static ConstructorHelpers::FObjectFinder<UAnimMontage>

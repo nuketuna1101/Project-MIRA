@@ -23,9 +23,6 @@ class MIRA_API UTrooperAnimInstance : public UAnimInstance
 	//
 	void PlayAttackMontage();
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
-	bool IsStrafing;
-
 private:
 	// anim notify
 

@@ -37,6 +37,9 @@ public:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	bool IsAttacking;
 
+	UPROPERTY(BlueprintReadWrite, Category = "Animation")
+	bool bIsStrafing;
+
 	// anim montage
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
