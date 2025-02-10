@@ -70,6 +70,11 @@ void AMIRAEnemyBaseCharacter::Attack()
 	}
 }
 
+void AMIRAEnemyBaseCharacter::SetTarget(AMIRACharacter* TargetActor)
+{
+	Target = TargetActor;
+}
+
 void AMIRAEnemyBaseCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	MIRACHECK(IsAttacking);

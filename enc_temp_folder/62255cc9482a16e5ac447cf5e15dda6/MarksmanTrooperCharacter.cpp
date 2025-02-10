@@ -6,7 +6,6 @@
 #include "Projectile.h"
 #include "TrooperAIController.h"
 #include "MIRACharacter.h"
-#include "GameFramework/ProjectileMovementComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -58,25 +57,15 @@ void AMarksmanTrooperCharacter::Attack()
 
 		FVector TrooperLocation = GetActorLocation();
 		TrooperLocation.Z += 50.0f;
-		FVector TargetLocation = TargetPlayer->GetActorLocation();
-		TargetLocation.Z = TrooperLocation.Z;
-		//FRotator rotation = UKismetMathLibrary::FindLookAtRotation(TrooperLocation, targetLocation);
-		FVector BulletDir = (TargetLocation - TrooperLocation).GetSafeNormal();
-
+		FVector targetLocation = TargetPlayer->GetActorLocation();
+		targetLocation.Z = TrooperLocation.Z;
+		FRotator rotation = UKismetMathLibrary::FindLookAtRotation(TrooperLocation, targetLocation);
 		// 로그 출력
 		MIRALOG(Warning, TEXT("TrooperLocation: %s"), *TrooperLocation.ToString());
-		MIRALOG(Warning, TEXT("targetLocation: %s"), *TargetLocation.ToString());
+		MIRALOG(Warning, TEXT("targetLocation: %s"), *targetLocation.ToString());
 
 		Bullet->SetActorLocation(TrooperLocation);
-		//Bullet->SetActorRotation(rotation);
-
-		UProjectileMovementComponent* ProjectileMovement = Bullet->FindComponentByClass<UProjectileMovementComponent>();
-		if (ProjectileMovement)
-		{
-			// 로그 출력: 적용될 속도 벡터 확인
-			FVector BulletVel = BulletDir * 800.0f;
-			ProjectileMovement->SetVelocityInLocalSpace(BulletVel);
-		}
+		Bullet->SetActorRotation(rotation);
 	}
 	else
 	{

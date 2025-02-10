@@ -20,4 +20,8 @@ public:
 
 	// attack
 	virtual void Attack() override;
+
+protected:
+	UClass* BulletClass;
+
 };

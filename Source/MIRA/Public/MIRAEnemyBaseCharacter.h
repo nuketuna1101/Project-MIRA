@@ -22,6 +22,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	class AMIRACharacter* Target = nullptr;
+
 public:	
 	// post initial
 	virtual void PostInitializeComponents() override;
@@ -37,10 +39,14 @@ public:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	bool IsAttacking;
 
+	UFUNCTION(BlueprintCallable, Category = "Attack")
+	void SetTarget(AMIRACharacter* TargetActor);
+
 	// anim montage
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
 	UPROPERTY()
 	class UTrooperAnimInstance* TrooperAnim;
+
 };

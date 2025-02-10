@@ -31,32 +31,32 @@ void AProjectile::Tick(float DeltaTime)
 	if (_LifeCountingDown > 0.0f)
 	{
 		// update transform
-		FVector currentLocation = GetActorLocation();
-		FVector vel = GetActorRotation().RotateVector(FVector::ForwardVector) * Speed * DeltaTime;
-		FVector nextLocation = currentLocation + vel;
-		SetActorLocation(nextLocation);
+		//FVector currentLocation = GetActorLocation();
+		//FVector vel = GetActorRotation().RotateVector(FVector::ForwardVector) * Speed * DeltaTime;
+		//FVector nextLocation = currentLocation + vel;
+		//SetActorLocation(nextLocation);
 
-		//Ray cast Check 
-		FHitResult hitResult;
-		FCollisionObjectQueryParams objCollisionQueryParams;
-		objCollisionQueryParams.AddObjectTypesToQuery(ECollisionChannel::ECC_Pawn);
+		////Ray cast Check 
+		//FHitResult hitResult;
+		//FCollisionObjectQueryParams objCollisionQueryParams;
+		//objCollisionQueryParams.AddObjectTypesToQuery(ECollisionChannel::ECC_Pawn);
 
-		// check if first collided
-		if (GetWorld()->LineTraceSingleByObjectType(hitResult, currentLocation, nextLocation, objCollisionQueryParams))
-		{
-			auto TheActor = hitResult.GetActor();
-			if (hitResult.GetActor() != nullptr)
-			{
-				MIRALOG(Warning, TEXT("[Projectile] hit called"));
+		//// check if first collided
+		//if (GetWorld()->LineTraceSingleByObjectType(hitResult, currentLocation, nextLocation, objCollisionQueryParams))
+		//{
+		//	auto TheActor = hitResult.GetActor();
+		//	if (hitResult.GetActor() != nullptr)
+		//	{
+		//		MIRALOG(Warning, TEXT("[Projectile] hit called"));
 
-				// remove it
-				PrimaryActorTick.bCanEverTick = false;
-				Destroy();
-			}
-		}
+		//		// remove it
+		//		PrimaryActorTick.bCanEverTick = false;
+		//		Destroy();
+		//	}
+		//}
 
-		//Reduce time
-		_LifeCountingDown -= DeltaTime;
+		////Reduce time
+		//_LifeCountingDown -= DeltaTime;
 	}
 	else
 	{
