@@ -25,7 +25,4 @@ protected:
 private:
 	float FocusTime;
 	float ElapsedTime;
-	float LeftRight;
-	float RandX;
-	float RandY;
 };

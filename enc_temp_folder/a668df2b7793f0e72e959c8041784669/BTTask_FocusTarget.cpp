@@ -34,10 +34,6 @@ EBTNodeResult::Type UBTTask_FocusTarget::ExecuteTask(UBehaviorTreeComponent& Own
 
 	ElapsedTime = 0.0f;
 
-	LeftRight = FMath::Rand();
-	RandX = FMath::FRandRange(-5.0f, 5.0f);
-	RandY = FMath::FRandRange(-5.0f, 5.0f);
-
 	// 
 	auto AnimInstance = Cast<UTrooperAnimInstance>(Trooper->GetMesh()->GetAnimInstance());
 	if (AnimInstance)
@@ -71,10 +67,10 @@ void UBTTask_FocusTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 
 	Trooper->SetActorRotation(FMath::RInterpTo(TrooperRotation, FocusRot, GetWorld()->GetDeltaSeconds(), 2.0f));
 
-	FVector BaseDir = Trooper->GetActorRightVector();
+	FVector StrafeDir = Trooper->GetActorRightVector();
+	Trooper->GetCharacterMovement()->Velocity = StrafeDir * 300.0f;
 
-	FVector StrafeDir = (LeftRight > 0.5f ? 1.0f : -1.0f) * BaseDir + FVector(RandX, RandY, 0.0f);
-	Trooper->GetCharacterMovement()->Velocity = StrafeDir * 100.0f;
+
 
 	ElapsedTime += DeltaSeconds;
 

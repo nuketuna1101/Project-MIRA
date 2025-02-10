@@ -16,6 +16,14 @@ UMIRAAnimInstance::UMIRAAnimInstance()
 	{
 		AttackMontage = ATTACK_MONTAGE.Object;
 	}
+
+	// set montage : dodge
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>
+		DODGE_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MPlayerDodgeMontage.MPlayerDodgeMontage"));
+	if (DODGE_MONTAGE.Succeeded())
+	{
+		DodgeMontage = DODGE_MONTAGE.Object;
+	}
 }
 
 void UMIRAAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -44,6 +52,14 @@ void UMIRAAnimInstance::PlayAttackMontage()
 	if (!Montage_IsPlaying(AttackMontage))
 	{
 		Montage_Play(AttackMontage, 1.0f);
+	}
+}
+
+void UMIRAAnimInstance::PlayDodgeMontage()
+{
+	if (!Montage_IsPlaying(DodgeMontage))
+	{
+		Montage_Play(DodgeMontage, 2.0f);
 	}
 }
 

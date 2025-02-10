@@ -31,8 +31,6 @@ AMarksmanTrooperCharacter::AMarksmanTrooperCharacter()
 		GetMesh()->SetAnimInstanceClass(MARKSMANTROOPER_ANIM.Class);
 	}
 
-
-
 	// temp bullet
 	static ConstructorHelpers::FObjectFinder<UBlueprint>
 		blueprint_finder(TEXT("Blueprint'/Game/MIRA/Characters/Blueprints/BP_TrooperBullet.BP_TrooperBullet'"));
@@ -50,30 +48,22 @@ void AMarksmanTrooperCharacter::Attack()
 		IsAttacking = true;
 
 		// bullet
-		//auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(AProjectile::StaticClass()));
 		auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(BulletClass));
 		auto TargetPlayer = GetWorld()->GetFirstPlayerController()->GetPawn();
-		//auto Target = Cast<AMIRACharacter>(BBComp->GetValueAsObject(ATrooperAIController::TargetKey));
 		if (nullptr == TargetPlayer)	return;
 
 		FVector TrooperLocation = GetActorLocation();
 		TrooperLocation.Z += 50.0f;
 		FVector TargetLocation = TargetPlayer->GetActorLocation();
 		TargetLocation.Z = TrooperLocation.Z;
-		//FRotator rotation = UKismetMathLibrary::FindLookAtRotation(TrooperLocation, targetLocation);
 		FVector BulletDir = (TargetLocation - TrooperLocation).GetSafeNormal();
 
-		// 로그 출력
-		MIRALOG(Warning, TEXT("TrooperLocation: %s"), *TrooperLocation.ToString());
-		MIRALOG(Warning, TEXT("targetLocation: %s"), *TargetLocation.ToString());
 
 		Bullet->SetActorLocation(TrooperLocation);
-		//Bullet->SetActorRotation(rotation);
 
 		UProjectileMovementComponent* ProjectileMovement = Bullet->FindComponentByClass<UProjectileMovementComponent>();
 		if (ProjectileMovement)
 		{
-			// 로그 출력: 적용될 속도 벡터 확인
 			FVector BulletVel = BulletDir * 800.0f;
 			ProjectileMovement->SetVelocityInLocalSpace(BulletVel);
 		}

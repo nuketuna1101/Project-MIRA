@@ -68,6 +68,9 @@ private:
 	void Turn(float NewAxisValue);
 	void LookUp(float NewAxisValue);
 
+	// other action
+	void Dodge();
+
 	// attack action
 	void AttackStartComboState();
 	void AttackEndComboState();
@@ -78,6 +81,9 @@ private:
 
 	UPROPERTY()
 	class UMIRAAnimInstance* MIRAAnim;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Dodge", Meta = (AllowPrivateAccess = true))
+	bool bIsDodgeMode;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	bool IsAttacking;

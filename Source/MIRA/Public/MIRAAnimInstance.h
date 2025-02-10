@@ -26,6 +26,7 @@ public:
 
 	//
 	void PlayAttackMontage();
+	void PlayDodgeMontage();
 
 	void JumpToAttackMontageSection(int32 NewSection);
 
@@ -53,4 +54,7 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Attack", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackMontage;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Dodge", meta = (AllowPrivateAccess = true))
+	UAnimMontage* DodgeMontage;
 };

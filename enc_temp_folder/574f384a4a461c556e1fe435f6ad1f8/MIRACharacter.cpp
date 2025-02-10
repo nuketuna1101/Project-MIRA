@@ -3,7 +3,6 @@
 #include "MIRACharacter.h"
 #include "MIRAAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/PawnMovementComponent.h"
 
 // Sets default values
 AMIRACharacter::AMIRACharacter()
@@ -171,12 +170,12 @@ void AMIRACharacter::Dodge()
 	MIRAAnim->PlayDodgeMontage();
 
 	//UCharacterMovementComponent* MIRACharMovement = GetCharacterMovement();
-	//MIRACharMovement->AddImpulse(-GetActorForwardVector() * 800.0f, false); // true: velocity change
+	//MIRACharMovement->AddImpulse(-GetActorForwardVector() * 2000.0f, true); // true: velocity change
 	//AddMovementInput(FRotationMatrix(-GetActorForwardVector(), 200.0f);
 	//AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::X), NewAxisValue);
-	//AddMovementInput(-GetActorForwardVector() * 200.0f, 1.0f, true);
-	UCharacterMovementComponent* MIRACharMovement = GetCharacterMovement();
-	LaunchCharacter(-GetActorForwardVector() * 300.0f + FVector(0.0f, 0.0f, 100.0f), false, false);
+	AddMovementInput(-GetActorForwardVector() * 200.0f, 1.0f, true);
+
+	//AddMovementInput(-GetActorForwardVector() * 2000.0f, 1.0f);
 }
 
 void AMIRACharacter::Attack()
