@@ -21,6 +21,10 @@ public:
 	// attack
 	virtual void Attack() override;
 
+	// damage framework
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+		AController* EventInstigator, AActor* DamageCauser) override;
+
 protected:
 	UClass* BulletClass;
 

@@ -14,7 +14,7 @@ class MIRA_API UTrooperAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 	
-	public:
+public:
 	UTrooperAnimInstance();
 
 	// 
@@ -22,6 +22,8 @@ class MIRA_API UTrooperAnimInstance : public UAnimInstance
 
 	//
 	void PlayAttackMontage();
+
+	void SetDeadAnim() { IsDead = true; }
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
 	bool IsStrafing;
@@ -35,6 +37,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
 	bool IsInAir;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
+	bool IsDead;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Attack", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackMontage;

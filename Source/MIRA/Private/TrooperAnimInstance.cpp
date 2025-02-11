@@ -9,6 +9,7 @@ UTrooperAnimInstance::UTrooperAnimInstance()
 	CurrentPawnSpeed = 0.0f;
 	IsInAir = false;
 	IsStrafing = false;
+	IsDead = false;
 
 	// set montage : attack
 	static ConstructorHelpers::FObjectFinder<UAnimMontage>
@@ -25,7 +26,11 @@ void UTrooperAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	// get pawn speed from pawn
 	auto Pawn = TryGetPawnOwner();
-	if (IsValid(Pawn))
+	if (!IsValid(Pawn)) return;
+
+
+
+	if (!IsDead)
 	{
 		CurrentPawnSpeed = Pawn->GetVelocity().Size();
 
