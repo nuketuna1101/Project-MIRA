@@ -78,12 +78,14 @@ void AMIRACharacter::BeginPlay()
 				(FVector::ZeroVector, FRotator::ZeroRotator);
 	if (nullptr != CurRightBlade)
 	{
+		CurRightBlade->SetActorScale3D(FVector(2.0f, 2.0f, 2.0f));
 		CurRightBlade->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponRightSocket);
 	}
 	auto CurLeftBlade = GetWorld()->SpawnActor<AMIRABlade>
 		(FVector::ZeroVector, FRotator::ZeroRotator);
 	if (nullptr != CurLeftBlade)
 	{
+		CurLeftBlade->SetActorScale3D(FVector(2.0f, 2.0f, 2.0f));
 		CurLeftBlade->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponLeftSocket);
 	}
 
