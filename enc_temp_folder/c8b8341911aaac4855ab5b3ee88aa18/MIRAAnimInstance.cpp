@@ -12,7 +12,7 @@ UMIRAAnimInstance::UMIRAAnimInstance()
 
 	// set montage : attack
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> 
-		ATTACK_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MIRAPlayer/MPlayerAnimMontage.MPlayerAnimMontage"));
+		ATTACK_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MPlayerAnimMontage.MPlayerAnimMontage"));
 	if (ATTACK_MONTAGE.Succeeded())
 	{
 		AttackMontage = ATTACK_MONTAGE.Object;
@@ -20,7 +20,7 @@ UMIRAAnimInstance::UMIRAAnimInstance()
 
 	// set montage : dodge
 	static ConstructorHelpers::FObjectFinder<UAnimMontage>
-		DODGE_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MIRAPlayer/MPlayerDodgeMontage.MPlayerDodgeMontage"));
+		DODGE_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MPlayerDodgeMontage.MPlayerDodgeMontage"));
 	if (DODGE_MONTAGE.Succeeded())
 	{
 		DodgeMontage = DODGE_MONTAGE.Object;

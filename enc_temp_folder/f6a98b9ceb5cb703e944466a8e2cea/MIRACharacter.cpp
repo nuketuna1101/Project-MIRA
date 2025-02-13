@@ -36,7 +36,7 @@ AMIRACharacter::AMIRACharacter()
 	// setting for animations
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	static ConstructorHelpers::FClassFinder<UAnimInstance>
-		MIRAPLAYER_ANIM(TEXT("/Game/MIRA/Characters/Animations/MIRAPlayer/MPlayerAnimBlueprint.MPlayerAnimBlueprint_C"));
+		MIRAPLAYER_ANIM(TEXT("/Game/MIRA/Characters/Animations/MPlayerAnimBlueprint.MPlayerAnimBlueprint_C"));
 	if (MIRAPLAYER_ANIM.Succeeded())
 	{
 		GetMesh()->SetAnimInstanceClass(MIRAPLAYER_ANIM.Class);
