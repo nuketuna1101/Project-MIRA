@@ -71,33 +71,45 @@ void AMIRACharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	// weapon attach
-	FName WeaponRightSocket(TEXT("WeaponAttachPointR"));
+	FName WeaponRightSocket(TEXT("blade_left_socket"));
 	FName WeaponLeftSocket(TEXT("WeaponAttachPointL"));
-	if (GetMesh()->DoesSocketExist(WeaponRightSocket)
-		&& GetMesh()->DoesSocketExist(WeaponLeftSocket))
-	{
-		UWorld* World = GetWorld();
-		if (World)
-		{
-			AMIRABlade* BladeRight = World->SpawnActor<AMIRABlade>
-				(AMIRABlade::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-			if (BladeRight)
-			{
-				BladeRight->AttachToComponent(GetMesh(),
-					FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponRightSocket);
-				BladeRight->SetOwner(this);
-			}
 
-			AMIRABlade* BladeLeft = World->SpawnActor<AMIRABlade>
-				(AMIRABlade::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-			if (BladeLeft)
-			{
-				BladeLeft->AttachToComponent(GetMesh(),
-					FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponLeftSocket);
-				BladeLeft->SetOwner(this);
-			}
-		}
+	auto CurBlade = GetWorld()->SpawnActor<AMIRABlade>
+				(FVector::ZeroVector, FRotator::ZeroRotator);
+	if (nullptr != CurBlade)
+	{
+		CurBlade->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponRightSocket);
 	}
+
+	//if (GetMesh()->DoesSocketExist(WeaponRightSocket)
+	//	&& GetMesh()->DoesSocketExist(WeaponLeftSocket))
+	//{
+		//UWorld* World = GetWorld();
+		//if (World)
+		//{
+		//	AMIRABlade* BladeRight = World->SpawnActor<AMIRABlade>
+		//		(AMIRABlade::StaticClass(), FVector(-24.0f, -3.5f, 0.0f), FRotator(-180.0f, 0, -180.0f));
+		//		//(AMIRABlade::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+
+		//	if (BladeRight)
+		//	{
+		//		BladeRight->AttachToComponent(GetMesh(),
+		//			FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponRightSocket);
+		//		BladeRight->SetOwner(this);
+		//	}
+
+			//AMIRABlade* BladeLeft = World->SpawnActor<AMIRABlade>
+			//	(AMIRABlade::StaticClass(), FVector(24.0f, 3.5f, 0.0f), FRotator(-180.0f, 0, -180.0f));
+			//	//(AMIRABlade::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+
+			//if (BladeLeft)
+			//{
+			//	BladeLeft->AttachToComponent(GetMesh(),
+			//		FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponLeftSocket);
+			//	BladeLeft->SetOwner(this);
+			//}
+	//	}
+	//}
 }
 
 void AMIRACharacter::SetCameraMode(ECameraMode CameraMode)

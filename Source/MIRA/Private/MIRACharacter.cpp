@@ -71,14 +71,20 @@ void AMIRACharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	// weapon attach
-	FName WeaponRightSocket(TEXT("sword_base_l"));
-	FName WeaponLeftSocket(TEXT("WeaponAttachPointL"));
+	FName WeaponRightSocket(TEXT("blade_right_socket"));
+	FName WeaponLeftSocket(TEXT("blade_left_socket"));
 
-	auto CurBlade = GetWorld()->SpawnActor<AMIRABlade>
+	auto CurRightBlade = GetWorld()->SpawnActor<AMIRABlade>
 				(FVector::ZeroVector, FRotator::ZeroRotator);
-	if (nullptr != CurBlade)
+	if (nullptr != CurRightBlade)
 	{
-		CurBlade->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponRightSocket);
+		CurRightBlade->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponRightSocket);
+	}
+	auto CurLeftBlade = GetWorld()->SpawnActor<AMIRABlade>
+		(FVector::ZeroVector, FRotator::ZeroRotator);
+	if (nullptr != CurLeftBlade)
+	{
+		CurLeftBlade->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponLeftSocket);
 	}
 
 	//if (GetMesh()->DoesSocketExist(WeaponRightSocket)
