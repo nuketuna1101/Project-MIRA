@@ -61,7 +61,10 @@ public:
 	UCameraComponent* Camera;
 
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
-	UStaticMesh* Weapon;
+	UStaticMeshComponent* Weapon;
+
+	//UPROPERTY(VisibleAnywhere, Category = "Weapon")
+	//class AMIRABlade* MyBlade;
 
 	// attack action
 	void Attack();
