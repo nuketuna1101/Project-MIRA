@@ -106,16 +106,15 @@ void AMIRACharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
+	// initializing for anim montage
 	MIRAAnim = Cast<UMIRAAnimInstance>(GetMesh()->GetAnimInstance());
-	MIRACHECK(nullptr != MIRAAnim);
+	if (!MIRAAnim) return;
 
 	// event binding on montage end
-	if (!MIRAAnim) return;
 	MIRAAnim->OnMontageEnded.AddDynamic(this, &AMIRACharacter::OnAttackMontageEnded);
 
 	// when nextattackcheck, delegate execution
 	MIRAAnim->OnNextAttackCheck.AddLambda([this]() -> void {
-		MIRALOG(Warning, TEXT("[OnNextAttackCheck]"));
 		CanNextCombo = false;
 		if (IsComboInputOn)
 		{
@@ -160,13 +159,11 @@ float AMIRACharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 void AMIRACharacter::UpDown(float NewAxisValue)
 {
-	//AddMovementInput(GetActorForwardVector(), NewAxisValue);
 	AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::X), NewAxisValue);
 }
 
 void AMIRACharacter::LeftRight(float NewAxisValue)
 {
-	//AddMovementInput(GetActorRightVector(), NewAxisValue);
 	AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::Y), NewAxisValue);
 }
 
@@ -185,11 +182,6 @@ void AMIRACharacter::Dodge()
 	// play dodge anim
 	MIRAAnim->PlayDodgeMontage();
 
-	//UCharacterMovementComponent* MIRACharMovement = GetCharacterMovement();
-	//MIRACharMovement->AddImpulse(-GetActorForwardVector() * 800.0f, false); // true: velocity change
-	//AddMovementInput(FRotationMatrix(-GetActorForwardVector(), 200.0f);
-	//AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::X), NewAxisValue);
-	//AddMovementInput(-GetActorForwardVector() * 200.0f, 1.0f, true);
 	UCharacterMovementComponent* MIRACharMovement = GetCharacterMovement();
 	LaunchCharacter(-GetActorForwardVector() * 300.0f + FVector(0.0f, 0.0f, 100.0f), false, false);
 }
