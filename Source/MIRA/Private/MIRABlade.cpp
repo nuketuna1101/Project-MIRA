@@ -9,15 +9,15 @@ AMIRABlade::AMIRABlade()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WEAPON"));
+	Weapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WEAPON"));
 	RootComponent = Weapon;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MIRABLADE
-	(TEXT(""));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> 
+		SK_MIRABLADE(TEXT("/Game/MIRA/Characters/Meshes/SM_MPlayerBladeGlow.SM_MPlayerBladeGlow"));
 
 	if (SK_MIRABLADE.Succeeded())
 	{
-		Weapon->SetSkeletalMesh(SK_MIRABLADE.Object);
+		Weapon->SetStaticMesh(SK_MIRABLADE.Object);
 	}
 
 	// collision setting

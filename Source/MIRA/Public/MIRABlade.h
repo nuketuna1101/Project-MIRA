@@ -21,6 +21,6 @@ protected:
 
 public:	
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
-	USkeletalMeshComponent* Weapon;
+	UStaticMeshComponent* Weapon;
 
 };

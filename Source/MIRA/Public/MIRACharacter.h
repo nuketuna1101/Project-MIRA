@@ -60,6 +60,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	UCameraComponent* Camera;
 
+	UPROPERTY(VisibleAnywhere, Category = "Weapon")
+	UStaticMesh* Weapon;
+
 	// attack action
 	void Attack();
 	//FOnAttackEndDelegate OnAttackEnd;
