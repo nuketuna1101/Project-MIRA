@@ -25,7 +25,7 @@ AMarksmanTrooperCharacter::AMarksmanTrooperCharacter()
 	// setting for animations
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	static ConstructorHelpers::FClassFinder<UAnimInstance>
-		MARKSMANTROOPER_ANIM(TEXT("/Game/MIRA/Characters/Animations/MarksmanTrooper/MarksmanTrooperAnimBlueprint.MarksmanTrooperAnimBlueprint_C"));
+		MARKSMANTROOPER_ANIM(TEXT("/Game/MIRA/Characters/Animations/MarksmanTrooperAnimBlueprint.MarksmanTrooperAnimBlueprint_C"));
 	if (MARKSMANTROOPER_ANIM.Succeeded())
 	{
 		GetMesh()->SetAnimInstanceClass(MARKSMANTROOPER_ANIM.Class);
