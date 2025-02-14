@@ -48,6 +48,11 @@
     Content/Scene_UnfinishedBuilding/*
     Content/InfinityBladeEffects/*
     </div>
+
+    <summary> OpenGameArts free resources for CC0 license </summary>
+    <div markdown="1">
+    https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes
+    </div>
 </details>
 
 <br><br>
