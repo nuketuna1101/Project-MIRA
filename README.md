@@ -30,6 +30,26 @@
 > - enter the room and eliminate the boss
 > - you must survive
 
+### Caution!
+
+- for this repository, most of imported assets are NOT included due to the memory issue.
+- check out the toggle button for details for assets that i used.
+
+<details>
+    <summary> unreal assets that i used </summary>
+    <div markdown="1">
+    Content/ModSci_Engineer/*
+    Content/ModSci_EngiProps/*
+    Content/ModSciInteriors/*
+    Content/ParagonKallari/*
+    Content/ParagonWraith/*
+    Content/ParagonRevenant/*
+    Content/ParagonMinions/*
+    Content/Scene_UnfinishedBuilding/*
+    Content/InfinityBladeEffects/*
+    </div>
+</details>
+
 <br><br>
 
 # Details
