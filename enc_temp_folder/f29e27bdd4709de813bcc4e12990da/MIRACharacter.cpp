@@ -83,19 +83,19 @@ void AMIRACharacter::BeginPlay()
 	FName WeaponRightSocket(TEXT("blade_right_socket"));
 	FName WeaponLeftSocket(TEXT("blade_left_socket"));
 
-	RightBlade = GetWorld()->SpawnActor<AMIRABlade>(FVector::ZeroVector, FRotator::ZeroRotator);
-	//auto RightBlade = GetWorld()->SpawnActor<AMIRABlade>(FVector::ZeroVector, FRotator::ZeroRotator);
-	if (nullptr != RightBlade)
+	auto CurRightBlade = GetWorld()->SpawnActor<AMIRABlade>
+				(FVector::ZeroVector, FRotator::ZeroRotator);
+	if (nullptr != CurRightBlade)
 	{
-		RightBlade->SetActorScale3D(FVector(2.0f, 2.0f, 2.0f));
-		RightBlade->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponRightSocket);
+		CurRightBlade->SetActorScale3D(FVector(2.0f, 2.0f, 2.0f));
+		CurRightBlade->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponRightSocket);
 	}
-	LeftBlade = GetWorld()->SpawnActor<AMIRABlade>(FVector::ZeroVector, FRotator::ZeroRotator);
-	//auto LeftBlade = GetWorld()->SpawnActor<AMIRABlade>(FVector::ZeroVector, FRotator::ZeroRotator);
-	if (nullptr != LeftBlade)
+	auto CurLeftBlade = GetWorld()->SpawnActor<AMIRABlade>
+		(FVector::ZeroVector, FRotator::ZeroRotator);
+	if (nullptr != CurLeftBlade)
 	{
-		LeftBlade->SetActorScale3D(FVector(2.0f, 2.0f, 2.0f));
-		LeftBlade->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponLeftSocket);
+		CurLeftBlade->SetActorScale3D(FVector(2.0f, 2.0f, 2.0f));
+		CurLeftBlade->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponLeftSocket);
 	}
 }
 
@@ -277,16 +277,6 @@ void AMIRACharacter::AttackCheck()
 			HitResult.GetActor()->TakeDamage(200.0f, DamageEvent, GetController(), this);
 		}
 	}
-}
-
-AMIRABlade* AMIRACharacter::GetBladeRight()
-{
-	return RightBlade;
-}
-
-AMIRABlade* AMIRACharacter::GetBladeLeft()
-{
-	return LeftBlade;
 }
 
 void AMIRACharacter::Attack()

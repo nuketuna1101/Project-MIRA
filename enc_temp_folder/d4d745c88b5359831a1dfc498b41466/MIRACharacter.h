@@ -3,7 +3,6 @@
 #pragma once
 
 #include "MIRA.h"
-#include "MIRABlade.h"
 #include "GameFramework/Character.h"
 #include "MIRACharacter.generated.h"
 
@@ -63,17 +62,7 @@ public:
 	UCameraComponent* Camera;
 
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
-	AMIRABlade* RightBlade;
-
-	UPROPERTY(VisibleAnywhere, Category = "Weapon")
-	AMIRABlade* LeftBlade;
-
-	// getter for weapon mesh
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	AMIRABlade* GetBladeRight();
-
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	AMIRABlade* GetBladeLeft();
+	UStaticMeshComponent* Weapon;
 
 	// attack action
 	void Attack();
