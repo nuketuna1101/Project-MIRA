@@ -89,6 +89,8 @@ void UMIRAAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void UMIRAAnimInstance::PlayAttackMontage()
 {
+	//Montage_Play(AttackMontage, 1.0f);
+
 	if (!Montage_IsPlaying(AttackMontage))
 	{
 		Montage_Play(AttackMontage, 1.0f);
@@ -97,7 +99,6 @@ void UMIRAAnimInstance::PlayAttackMontage()
 
 void UMIRAAnimInstance::PlayAttackComboMontage(int32 CurrentComboCount)
 {
-	MIRALOG(Warning, TEXT("[PlayAttackComboMontage] CurrentComboCount: %d"), CurrentComboCount);
 	switch (CurrentComboCount)
 	{
 	case 0:
@@ -131,6 +132,18 @@ void UMIRAAnimInstance::JumpToAttackMontageSection(int32 NewSection)
 	//
 	Montage_JumpToSection(GetAttackMontageSectionName(NewSection), AttackMontage);
 }
+
+//void UMIRAAnimInstance::AnimNotify_AttackHitCheck()
+//{
+//	// delegate broadcast
+//	OnAttackHitCheck.Broadcast();
+//}
+//
+//void UMIRAAnimInstance::AnimNotify_NextAttackCheck()
+//{
+//	// delegate broadcast
+//	OnNextAttackCheck.Broadcast();
+//}
 
 void UMIRAAnimInstance::AnimNotify_SaveAttackCheck()
 {

@@ -64,8 +64,7 @@ AMIRACharacter::AMIRACharacter()
 	// bool varaible for dodge
 	bIsDodgeMode = false;
 
-	// varaibles for attack combo
-	MaxCombo = 5;
+	// reset attack combo
 	bIsAttacking = false;
 	bSaveAttack = false;
 }
@@ -93,6 +92,36 @@ void AMIRACharacter::BeginPlay()
 		CurLeftBlade->SetActorScale3D(FVector(2.0f, 2.0f, 2.0f));
 		CurLeftBlade->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponLeftSocket);
 	}
+
+	//if (GetMesh()->DoesSocketExist(WeaponRightSocket)
+	//	&& GetMesh()->DoesSocketExist(WeaponLeftSocket))
+	//{
+		//UWorld* World = GetWorld();
+		//if (World)
+		//{
+		//	AMIRABlade* BladeRight = World->SpawnActor<AMIRABlade>
+		//		(AMIRABlade::StaticClass(), FVector(-24.0f, -3.5f, 0.0f), FRotator(-180.0f, 0, -180.0f));
+		//		//(AMIRABlade::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+
+		//	if (BladeRight)
+		//	{
+		//		BladeRight->AttachToComponent(GetMesh(),
+		//			FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponRightSocket);
+		//		BladeRight->SetOwner(this);
+		//	}
+
+			//AMIRABlade* BladeLeft = World->SpawnActor<AMIRABlade>
+			//	(AMIRABlade::StaticClass(), FVector(24.0f, 3.5f, 0.0f), FRotator(-180.0f, 0, -180.0f));
+			//	//(AMIRABlade::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+
+			//if (BladeLeft)
+			//{
+			//	BladeLeft->AttachToComponent(GetMesh(),
+			//		FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponLeftSocket);
+			//	BladeLeft->SetOwner(this);
+			//}
+	//	}
+	//}
 }
 
 void AMIRACharacter::SetCameraMode(ECameraMode CameraMode)
@@ -140,6 +169,19 @@ void AMIRACharacter::PostInitializeComponents()
 	MIRAAnim->OnResetComboCheck.AddLambda([this]() -> void {
 		ResetAttackCombo();
 	});
+
+	// event binding on montage end
+	//MIRAAnim->OnMontageEnded.AddDynamic(this, &AMIRACharacter::OnAttackMontageEnded);
+
+	// when nextattackcheck, delegate execution
+	//MIRAAnim->OnNextAttackCheck.AddLambda([this]() -> void {
+	//	CanNextCombo = false;
+	//	if (IsComboInputOn)
+	//	{
+	//		AttackStartComboState();
+	//		MIRAAnim->JumpToAttackMontageSection(CurrentCombo);
+	//	}
+	//});
 }
 
 // Called to bind functionality to input
@@ -206,8 +248,19 @@ void AMIRACharacter::Dodge()
 
 void AMIRACharacter::PerformAttackCombo()
 {
-	CurrentComboCount = (CurrentComboCount + 1) % 5;
+
 	MIRAAnim->PlayAttackComboMontage(CurrentComboCount);
+
+	//switch (CurrentComboCount)
+	//{
+	//case 0:
+	//	//PlayAnimMontage();
+	//	break;
+	//case 1:
+	//	break;
+	//case 2:
+	//	break;
+	//}
 }
 
 void AMIRACharacter::SaveAttackCombo()
@@ -241,6 +294,27 @@ void AMIRACharacter::Attack()
 		bIsAttacking = true;
 		PerformAttackCombo();
 	}
+	//if (IsAttacking)
+	//{
+	//	//MIRACHECK(FMath::IsWithinInclusive<int32>(CurrentCombo, 1, MaxCombo));
+	//	if (CanNextCombo)
+	//	{
+	//		IsComboInputOn = true;
+	//	}
+	//}
+	//else
+	//{
+	//	MIRACHECK(CurrentCombo == 0);
+	//	AttackStartComboState();
+	//	// handling by attack montage in anim instance
+	//	MIRAAnim->PlayAttackMontage();
+	//	MIRAAnim->JumpToAttackMontageSection(CurrentCombo);
+	//	IsAttacking = true;
+
+
+	//	// 임시 : 데미지 적용
+	//	//FDamageEvent DamageEvent;
+	//}
 }
 
 //void AMIRACharacter::AttackStartComboState()
