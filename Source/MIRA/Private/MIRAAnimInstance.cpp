@@ -101,19 +101,19 @@ void UMIRAAnimInstance::PlayAttackComboMontage(int32 CurrentComboCount)
 	switch (CurrentComboCount)
 	{
 	case 0:
-		Montage_Play(AttackComboMontageA, 2.0f);
+		Montage_Play(AttackComboMontageA, 1.0f);
 		break;
 	case 1:
-		Montage_Play(AttackComboMontageB, 2.0f);
+		Montage_Play(AttackComboMontageB, 1.0f);
 		break;
 	case 2:
-		Montage_Play(AttackComboMontageC, 2.0f);
+		Montage_Play(AttackComboMontageC, 1.0f);
 		break;
 	case 3:
-		Montage_Play(AttackComboMontageD, 2.0f);
+		Montage_Play(AttackComboMontageD, 1.0f);
 		break;
 	case 4:
-		Montage_Play(AttackComboMontageE, 2.0f);
+		Montage_Play(AttackComboMontageE, 1.0f);
 		break;
 	}
 }
@@ -122,7 +122,7 @@ void UMIRAAnimInstance::PlayDodgeMontage()
 {
 	if (!Montage_IsPlaying(DodgeMontage))
 	{
-		Montage_Play(DodgeMontage, 2.0f);
+		Montage_Play(DodgeMontage, 1.0f);
 	}
 }
 

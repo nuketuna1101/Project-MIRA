@@ -5,6 +5,7 @@
 #include "MIRABlade.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
+#include "Engine/DamageEvents.h"
 
 // Sets default values
 AMIRACharacter::AMIRACharacter()
@@ -60,6 +61,9 @@ AMIRACharacter::AMIRACharacter()
 
 	// setting for collision channel
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("MIRACharacter"));
+
+	// bool varaible for move
+	bCannotMove = false;
 
 	// bool varaible for dodge
 	bIsDodgeMode = false;
@@ -168,20 +172,36 @@ float AMIRACharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	// TMP: 일단은 조금이라도 피격 당하면 사망으로
 	if (FinalDamage > 0.0f)
 	{
-		
+		// TO DO: 피격 시 피격 애니메이션 재생
+		//if (MIRAAnim)			MIRAAnim->PlayHitMontage();
 	}
 
+	// TO DO: STAT 기반 판별해서
+	/*
+	CharacterStat->SetDamage(FinalDamage);
+	if (CurrentState == ECharacterState::DEAD)
+	{
+		OnDead.Broadcast(DamageCauser);
+		if (EventInstigator->IsPlayerController())
+		{
+			ABPlayerController = Cast<AABPlayerController>(EventInstigator);
+			ABPlayerController->NPCKill(this);
+		}
+	}
+	*/
 
 	return FinalDamage;
 }
 
 void AMIRACharacter::UpDown(float NewAxisValue)
 {
+	if (bCannotMove) return;
 	AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::X), NewAxisValue);
 }
 
 void AMIRACharacter::LeftRight(float NewAxisValue)
 {
+	if (bCannotMove) return;
 	AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::Y), NewAxisValue);
 }
 
@@ -197,6 +217,8 @@ void AMIRACharacter::LookUp(float NewAxisValue)
 
 void AMIRACharacter::Dodge()
 {
+	// TO DO: bCannotMove 설정해줘야 함
+
 	// play dodge anim
 	MIRAAnim->PlayDodgeMontage();
 
@@ -206,6 +228,8 @@ void AMIRACharacter::Dodge()
 
 void AMIRACharacter::PerformAttackCombo()
 {
+	OnAttackEndBP.Broadcast();
+	bCannotMove = true;
 	CurrentComboCount = (CurrentComboCount + 1) % 5;
 	MIRAAnim->PlayAttackComboMontage(CurrentComboCount);
 }
@@ -222,10 +246,37 @@ void AMIRACharacter::SaveAttackCombo()
 
 void AMIRACharacter::ResetAttackCombo()
 {
+	bCannotMove = false;
 	MIRALOG(Warning, TEXT("[ResetAttackCombo] called"));
 	CurrentComboCount = 0;
 	bIsAttacking = false;
 	bSaveAttack = false;
+}
+
+void AMIRACharacter::AttackCheck()
+{
+	float FinalAttackRange = 120.0f; //GetFinalAttackRange();
+
+	FHitResult HitResult;
+	FCollisionQueryParams Params(NAME_None, false, this);
+	bool bResult = GetWorld()->SweepSingleByChannel(
+		HitResult,
+		GetActorLocation(),
+		GetActorLocation() + GetActorForwardVector() * FinalAttackRange,
+		FQuat::Identity,
+		ECollisionChannel::ECC_EngineTraceChannel2,
+		FCollisionShape::MakeSphere(50.0f),		// tmp radius
+		Params);
+
+	if (bResult)
+	{
+		if (HitResult.GetActor()->IsValidLowLevel())
+		{
+			OnHitBP.Broadcast(HitResult.ImpactPoint);
+			FDamageEvent DamageEvent;
+			HitResult.GetActor()->TakeDamage(200.0f, DamageEvent, GetController(), this);
+		}
+	}
 }
 
 void AMIRACharacter::Attack()
@@ -242,26 +293,3 @@ void AMIRACharacter::Attack()
 		PerformAttackCombo();
 	}
 }
-
-//void AMIRACharacter::AttackStartComboState()
-//{
-//	CanNextCombo = true;
-//	IsComboInputOn = false;
-//	CurrentCombo = FMath::Clamp<int32>(CurrentCombo + 1, 1, MaxCombo);
-//}
-//
-//void AMIRACharacter::AttackEndComboState()
-//{
-//	IsComboInputOn = false;
-//	CanNextCombo = false;
-//	CurrentCombo = 0;
-//}
-//
-//void AMIRACharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
-//{
-//	//MIRACHECK(IsAttacking);
-//	IsAttacking = false;
-//	AttackEndComboState();
-//	// delegate broadcast
-//	//OnAttackEnd.Broadcast();
-//}

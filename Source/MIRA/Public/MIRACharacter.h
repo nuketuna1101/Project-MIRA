@@ -7,7 +7,8 @@
 #include "MIRACharacter.generated.h"
 
 // declare delegates
-//DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAttackEnd);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitEvent, FVector, HitLocation);		// if hit, get location and timing 
 
 UENUM()
 enum class ECameraMode : uint8
@@ -63,58 +64,47 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	UStaticMeshComponent* Weapon;
 
-	//UPROPERTY(VisibleAnywhere, Category = "Weapon")
-	//class AMIRABlade* MyBlade;
-
 	// attack action
 	void Attack();
-	//FOnAttackEndDelegate OnAttackEnd;
+
+	// delegate for when attack hit
+	UPROPERTY(BlueprintAssignable, Category = "Event")
+	FOnAttackEnd OnAttackEndBP;
+
+	// delegate for when be hitted
+	UPROPERTY(BlueprintAssignable, Category = "Event")
+	FOnHitEvent OnHitBP;
 
 private:
-	// movement logics by player input 
-	// basic movement
+	// basic movements by axis mapping
 	void UpDown(float NewAxisValue);
 	void LeftRight(float NewAxisValue);
 	void Turn(float NewAxisValue);
 	void LookUp(float NewAxisValue);
 
-	// other action
+	// player input actions by action mapping
 	void Dodge();
 
-	// attack action
-	//void AttackStartComboState();
-	//void AttackEndComboState();
-
-	// montage
-	//UFUNCTION()
-	//void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
-
+	// attack logics
 	void PerformAttackCombo();
 	void SaveAttackCombo();
 	void ResetAttackCombo();
 
+	void AttackCheck();
 
 	UPROPERTY()
 	class UMIRAAnimInstance* MIRAAnim;
 
+	// boolean for blocking or allowing moves
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	bool bCannotMove;
+
+
+	// boolean for dodge
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Dodge", Meta = (AllowPrivateAccess = true))
 	bool bIsDodgeMode;
 
-	//UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
-	//bool IsAttacking;
-
-	//UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
-	//bool CanNextCombo;
-
-	//UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
-	//bool IsComboInputOn;
-
-	//UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
-	//int32 CurrentCombo;
-
-	//UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
-	//int32 MaxCombo;
-
+	// attack combo variables
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	bool bSaveAttack;
 
