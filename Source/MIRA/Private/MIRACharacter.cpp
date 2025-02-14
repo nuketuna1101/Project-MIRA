@@ -6,6 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Engine/DamageEvents.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 AMIRACharacter::AMIRACharacter()
@@ -138,12 +139,14 @@ void AMIRACharacter::PostInitializeComponents()
 	MIRAAnim = Cast<UMIRAAnimInstance>(GetMesh()->GetAnimInstance());
 	if (!MIRAAnim) return;
 
+	// binding logics to anim notify
 	MIRAAnim->OnSaveAttackCheck.AddLambda([this]() -> void {
 		SaveAttackCombo();
 	});
 	MIRAAnim->OnResetComboCheck.AddLambda([this]() -> void {
 		ResetAttackCombo();
 	});
+	MIRAAnim->OnAttackHitCheck.AddUObject(this, &AMIRACharacter::AttackCheck);
 }
 
 // Called to bind functionality to input
@@ -267,6 +270,23 @@ void AMIRACharacter::AttackCheck()
 		ECollisionChannel::ECC_EngineTraceChannel2,
 		FCollisionShape::MakeSphere(50.0f),		// tmp radius
 		Params);
+
+	FVector TraceVec = GetActorForwardVector() * FinalAttackRange;
+	FVector Center = GetActorLocation() + TraceVec * 0.5f;
+	float HalfHeight = FinalAttackRange * 0.5f + 50.0f;
+	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
+	float DebugLifeTime = 5.0f;
+
+	DrawDebugCapsule(GetWorld(), 
+		Center, 
+		HalfHeight, 
+		50.0f, 
+		CapsuleRot, 
+		DrawColor, 
+		false, 
+		DebugLifeTime);
+
 
 	if (bResult)
 	{

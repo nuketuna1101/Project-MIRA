@@ -132,6 +132,11 @@ void UMIRAAnimInstance::JumpToAttackMontageSection(int32 NewSection)
 	Montage_JumpToSection(GetAttackMontageSectionName(NewSection), AttackMontage);
 }
 
+void UMIRAAnimInstance::AnimNotify_AttackHitCheck()
+{
+	OnAttackHitCheck.Broadcast();
+}
+
 void UMIRAAnimInstance::AnimNotify_SaveAttackCheck()
 {
 	OnSaveAttackCheck.Broadcast();

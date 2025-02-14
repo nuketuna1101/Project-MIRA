@@ -7,6 +7,7 @@
 #include "MIRAAnimInstance.generated.h"
 
 // delegate
+DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnSaveAttackCheckDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnResetComboCheckDelegate);
 
@@ -31,6 +32,8 @@ public:
 
 	void JumpToAttackMontageSection(int32 NewSection);
 
+	// delegates
+	FOnAttackHitCheckDelegate OnAttackHitCheck;
 	FOnSaveAttackCheckDelegate OnSaveAttackCheck;
 	FOnResetComboCheckDelegate OnResetComboCheck;
 
@@ -38,6 +41,9 @@ public:
 
 private:
 	// anim notify
+	UFUNCTION()
+	void AnimNotify_AttackHitCheck();
+
 	UFUNCTION()
 	void AnimNotify_SaveAttackCheck();
 
