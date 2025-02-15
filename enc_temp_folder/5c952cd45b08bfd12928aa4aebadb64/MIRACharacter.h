@@ -102,9 +102,6 @@ private:
 	void Dodge();
 
 	// attack logics
-	void AttackMelee();
-	void AttackRange();
-
 	void PerformAttackCombo();
 	void SaveAttackCombo();
 	void ResetAttackCombo();

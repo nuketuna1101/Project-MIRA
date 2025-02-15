@@ -132,23 +132,6 @@ void AMIRACharacter::Tick(float DeltaTime)
 	// spring arm interpolation
 	SpringArm->TargetArmLength = FMath::FInterpTo(SpringArm->TargetArmLength,
 		SpringArmLength, DeltaTime, SpringArmLengthSpeed);
-
-	//
-		// 줌 기능 구현
-	if (bIsAiming)
-	{
-		// 현재 FOV 값을 목표 FOV 값으로 부드럽게 보간
-		float CurrentFOV = Camera->FieldOfView;
-		float NewFOV = FMath::FInterpTo(CurrentFOV, 75.0f, DeltaTime, 3.0f);
-		Camera->SetFieldOfView(NewFOV);
-	}
-	else
-	{
-		// 현재 FOV 값을 초기 FOV 값으로 부드럽게 보간
-		float CurrentFOV = Camera->FieldOfView;
-		float NewFOV = FMath::FInterpTo(CurrentFOV, 90.0f, DeltaTime, 3.0f);
-		Camera->SetFieldOfView(NewFOV);
-	}
 }
 
 void AMIRACharacter::PostInitializeComponents()
@@ -336,16 +319,13 @@ void AMIRACharacter::Attack()
 	MIRALOG(Warning, TEXT("[Attack] called / bIsAttacking : %s"), bIsAttacking? TEXT("true") : TEXT("false"));
 	if (bIsAiming)
 	{
-		AttackRange();
+
 	}
 	else
 	{
-		AttackMelee();
-	}
-}
 
-void AMIRACharacter::AttackMelee()
-{
+	}
+
 	if (bIsAttacking)
 	{
 		bSaveAttack = true;
@@ -358,27 +338,22 @@ void AMIRACharacter::AttackMelee()
 	}
 }
 
-void AMIRACharacter::AttackRange()
-{
-}
-
 void AMIRACharacter::StartAim()
 {
+	MIRALOG(Warning, TEXT("[StartAim] called / bIsAiming : %s"), bIsAiming ? TEXT("true") : TEXT("false"));
 	bIsAiming = true;
 
-	SpringArmLength = 400.0f;
+	SpringArmLength = 300.0f;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
-	SpringArm->SocketOffset = FVector(100.0f, 60.0f, 0.0f);
-
 }
 
 void AMIRACharacter::StopAim()
 {
+	MIRALOG(Warning, TEXT("[StopAim] called / bIsAiming : %s"), bIsAiming ? TEXT("true") : TEXT("false"));
 	bIsAiming = false;
 
 	SpringArmLength = 450.0f;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
-	SpringArm->SocketOffset = FVector::ZeroVector;
 }

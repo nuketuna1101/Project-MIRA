@@ -13,7 +13,7 @@ UTrooperAnimInstance::UTrooperAnimInstance()
 
 	// set montage : attack
 	static ConstructorHelpers::FObjectFinder<UAnimMontage>
-		ATTACK_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MarksmanTrooperAttackAnimMontage.MarksmanTrooperAttackAnimMontage"));
+		ATTACK_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MarksmanTrooper/MarksmanTrooperAttackAnimMontage.MarksmanTrooperAttackAnimMontage"));
 	if (ATTACK_MONTAGE.Succeeded())
 	{
 		AttackMontage = ATTACK_MONTAGE.Object;
