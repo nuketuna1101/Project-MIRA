@@ -76,6 +76,10 @@ AMIRACharacter::AMIRACharacter()
 
 	// variable for aim
 	bIsAiming = false;
+
+	bIsWalking = false;
+
+	bIsBlocking = false;
 }
 
 // Called when the game starts or when spawned
@@ -176,10 +180,14 @@ void AMIRACharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	// bindings for action mapping
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Attack);
-	PlayerInputComponent->BindAction(TEXT("Dodge"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Dodge);
+
 	PlayerInputComponent->BindAction(TEXT("Aim"), EInputEvent::IE_Pressed, this, &AMIRACharacter::StartAim);
 	PlayerInputComponent->BindAction(TEXT("Aim"), EInputEvent::IE_Released, this, &AMIRACharacter::StopAim);
+	PlayerInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Attack);
+	PlayerInputComponent->BindAction(TEXT("Block"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Block);
+	PlayerInputComponent->BindAction(TEXT("Dodge"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Dodge);
+	PlayerInputComponent->BindAction(TEXT("Execute"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Execute);
+
 
 
 	// bindings for axis mapping
@@ -221,12 +229,24 @@ float AMIRACharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 void AMIRACharacter::UpDown(float NewAxisValue)
 {
 	if (bCannotMove) return;
+	if (NewAxisValue == 0)
+	{
+		bIsWalking = false;
+		return;
+	}
+	bIsWalking = true;
 	AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::X), NewAxisValue);
 }
 
 void AMIRACharacter::LeftRight(float NewAxisValue)
 {
 	if (bCannotMove) return;
+	if (NewAxisValue == 0)
+	{
+		bIsWalking = false;
+		return;
+	}
+	bIsWalking = true;
 	AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::Y), NewAxisValue);
 }
 
@@ -240,6 +260,11 @@ void AMIRACharacter::LookUp(float NewAxisValue)
 	AddControllerPitchInput(NewAxisValue);
 }
 
+void AMIRACharacter::Block()
+{
+	bIsBlocking = true;
+}
+
 void AMIRACharacter::Dodge()
 {
 	// TO DO: bCannotMove 설정해줘야 함
@@ -247,8 +272,25 @@ void AMIRACharacter::Dodge()
 	// play dodge anim
 	MIRAAnim->PlayDodgeMontage();
 
-	UCharacterMovementComponent* MIRACharMovement = GetCharacterMovement();
-	LaunchCharacter(-GetActorForwardVector() * 300.0f + FVector(0.0f, 0.0f, 100.0f), false, false);
+	///////////
+	// 이동 방향 벡터 계산
+	FVector DodgeDirection = GetCharacterMovement()->GetLastInputVector();
+	if (DodgeDirection.IsZero())
+	{
+		DodgeDirection = GetActorForwardVector();
+	}
+	FVector NormalDodgeDirection = DodgeDirection.GetSafeNormal();
+
+	// 회피/구르기 애니메이션 재생 (애니메이션 블루프린트에서 처리)
+
+	// 회피/구르기 이동
+	GetCharacterMovement()->AddImpulse(NormalDodgeDirection * 200.0f, true);
+	//LaunchCharacter(-GetActorForwardVector() * 300.0f + FVector(0.0f, 0.0f, 100.0f), false, false);
+}
+
+void AMIRACharacter::Execute()
+{
+	MIRAAnim->PlayExecuteMontage();
 }
 
 void AMIRACharacter::PerformAttackCombo()
@@ -331,6 +373,11 @@ AMIRABlade* AMIRACharacter::GetBladeLeft()
 	return LeftBlade;
 }
 
+bool AMIRACharacter::IsWalking()
+{
+	return bIsWalking;
+}
+
 void AMIRACharacter::Attack()
 {
 	MIRALOG(Warning, TEXT("[Attack] called / bIsAttacking : %s"), bIsAttacking? TEXT("true") : TEXT("false"));
@@ -342,6 +389,16 @@ void AMIRACharacter::Attack()
 	{
 		AttackMelee();
 	}
+}
+
+void AMIRACharacter::StartBlock()
+{
+	bIsBlocking = true;
+}
+
+void AMIRACharacter::StopBlock()
+{
+	bIsBlocking = false;
 }
 
 void AMIRACharacter::AttackMelee()
@@ -370,7 +427,6 @@ void AMIRACharacter::StartAim()
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 	SpringArm->SocketOffset = FVector(100.0f, 60.0f, 0.0f);
-
 }
 
 void AMIRACharacter::StopAim()

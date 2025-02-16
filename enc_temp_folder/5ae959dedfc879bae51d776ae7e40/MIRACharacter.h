@@ -75,13 +75,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	AMIRABlade* GetBladeLeft();
 
+	// getter for bIsWalking
+	UFUNCTION(BlueprintCallable, Category = "Player Movement")
+	bool IsWalking();
+
 	// attack action
 	void Attack();
 
 	void StartAim();
 
 	void StopAim();
-
 
 	// delegate for when attack hit
 	UPROPERTY(BlueprintAssignable, Category = "Event")
@@ -102,6 +105,9 @@ private:
 	void Dodge();
 
 	// attack logics
+	void AttackMelee();
+	void AttackRange();
+
 	void PerformAttackCombo();
 	void SaveAttackCombo();
 	void ResetAttackCombo();
@@ -136,4 +142,8 @@ private:
 	// aim variable
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	bool bIsAiming;
+
+	// walking variable
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Player Movement", Meta = (AllowPrivateAccess = true))
+	bool bIsWalking;
 };

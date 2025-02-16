@@ -76,6 +76,8 @@ AMIRACharacter::AMIRACharacter()
 
 	// variable for aim
 	bIsAiming = false;
+
+	bIsWalking = false;
 }
 
 // Called when the game starts or when spawned
@@ -132,6 +134,23 @@ void AMIRACharacter::Tick(float DeltaTime)
 	// spring arm interpolation
 	SpringArm->TargetArmLength = FMath::FInterpTo(SpringArm->TargetArmLength,
 		SpringArmLength, DeltaTime, SpringArmLengthSpeed);
+
+	//
+		// 줌 기능 구현
+	if (bIsAiming)
+	{
+		// 현재 FOV 값을 목표 FOV 값으로 부드럽게 보간
+		float CurrentFOV = Camera->FieldOfView;
+		float NewFOV = FMath::FInterpTo(CurrentFOV, 75.0f, DeltaTime, 3.0f);
+		Camera->SetFieldOfView(NewFOV);
+	}
+	else
+	{
+		// 현재 FOV 값을 초기 FOV 값으로 부드럽게 보간
+		float CurrentFOV = Camera->FieldOfView;
+		float NewFOV = FMath::FInterpTo(CurrentFOV, 90.0f, DeltaTime, 3.0f);
+		Camera->SetFieldOfView(NewFOV);
+	}
 }
 
 void AMIRACharacter::PostInitializeComponents()
@@ -204,12 +223,24 @@ float AMIRACharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 void AMIRACharacter::UpDown(float NewAxisValue)
 {
 	if (bCannotMove) return;
+	if (NewAxisValue == 0)
+	{
+		bIsWalking = false;
+		return;
+	}
+	bIsWalking = true;
 	AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::X), NewAxisValue);
 }
 
 void AMIRACharacter::LeftRight(float NewAxisValue)
 {
 	if (bCannotMove) return;
+	if (NewAxisValue == 0)
+	{
+		bIsWalking = false;
+		return;
+	}
+	bIsWalking = true;
 	AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::Y), NewAxisValue);
 }
 
@@ -314,18 +345,26 @@ AMIRABlade* AMIRACharacter::GetBladeLeft()
 	return LeftBlade;
 }
 
+bool AMIRACharacter::IsWalking()
+{
+	return bIsWalking;
+}
+
 void AMIRACharacter::Attack()
 {
 	MIRALOG(Warning, TEXT("[Attack] called / bIsAttacking : %s"), bIsAttacking? TEXT("true") : TEXT("false"));
 	if (bIsAiming)
 	{
-
+		AttackRange();
 	}
 	else
 	{
-
+		AttackMelee();
 	}
+}
 
+void AMIRACharacter::AttackMelee()
+{
 	if (bIsAttacking)
 	{
 		bSaveAttack = true;
@@ -338,22 +377,27 @@ void AMIRACharacter::Attack()
 	}
 }
 
+void AMIRACharacter::AttackRange()
+{
+}
+
 void AMIRACharacter::StartAim()
 {
-	MIRALOG(Warning, TEXT("[StartAim] called / bIsAiming : %s"), bIsAiming ? TEXT("true") : TEXT("false"));
 	bIsAiming = true;
 
-	SpringArmLength = 300.0f;
+	SpringArmLength = 400.0f;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+	SpringArm->SocketOffset = FVector(100.0f, 60.0f, 0.0f);
+
 }
 
 void AMIRACharacter::StopAim()
 {
-	MIRALOG(Warning, TEXT("[StopAim] called / bIsAiming : %s"), bIsAiming ? TEXT("true") : TEXT("false"));
 	bIsAiming = false;
 
 	SpringArmLength = 450.0f;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
+	SpringArm->SocketOffset = FVector::ZeroVector;
 }

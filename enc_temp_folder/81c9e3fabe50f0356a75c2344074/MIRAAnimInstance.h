@@ -25,11 +25,10 @@ public:
 	// 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
-	// play montages for proper action
+	//
 	void PlayAttackMontage();
 	void PlayAttackComboMontage(int32 CurrentComboCount);
 	void PlayDodgeMontage();
-	void PlayExecuteMontage();
 
 	void JumpToAttackMontageSection(int32 NewSection);
 
@@ -65,28 +64,27 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
 	bool IsDead;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Attack", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackMontage;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Dodge", meta = (AllowPrivateAccess = true))
 	UAnimMontage* DodgeMontage;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
-	UAnimMontage* ExecuteMontage;
 
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Attack", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackComboMontageA;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Attack", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackComboMontageB;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Attack", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackComboMontageC;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Attack", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackComboMontageD;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Attack", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackComboMontageE;
 };

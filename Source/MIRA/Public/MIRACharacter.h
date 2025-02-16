@@ -75,13 +75,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	AMIRABlade* GetBladeLeft();
 
+	// getter for bIsWalking
+	UFUNCTION(BlueprintCallable, Category = "Player Movement")
+	bool IsWalking();
+
 	// attack action
 	void Attack();
 
+	void StartBlock();
+	void StopBlock();
+
 	void StartAim();
-
 	void StopAim();
-
 
 	// delegate for when attack hit
 	UPROPERTY(BlueprintAssignable, Category = "Event")
@@ -99,7 +104,9 @@ private:
 	void LookUp(float NewAxisValue);
 
 	// player input actions by action mapping
+	void Block();
 	void Dodge();
+	void Execute();
 
 	// attack logics
 	void AttackMelee();
@@ -115,28 +122,34 @@ private:
 	class UMIRAAnimInstance* MIRAAnim;
 
 	// boolean for blocking or allowing moves
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Combat", Meta = (AllowPrivateAccess = true))
 	bool bCannotMove;
 
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Combat", Meta = (AllowPrivateAccess = true))
+	bool bIsBlocking;
 
 	// boolean for dodge
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Dodge", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Combat", Meta = (AllowPrivateAccess = true))
 	bool bIsDodgeMode;
 
 	// attack combo variables
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Combat", Meta = (AllowPrivateAccess = true))
 	bool bSaveAttack;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Combat", Meta = (AllowPrivateAccess = true))
 	bool bIsAttacking;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Combat", Meta = (AllowPrivateAccess = true))
 	int32 MaxCombo;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Combat", Meta = (AllowPrivateAccess = true))
 	int32 CurrentComboCount;
 
 	// aim variable
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Combat", Meta = (AllowPrivateAccess = true))
 	bool bIsAiming;
+
+	// walking variable
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Player Movement", Meta = (AllowPrivateAccess = true))
+	bool bIsWalking;
 };

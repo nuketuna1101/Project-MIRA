@@ -26,14 +26,6 @@ UMIRAAnimInstance::UMIRAAnimInstance()
 		DodgeMontage = DODGE_MONTAGE.Object;
 	}
 
-	// set montage : execute
-	static ConstructorHelpers::FObjectFinder<UAnimMontage>
-		EXECUTE_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MIRAPlayer/MPlayerShadowStrikeMontage.MPlayerShadowStrikeMontage"));
-	if (EXECUTE_MONTAGE.Succeeded())
-	{
-		ExecuteMontage = EXECUTE_MONTAGE.Object;
-	}
-
 
 
 	// set montage : attack combo
@@ -131,14 +123,6 @@ void UMIRAAnimInstance::PlayDodgeMontage()
 	if (!Montage_IsPlaying(DodgeMontage))
 	{
 		Montage_Play(DodgeMontage, 1.0f);
-	}
-}
-
-void UMIRAAnimInstance::PlayExecuteMontage()
-{
-	if (!Montage_IsPlaying(ExecuteMontage))
-	{
-		Montage_Play(ExecuteMontage, 1.0f);
 	}
 }
 
