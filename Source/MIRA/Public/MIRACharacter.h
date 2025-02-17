@@ -4,6 +4,7 @@
 
 #include "MIRA.h"
 #include "MIRABlade.h"
+#include "MIRACharacterStatComponent.h"
 #include "GameFramework/Character.h"
 #include "MIRACharacter.generated.h"
 

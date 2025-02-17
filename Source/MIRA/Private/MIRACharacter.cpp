@@ -285,7 +285,8 @@ void AMIRACharacter::Dodge()
 	// 회피/구르기 애니메이션 재생 (애니메이션 블루프린트에서 처리)
 
 	// 회피/구르기 이동
-	GetCharacterMovement()->AddImpulse(NormalDodgeDirection * 200.0f, true);
+	GetCharacterMovement()->AddImpulse(FVector(0.0f, 0.0f, 1.0f) * 20.0f, true);
+	GetCharacterMovement()->AddImpulse(NormalDodgeDirection * 400.0f, true);
 	//LaunchCharacter(-GetActorForwardVector() * 300.0f + FVector(0.0f, 0.0f, 100.0f), false, false);
 }
 

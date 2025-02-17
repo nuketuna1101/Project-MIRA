@@ -23,4 +23,7 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	UStaticMeshComponent* Weapon;
 
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision", meta = (AllowPrivateAccess = "true"))
+	UBoxComponent* BoxCollider;
 };
