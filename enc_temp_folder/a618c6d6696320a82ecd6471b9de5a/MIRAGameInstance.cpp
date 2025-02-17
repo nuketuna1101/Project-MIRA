@@ -45,15 +45,16 @@ void UMIRAGameInstance::PrintMIRACharacterDataAll()
             FName RowName = Pair.Key;
             uint8* RowData = Pair.Value;
 
+            // FMIRACharacterData 구조체의 메모리 레이아웃에 맞춰 데이터를 읽어옵니다.
             FMIRACharacterData* Data = reinterpret_cast<FMIRACharacterData*>(RowData);
 
-            if (Data)
+            if (Data) // nullptr 체크 (필수!)
             {
                 MIRALOG(Warning, TEXT("Row Name: %s"), *RowName.ToString());
                 MIRALOG(Warning, TEXT("Level: %d"), Data->Level);
-                MIRALOG(Warning, TEXT("MaxHP: %f"), Data->MaxHP);
-                MIRALOG(Warning, TEXT("MaxMP: %f"), Data->MaxMP);
-                MIRALOG(Warning, TEXT("Power: %f"), Data->Power);
+                MIRALOG(Warning, TEXT("MaxHP: %d"), Data->MaxHP);
+                MIRALOG(Warning, TEXT("MaxMP: %d"), Data->MaxMP);
+                MIRALOG(Warning, TEXT("Power: %d"), Data->Power);
                 MIRALOG(Warning, TEXT("--------------------"));
             }
             else

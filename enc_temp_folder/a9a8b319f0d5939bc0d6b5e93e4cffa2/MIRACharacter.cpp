@@ -18,7 +18,6 @@ AMIRACharacter::AMIRACharacter()
 	// create defaultsubobject
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	CharacterStat = CreateDefaultSubobject<UMIRACharacterStatComponent>(TEXT("CharacterStat"));
 
 	// hierarchy
 	SpringArm->SetupAttachment(GetCapsuleComponent());

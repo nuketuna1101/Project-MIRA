@@ -96,11 +96,6 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FOnHitEvent OnHitBP;
 
-
-	UPROPERTY(VisibleAnywhere, Category = "Character Data")
-	class UMIRACharacterStatComponent* CharacterStat;
-
-
 private:
 	// basic movements by axis mapping
 	void UpDown(float NewAxisValue);
