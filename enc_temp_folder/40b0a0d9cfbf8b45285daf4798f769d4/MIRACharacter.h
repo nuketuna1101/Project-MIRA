@@ -31,7 +31,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-#pragma region Camera Setting
+	// camera mode
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	ECameraMode CurrentControlMode = ECameraMode::FreeTPS;
 
@@ -41,14 +41,17 @@ protected:
 	float SpringArmLength = 0.0f;
 	float SpringArmRotationSpeed = 0.0f;
 	float SpringArmLengthSpeed = 0.0f;
-#pragma endregion
+
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
 	virtual void PostInitializeComponents() override;
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
 	// damage framework
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, 
 		AController* EventInstigator, AActor* DamageCauser) override;
@@ -56,43 +59,50 @@ public:
 	// camera components
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	USpringArmComponent* SpringArm;
+
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	UCameraComponent* Camera;
+
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	AMIRABlade* RightBlade;
+
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	AMIRABlade* LeftBlade;
 
 	// getter for weapon mesh
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	AMIRABlade* GetBladeRight();
+
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	AMIRABlade* GetBladeLeft();
+
 	// getter for bIsWalking
 	UFUNCTION(BlueprintCallable, Category = "Player Movement")
 	bool IsWalking();
 
 	// attack action
 	void Attack();
+
 	void StartBlock();
 	void StopBlock();
+
 	void StartAim();
 	void StopAim();
 
 	// delegate for when attack hit
 	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FOnAttackEnd OnAttackEndBP;
+
 	// delegate for when be hitted
 	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FOnHitEvent OnHitBP;
+
 
 	UPROPERTY(VisibleAnywhere, Category = "Character Data")
 	class UMIRACharacterStatComponent* CharacterStat;
 
 
 private:
-
-#pragma region Input Action by axis and action mappings
 	// basic movements by axis mapping
 	void UpDown(float NewAxisValue);
 	void LeftRight(float NewAxisValue);
@@ -103,9 +113,6 @@ private:
 	void Block();
 	void Dodge();
 	void Execute();
-#pragma endregion
-
-
 
 	// attack logics
 	void AttackMelee();
@@ -119,8 +126,6 @@ private:
 
 	UPROPERTY()
 	class UMIRAAnimInstance* MIRAAnim;
-
-#pragma region Booleans for State/Mode
 
 	// boolean for blocking or allowing moves
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Combat", Meta = (AllowPrivateAccess = true))
@@ -153,36 +158,4 @@ private:
 	// walking variable
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Player Movement", Meta = (AllowPrivateAccess = true))
 	bool bIsWalking;
-
-#pragma endregion
-
-#pragma region CharacterStat
-
-	UPROPERTY(EditInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	int32 Level;
-
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	float MaxHP;
-
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	float CurrentHP;
-
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	float MaxMP;
-
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	float CurrentMP;
-
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	int32 TotalUP;
-
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	int32 CurrentUP;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Data")
-	float Power;
-
-#pragma endregion
-
-
 };
