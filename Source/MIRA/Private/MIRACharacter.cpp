@@ -207,7 +207,7 @@ float AMIRACharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	if (FinalDamage > 0.0f)
 	{
 		// TO DO: 피격 시 피격 애니메이션 재생
-		//if (MIRAAnim)			MIRAAnim->PlayHitMontage();
+		if (MIRAAnim)	MIRAAnim->PlayHitMontage();
 	}
 
 	// TO DO: STAT 기반 판별해서

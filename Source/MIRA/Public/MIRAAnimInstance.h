@@ -30,6 +30,8 @@ public:
 	void PlayAttackComboMontage(int32 CurrentComboCount);
 	void PlayDodgeMontage();
 	void PlayExecuteMontage();
+	void PlayHitMontage();
+	void PlayStunnedMontage();
 
 	void JumpToAttackMontageSection(int32 NewSection);
 
@@ -65,6 +67,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
 	bool IsDead;
 
+	// montage assets
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackMontage;
 
@@ -74,6 +77,11 @@ private:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
 	UAnimMontage* ExecuteMontage;
 
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
+	UAnimMontage* HitMontage;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
+	UAnimMontage* StunnedMontage;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackComboMontageA;

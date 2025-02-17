@@ -1,0 +1,3 @@
+﻿Name,EnemyName,Alias,MaxHP,Power,IsBoss
+1,MarksmanTrooper,,100,10,FALSE
+2,Ivan,the Darkwater,2400,25,TRUE

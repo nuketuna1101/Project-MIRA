@@ -34,6 +34,20 @@ UMIRAAnimInstance::UMIRAAnimInstance()
 		ExecuteMontage = EXECUTE_MONTAGE.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>
+		HIT_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MIRAPlayer/MPlayerHitMontage.MPlayerHitMontage"));
+	if (HIT_MONTAGE.Succeeded())
+	{
+		ExecuteMontage = HIT_MONTAGE.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>
+		STUNNED_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MIRAPlayer/MPlayerStunnedMontage.MPlayerStunnedMontage"));
+	if (STUNNED_MONTAGE.Succeeded())
+	{
+		ExecuteMontage = STUNNED_MONTAGE.Object;
+	}
+
 
 
 	// set montage : attack combo
@@ -139,6 +153,22 @@ void UMIRAAnimInstance::PlayExecuteMontage()
 	if (!Montage_IsPlaying(ExecuteMontage))
 	{
 		Montage_Play(ExecuteMontage, 1.0f);
+	}
+}
+
+void UMIRAAnimInstance::PlayHitMontage()
+{
+	if (!Montage_IsPlaying(HitMontage))
+	{
+		Montage_Play(HitMontage, 1.0f);
+	}
+}
+
+void UMIRAAnimInstance::PlayStunnedMontage()
+{
+	if (!Montage_IsPlaying(StunnedMontage))
+	{
+		Montage_Play(StunnedMontage, 1.0f);
 	}
 }
 
