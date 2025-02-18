@@ -317,6 +317,11 @@ void AMIRACharacter::ResetAttackCombo()
 
 void AMIRACharacter::AttackCheck()
 {
+	// 이 시점에서 
+
+	RightBlade->ApplyBladeAttack();
+	LeftBlade->ApplyBladeAttack();
+
 	/*
 	float FinalAttackRange = 120.0f; //GetFinalAttackRange();
 

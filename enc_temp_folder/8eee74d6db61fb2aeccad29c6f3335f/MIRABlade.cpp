@@ -2,6 +2,7 @@
 
 
 #include "MIRABlade.h"
+#include "Engine/DamageEvents.h"
 
 // Sets default values
 AMIRABlade::AMIRABlade()
@@ -23,36 +24,46 @@ AMIRABlade::AMIRABlade()
 
 	// collision setting
 	Weapon->SetCollisionProfileName(TEXT("NoCollision"));
-	//BoxCollider->SetCollisionProfileName(TEXT("Weapon"));
+	BoxCollider->SetCollisionProfileName(TEXT("MIRABlade"));
 	//BoxCollider->SetGenerateOverlapEvents(true);
 
+	BoxCollider->OnComponentBeginOverlap.AddDynamic(this, &AMIRABlade::OnBeginOverlap);
 	// Box Collider setting
 	BoxCollider->SetBoxExtent(FVector(20.0f, 3.0f, 3.0f));
 }
-
-//void AMIRABlade::OnBeginOverlap(UPrimitiveComponent* OverlapeedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-//{
-//	AMIRAEnemyBaseCharacter* TargetEnemy = Cast<AMIRAEnemyBaseCharacter>(OtherActor);
-//	if (TargetEnemy)
-//	{
-//		MIRALOG(Warning, TEXT("[OnBeginOverlap]"));
-//		OverlappedEnemies.Add(TargetEnemy);
-//	}
-//}
-//
-//void AMIRABlade::OnEndOverlap(UPrimitiveComponent* OverlapeedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex)
-//{
-//	AMIRAEnemyBaseCharacter* TargetEnemy = Cast<AMIRAEnemyBaseCharacter>(OtherActor);
-//	if (TargetEnemy)
-//	{
-//		MIRALOG(Warning, TEXT("[OnEndOverlap]"));
-//		OverlappedEnemies.Remove(TargetEnemy);
-//	}
-//}
 
 // Called when the game starts or when spawned
 void AMIRABlade::BeginPlay()
 {
 	Super::BeginPlay();
 
+}
+
+void AMIRABlade::OnBeginOverlap(UPrimitiveComponent* OverlapeedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	AMIRAEnemyBaseCharacter* TargetEnemy = Cast<AMIRAEnemyBaseCharacter>(OtherActor);
+	if (TargetEnemy)
+	{
+		if (!OverlappedEnemies.Contains(TargetEnemy))
+		{
+			OverlappedEnemies.Add(TargetEnemy);
+		}
+	}
+}
+
+void AMIRABlade::ApplyBladeAttack()
+{
+	for (AMIRAEnemyBaseCharacter* Enemy : OverlappedEnemies)
+	{
+		if (Enemy && Enemy != GetOwner())
+		{
+			// take damage
+			MIRALOG(Warning, TEXT("[ApplyBladeAttack]"));
+
+			FDamageEvent DamageEvent;
+			Enemy->TakeDamage(20.0f, DamageEvent, nullptr, this);
+		}
+	}
+	//
+	OverlappedEnemies.Empty();
 }

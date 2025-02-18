@@ -17,19 +17,7 @@ public:
 	// Sets default values for this actor's properties
 	AMIRABlade();
 
-	UFUNCTION()
-	void OnBeginOverlap(UPrimitiveComponent* OverlapeedComponent,
-		AActor* OtherActor,
-		UPrimitiveComponent* OtherComponent,
-		int32 OtherBodyIndex,
-		bool bFromSweep,
-		const FHitResult& SweepResult);
 
-	UFUNCTION()
-	void OnEndOverlap(UPrimitiveComponent* OverlapeedComponent,
-		AActor* OtherActor,
-		UPrimitiveComponent* OtherComponent,
-		int32 OtherBodyIndex);
 
 protected:
 	// Called when the game starts or when spawned
@@ -39,10 +27,29 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	UStaticMeshComponent* Weapon;
 
+	UFUNCTION()
+	void ApplyBladeAttack();
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision", meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* BoxCollider;
 
 	UPROPERTY()
 	TArray<AMIRAEnemyBaseCharacter*> OverlappedEnemies;
+
+	UFUNCTION()
+	void OnBeginOverlap(UPrimitiveComponent* OverlapeedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComponent,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult);
+
+	//UFUNCTION()
+	//void OnEndOverlap(UPrimitiveComponent* OverlapeedComponent,
+	//	AActor* OtherActor,
+	//	UPrimitiveComponent* OtherComponent,
+	//	int32 OtherBodyIndex);
+
+
 };

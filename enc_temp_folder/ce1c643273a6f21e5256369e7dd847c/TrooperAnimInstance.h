@@ -22,8 +22,6 @@ public:
 
 	//
 	void PlayAttackMontage();
-	void PlayHitMontage();
-	void PlayDeadMontage();
 
 	void SetDeadAnim() { IsDead = true; }
 
@@ -45,10 +43,4 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Attack", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackMontage;
-
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Attack", meta = (AllowPrivateAccess = true))
-	UAnimMontage* HitMontage;
-
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Attack", meta = (AllowPrivateAccess = true))
-	UAnimMontage* DeadMontage;
 };

@@ -28,10 +28,6 @@ public:
 	// post initial
 	virtual void PostInitializeComponents() override;
 
-	// damage framework
-	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
-		AController* EventInstigator, AActor* DamageCauser) override;
-
 	// ui widgets
 	UPROPERTY(VisibleAnywhere, Category = "UI")
 	class UWidgetComponent* HPBar;

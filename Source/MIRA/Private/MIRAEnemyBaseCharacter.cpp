@@ -34,6 +34,10 @@ AMIRAEnemyBaseCharacter::AMIRAEnemyBaseCharacter()
 	// ai controller
 	AIControllerClass = ATrooperAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	// collision setting
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
+
 }
 
 // Called when the game starts or when spawned
@@ -53,6 +57,18 @@ void AMIRAEnemyBaseCharacter::PostInitializeComponents()
 	// event binding on montage end
 	if (!TrooperAnim) return;
 	TrooperAnim->OnMontageEnded.AddDynamic(this, &AMIRAEnemyBaseCharacter::OnAttackMontageEnded);
+}
+
+float AMIRAEnemyBaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	if (FinalDamage > 0.0f)
+	{
+		// TO DO: 피격 시 피격 애니메이션 재생
+		if (TrooperAnim)	TrooperAnim->PlayHitMontage();
+	}
+	return FinalDamage;
 }
 
 void AMIRAEnemyBaseCharacter::Attack()

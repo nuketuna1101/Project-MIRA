@@ -18,6 +18,20 @@ UTrooperAnimInstance::UTrooperAnimInstance()
 	{
 		AttackMontage = ATTACK_MONTAGE.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>
+		HIT_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MarksmanTrooper/MarksmanTrooperHitMontage.MarksmanTrooperHitMontage"));
+	if (HIT_MONTAGE.Succeeded())
+	{
+		HitMontage = HIT_MONTAGE.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>
+		DEAD_MONTAGE(TEXT(""));
+	if (DEAD_MONTAGE.Succeeded())
+	{
+		DeadMontage = DEAD_MONTAGE.Object;
+	}
 }
 
 void UTrooperAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -49,7 +63,23 @@ void UTrooperAnimInstance::PlayAttackMontage()
 	{
 		//MIRALOG(Warning, TEXT("PlayAttackMontage"));
 		Montage_Play(AttackMontage, 1.0f);
-		Montage_JumpToSection(FName("Attack"), AttackMontage);
+		//Montage_JumpToSection(FName("Attack"), AttackMontage);
+	}
+}
+
+void UTrooperAnimInstance::PlayHitMontage()
+{
+	if (!Montage_IsPlaying(HitMontage))
+	{
+		Montage_Play(HitMontage, 1.0f);
+	}
+}
+
+void UTrooperAnimInstance::PlayDeadMontage()
+{
+	if (!Montage_IsPlaying(DeadMontage))
+	{
+		Montage_Play(DeadMontage, 1.0f);
 	}
 }
 

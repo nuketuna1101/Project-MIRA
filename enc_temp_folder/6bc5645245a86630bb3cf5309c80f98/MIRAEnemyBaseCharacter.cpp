@@ -34,6 +34,10 @@ AMIRAEnemyBaseCharacter::AMIRAEnemyBaseCharacter()
 	// ai controller
 	AIControllerClass = ATrooperAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	// collision setting
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
+
 }
 
 // Called when the game starts or when spawned
@@ -59,7 +63,7 @@ void AMIRAEnemyBaseCharacter::Attack()
 {
 	if (!IsAttacking)
 	{
-		MIRALOG(Warning, TEXT("[AMIRAEnemyBaseCharacter] Attack"));
+		//MIRALOG(Warning, TEXT("[AMIRAEnemyBaseCharacter] Attack"));
 		// handling by attack montage in anim instance
 		TrooperAnim->PlayAttackMontage();
 		IsAttacking = true;
