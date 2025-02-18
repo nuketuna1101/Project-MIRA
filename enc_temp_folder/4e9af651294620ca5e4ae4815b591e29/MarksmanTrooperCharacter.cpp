@@ -42,7 +42,7 @@ void AMarksmanTrooperCharacter::Attack()
 {
 	if (!IsAttacking)
 	{
-		//MIRALOG(Warning, TEXT("[AMIRAEnemyBaseCharacter] Attack"));
+		MIRALOG(Warning, TEXT("[AMIRAEnemyBaseCharacter] Attack"));
 		// handling by attack montage in anim instance
 		TrooperAnim->PlayAttackMontage();
 		IsAttacking = true;
@@ -78,7 +78,7 @@ void AMarksmanTrooperCharacter::Attack()
 float AMarksmanTrooperCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	//MIRALOG(Warning, TEXT("Actor: %s / damage: %f"), *GetName(), FinalDamage);
+	MIRALOG(Warning, TEXT("Actor: %s / damage: %f"), *GetName(), FinalDamage);
 
 	// TMP: 일단은 조금이라도 피격 당하면 사망으로
 	if (FinalDamage > 0.0f)

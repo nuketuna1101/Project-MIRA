@@ -47,7 +47,7 @@ void UTrooperAnimInstance::PlayAttackMontage()
 {
 	if (!Montage_IsPlaying(AttackMontage))
 	{
-		//MIRALOG(Warning, TEXT("PlayAttackMontage"));
+		MIRALOG(Warning, TEXT("PlayAttackMontage"));
 		Montage_Play(AttackMontage, 1.0f);
 		Montage_JumpToSection(FName("Attack"), AttackMontage);
 	}

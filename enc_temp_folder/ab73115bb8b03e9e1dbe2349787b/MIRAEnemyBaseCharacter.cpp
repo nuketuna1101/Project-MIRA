@@ -59,7 +59,7 @@ void AMIRAEnemyBaseCharacter::Attack()
 {
 	if (!IsAttacking)
 	{
-		//MIRALOG(Warning, TEXT("[AMIRAEnemyBaseCharacter] Attack"));
+		MIRALOG(Warning, TEXT("[AMIRAEnemyBaseCharacter] Attack"));
 		// handling by attack montage in anim instance
 		TrooperAnim->PlayAttackMontage();
 		IsAttacking = true;

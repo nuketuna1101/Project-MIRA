@@ -40,7 +40,7 @@ void ATrooperAIController::OnPossess(APawn* InPawn)
 	//GetWorld()->GetTimerManager().SetTimer(RepeatTimerHandle, this, &ATrooperAIController::OnRepeatTimer, RepeatInterval, true);
 
 	//
-	//MIRALOG(Warning, TEXT("[ATrooperAIController] OnPossess"));
+	MIRALOG(Warning, TEXT("[ATrooperAIController] OnPossess"));
 	auto BBComponent = GetBlackboardComponent();
 	if (UseBlackboard(BBAsset, BBComponent))
 	{

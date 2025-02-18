@@ -119,7 +119,7 @@ void UMIRAAnimInstance::PlayAttackMontage()
 
 void UMIRAAnimInstance::PlayAttackComboMontage(int32 CurrentComboCount)
 {
-	//MIRALOG(Warning, TEXT("[PlayAttackComboMontage] CurrentComboCount: %d"), CurrentComboCount);
+	MIRALOG(Warning, TEXT("[PlayAttackComboMontage] CurrentComboCount: %d"), CurrentComboCount);
 	switch (CurrentComboCount)
 	{
 	case 0:
