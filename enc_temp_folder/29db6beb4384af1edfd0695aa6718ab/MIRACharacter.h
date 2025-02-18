@@ -10,7 +10,7 @@
 
 // declare delegates
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAttackEnd);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStartDash, FVector, DashEfxLocation);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStartDash);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitEvent, FVector, HitLocation);		// if hit, get location and timing 
 
 UENUM()
@@ -93,7 +93,6 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FOnHitEvent OnHitBP;
 	// delegate for when start dash
-	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FOnStartDash OnStartDashBP;
 
 	UPROPERTY(VisibleAnywhere, Category = "Character Data")

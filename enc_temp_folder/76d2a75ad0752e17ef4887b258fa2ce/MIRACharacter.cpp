@@ -70,6 +70,12 @@ AMIRACharacter::AMIRACharacter()
 	bIsAiming = false;
 	bIsWalking = false;
 	bIsBlocking = false;
+	bIsDashing = false;
+
+	// dash variable
+	MaxDashDistance = 400.0f;
+	DashSpeed = 800.0f;
+	CurrentDashDistance = 0.0f;
 }
 
 // Called when the game starts or when spawned
@@ -149,6 +155,44 @@ void AMIRACharacter::Tick(float DeltaTime)
 	{
 
 	}
+
+
+	if (bIsDashing)
+	{
+		float DashDelta = DashSpeed * DeltaTime;
+		CurrentDashDistance += DashDelta;
+
+		if (CurrentDashDistance >= MaxDashDistance)
+		{
+			CurrentDashDistance = MaxDashDistance;
+			bIsDashing = false;
+		}
+
+		FVector TargetLocation = GetActorLocation() + DashDirection * DashDelta;
+
+		// Sweep 테스트를 통해 충돌 여부 확인
+		FHitResult HitResult;
+		FCollisionQueryParams QueryParams;
+		QueryParams.AddIgnoredActor(this); // 자기 자신은 무시
+
+		bool bHit = GetWorld()->SweepSingleByChannel(
+			HitResult, 
+			GetActorLocation(), 
+			TargetLocation, 
+			FQuat::Identity, 
+			ECC_Visibility, 
+			FCollisionShape::MakeSphere(30.0f), 
+			QueryParams); // 충돌체 크기 조절
+
+		if (bHit)
+		{
+			// 충돌 발생 시, 충돌 지점까지 이동
+			TargetLocation = HitResult.ImpactPoint;
+			bIsDashing = false; // 충돌 시 대쉬 종료
+		}
+
+		SetActorLocation(TargetLocation);
+	}
 }
 
 void AMIRACharacter::PostInitializeComponents()
@@ -182,6 +226,7 @@ void AMIRACharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Attack);
 	PlayerInputComponent->BindAction(TEXT("Block"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Block);
 	PlayerInputComponent->BindAction(TEXT("Dodge"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Dodge);
+	PlayerInputComponent->BindAction(TEXT("Dash"), EInputEvent::IE_Pressed, this, &AMIRACharacter::StartDash);
 	PlayerInputComponent->BindAction(TEXT("Execute"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Execute);
 
 	// bindings for axis mapping
@@ -359,6 +404,11 @@ bool AMIRACharacter::IsWalking()
 	return bIsWalking;
 }
 
+bool AMIRACharacter::IsDashing()
+{
+	return bIsDashing;
+}
+
 void AMIRACharacter::Attack()
 {
 	//MIRALOG(Warning, TEXT("[Attack] called / bIsAttacking : %s"), bIsAttacking ? TEXT("true") : TEXT("false"));
@@ -419,4 +469,25 @@ void AMIRACharacter::StopAim()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	SpringArm->SocketOffset = FVector::ZeroVector;
+}
+
+void AMIRACharacter::StartDash()
+{
+	if (bCannotMove || bIsDashing) return;
+	
+	bIsDashing = true;
+
+	DashDirection = 
+		FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::X) * GetInputAxisValue("UpDown") +
+		FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::Y) * GetInputAxisValue("LeftRight");
+	if (DashDirection.IsNearlyZero())
+	{
+		bIsDashing = false;
+		return;
+	}
+
+	DashDirection.Normalize();
+	CurrentDashDistance = 0.0f;
+
+	OnStartDashBP.Broadcast();
 }

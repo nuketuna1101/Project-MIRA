@@ -18,6 +18,13 @@ UMIRAAnimInstance::UMIRAAnimInstance()
 		AttackMontage = ATTACK_MONTAGE.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>
+		DASH_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MIRAPlayer/MPlayerDashMontage.MPlayerDashMontage"));
+	if (DASH_MONTAGE.Succeeded())
+	{
+		DodgeMontage = DASH_MONTAGE.Object;
+	}
+
 	// set montage : dodge
 	static ConstructorHelpers::FObjectFinder<UAnimMontage>
 		DODGE_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MIRAPlayer/MPlayerDodgeMontage.MPlayerDodgeMontage"));
@@ -137,6 +144,14 @@ void UMIRAAnimInstance::PlayAttackComboMontage(int32 CurrentComboCount)
 	case 4:
 		Montage_Play(AttackComboMontageE, 1.0f);
 		break;
+	}
+}
+
+void UMIRAAnimInstance::PlayDashMontage()
+{
+	if (!Montage_IsPlaying(DashMontage))
+	{
+		Montage_Play(DashMontage, 4.0f);
 	}
 }
 

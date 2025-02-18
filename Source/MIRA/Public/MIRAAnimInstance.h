@@ -28,6 +28,7 @@ public:
 	// play montages for proper action
 	void PlayAttackMontage();
 	void PlayAttackComboMontage(int32 CurrentComboCount);
+	void PlayDashMontage();
 	void PlayDodgeMontage();
 	void PlayExecuteMontage();
 	void PlayHitMontage();
@@ -70,6 +71,9 @@ private:
 	// montage assets
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackMontage;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
+	UAnimMontage* DashMontage;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
 	UAnimMontage* DodgeMontage;
