@@ -25,7 +25,6 @@ AMIRABlade::AMIRABlade()
 	// collision setting
 	Weapon->SetCollisionProfileName(TEXT("NoCollision"));
 	BoxCollider->SetCollisionProfileName(TEXT("MIRABlade"));
-	//BoxCollider->SetGenerateOverlapEvents(true);
 
 	BoxCollider->OnComponentBeginOverlap.AddDynamic(this, &AMIRABlade::OnBeginOverlap);
 	// Box Collider setting
@@ -62,8 +61,14 @@ void AMIRABlade::ApplyBladeAttack()
 
 			FDamageEvent DamageEvent;
 			Enemy->TakeDamage(20.0f, DamageEvent, nullptr, this);
+			//OnHitBP.Broadcast(HitResult.ImpactPoint);
 		}
 	}
 	//
 	OverlappedEnemies.Empty();
+}
+
+TArray<AMIRAEnemyBaseCharacter*> AMIRABlade::GetOverlappedEnemies()
+{
+	return OverlappedEnemies;
 }

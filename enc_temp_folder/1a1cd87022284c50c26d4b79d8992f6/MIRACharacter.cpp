@@ -182,7 +182,6 @@ void AMIRACharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Attack);
 	PlayerInputComponent->BindAction(TEXT("Block"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Block);
 	PlayerInputComponent->BindAction(TEXT("Dodge"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Dodge);
-	PlayerInputComponent->BindAction(TEXT("Dash"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Dash);
 	PlayerInputComponent->BindAction(TEXT("Execute"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Execute);
 
 	// bindings for axis mapping

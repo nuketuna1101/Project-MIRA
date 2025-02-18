@@ -27,8 +27,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	UStaticMeshComponent* Weapon;
 
-	UFUNCTION()
 	void ApplyBladeAttack();
+
+	TArray<AMIRAEnemyBaseCharacter*> GetOverlappedEnemies();
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision", meta = (AllowPrivateAccess = "true"))
@@ -44,12 +45,5 @@ private:
 		int32 OtherBodyIndex,
 		bool bFromSweep,
 		const FHitResult& SweepResult);
-
-	//UFUNCTION()
-	//void OnEndOverlap(UPrimitiveComponent* OverlapeedComponent,
-	//	AActor* OtherActor,
-	//	UPrimitiveComponent* OtherComponent,
-	//	int32 OtherBodyIndex);
-
 
 };
