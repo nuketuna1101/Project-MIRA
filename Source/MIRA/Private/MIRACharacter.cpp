@@ -11,9 +11,8 @@
 // Sets default values
 AMIRACharacter::AMIRACharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 
 	// create defaultsubobject
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
@@ -54,21 +53,13 @@ AMIRACharacter::AMIRACharacter()
 	// jump velocity
 	GetCharacterMovement()->JumpZVelocity = 500.0f;
 
-	// bool variable for attack
-	//IsAttacking = false;
-
-	//// attack combo
-	//MaxCombo = 2;
-	//AttackEndComboState();
-
 	// setting for collision channel
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("MIRACharacter"));
 
 	// bool varaible for move
 	bCannotMove = false;
-
 	// bool varaible for dodge
-	bIsDodgeMode = false;
+	bIsDodging = false;
 
 	// varaibles for attack combo
 	MaxCombo = 5;
@@ -77,9 +68,7 @@ AMIRACharacter::AMIRACharacter()
 
 	// variable for aim
 	bIsAiming = false;
-
 	bIsWalking = false;
-
 	bIsBlocking = false;
 }
 
@@ -87,7 +76,7 @@ AMIRACharacter::AMIRACharacter()
 void AMIRACharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	// weapon attach
 	FName WeaponRightSocket(TEXT("blade_right_socket"));
 	FName WeaponLeftSocket(TEXT("blade_left_socket"));
@@ -117,12 +106,12 @@ void AMIRACharacter::SetCameraMode(ECameraMode CameraMode)
 	case ECameraMode::FreeTPS:
 		SpringArmLength = 450.0f;
 		SpringArm->bUsePawnControlRotation = true;
-		SpringArm->bInheritPitch = true; 
-		SpringArm->bInheritRoll = true; 
+		SpringArm->bInheritPitch = true;
+		SpringArm->bInheritRoll = true;
 		SpringArm->bInheritYaw = true;
 		SpringArm->bDoCollisionTest = true;
 		bUseControllerRotationYaw = false;
-		GetCharacterMovement()->bOrientRotationToMovement = true; 
+		GetCharacterMovement()->bOrientRotationToMovement = true;
 		GetCharacterMovement()->bUseControllerDesiredRotation = false;
 		GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
 		break;
@@ -137,22 +126,28 @@ void AMIRACharacter::Tick(float DeltaTime)
 	// spring arm interpolation
 	SpringArm->TargetArmLength = FMath::FInterpTo(SpringArm->TargetArmLength,
 		SpringArmLength, DeltaTime, SpringArmLengthSpeed);
-
-	//
-		// 줌 기능 구현
+	// implementation of aiming by lerp
 	if (bIsAiming)
 	{
-		// 현재 FOV 값을 목표 FOV 값으로 부드럽게 보간
 		float CurrentFOV = Camera->FieldOfView;
 		float NewFOV = FMath::FInterpTo(CurrentFOV, 75.0f, DeltaTime, 3.0f);
 		Camera->SetFieldOfView(NewFOV);
 	}
 	else
 	{
-		// 현재 FOV 값을 초기 FOV 값으로 부드럽게 보간
 		float CurrentFOV = Camera->FieldOfView;
 		float NewFOV = FMath::FInterpTo(CurrentFOV, 90.0f, DeltaTime, 3.0f);
 		Camera->SetFieldOfView(NewFOV);
+	}
+
+	//
+	if (bIsDodging)
+	{
+
+	}
+	else
+	{
+
 	}
 }
 
@@ -167,10 +162,10 @@ void AMIRACharacter::PostInitializeComponents()
 	// binding logics to anim notify
 	MIRAAnim->OnSaveAttackCheck.AddLambda([this]() -> void {
 		SaveAttackCombo();
-	});
+		});
 	MIRAAnim->OnResetComboCheck.AddLambda([this]() -> void {
 		ResetAttackCombo();
-	});
+		});
 	MIRAAnim->OnAttackHitCheck.AddUObject(this, &AMIRACharacter::AttackCheck);
 }
 
@@ -188,8 +183,6 @@ void AMIRACharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction(TEXT("Block"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Block);
 	PlayerInputComponent->BindAction(TEXT("Dodge"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Dodge);
 	PlayerInputComponent->BindAction(TEXT("Execute"), EInputEvent::IE_Pressed, this, &AMIRACharacter::Execute);
-
-
 
 	// bindings for axis mapping
 	PlayerInputComponent->BindAxis(TEXT("UpDown"), this, &AMIRACharacter::UpDown);
@@ -324,6 +317,7 @@ void AMIRACharacter::ResetAttackCombo()
 
 void AMIRACharacter::AttackCheck()
 {
+	/*
 	float FinalAttackRange = 120.0f; //GetFinalAttackRange();
 
 	FHitResult HitResult;
@@ -344,13 +338,13 @@ void AMIRACharacter::AttackCheck()
 	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
 	float DebugLifeTime = 5.0f;
 
-	DrawDebugCapsule(GetWorld(), 
-		Center, 
-		HalfHeight, 
-		50.0f, 
-		CapsuleRot, 
-		DrawColor, 
-		false, 
+	DrawDebugCapsule(GetWorld(),
+		Center,
+		HalfHeight,
+		50.0f,
+		CapsuleRot,
+		DrawColor,
+		false,
 		DebugLifeTime);
 
 
@@ -363,6 +357,7 @@ void AMIRACharacter::AttackCheck()
 			HitResult.GetActor()->TakeDamage(200.0f, DamageEvent, GetController(), this);
 		}
 	}
+	*/
 }
 
 AMIRABlade* AMIRACharacter::GetBladeRight()
@@ -382,7 +377,7 @@ bool AMIRACharacter::IsWalking()
 
 void AMIRACharacter::Attack()
 {
-	MIRALOG(Warning, TEXT("[Attack] called / bIsAttacking : %s"), bIsAttacking? TEXT("true") : TEXT("false"));
+	MIRALOG(Warning, TEXT("[Attack] called / bIsAttacking : %s"), bIsAttacking ? TEXT("true") : TEXT("false"));
 	if (bIsAiming)
 	{
 		AttackRange();
@@ -419,6 +414,7 @@ void AMIRACharacter::AttackMelee()
 
 void AMIRACharacter::AttackRange()
 {
+	// ranged attack logic
 }
 
 void AMIRACharacter::StartAim()

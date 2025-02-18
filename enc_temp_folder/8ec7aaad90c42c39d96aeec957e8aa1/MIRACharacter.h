@@ -23,7 +23,7 @@ class MIRA_API AMIRACharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-	public:
+public:
 	// Sets default values for this character's properties
 	AMIRACharacter();
 
@@ -43,14 +43,14 @@ protected:
 	float SpringArmLengthSpeed = 0.0f;
 #pragma endregion
 
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void PostInitializeComponents() override;
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// damage framework
-	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, 
 		AController* EventInstigator, AActor* DamageCauser) override;
 
 	// camera components
@@ -131,7 +131,7 @@ private:
 
 	// boolean for dodge
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Combat", Meta = (AllowPrivateAccess = true))
-	bool bIsDodging;
+	bool bIsDodgeMode;
 
 	// attack combo variables
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Combat", Meta = (AllowPrivateAccess = true))
@@ -179,7 +179,7 @@ private:
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
 	int32 CurrentUP;
 
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Data")
 	float Power;
 
 #pragma endregion
