@@ -54,7 +54,8 @@ public:
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 		AController* EventInstigator, AActor* DamageCauser) override;
 
-	// camera components
+#pragma region Camera and Blade Components
+	// components
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	USpringArmComponent* SpringArm;
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
@@ -63,6 +64,7 @@ public:
 	AMIRABlade* RightBlade;
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	AMIRABlade* LeftBlade;
+#pragma endregion
 
 	// getter for weapon mesh
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
@@ -70,22 +72,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	AMIRABlade* GetBladeLeft();
 
-	// getter for bIsWalking
-	UFUNCTION(BlueprintCallable, Category = "Player Movement")
-	bool IsWalking();
-
-	// getter for bIsDashing
-	UFUNCTION(BlueprintCallable, Category = "Player Movement")
-	bool IsDashing();
-
-	// attack action
+#pragma region Actions
 	void Attack();
 	void StartBlock();
 	void StopBlock();
 	void StartAim();
 	void StopAim();
 	void StartDash();
+#pragma endregion
 
+#pragma region Delegates for BP event
 	// delegate for when attack hit
 	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FOnAttackEnd OnAttackEndBP;
@@ -95,12 +91,16 @@ public:
 	// delegate for when start dash
 	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FOnStartDash OnStartDashBP;
+#pragma endregion
 
 	UPROPERTY(VisibleAnywhere, Category = "Character Data")
 	class UMIRACharacterStatComponent* CharacterStat;
 
 
 private:
+#pragma region
+
+#pragma endregion
 
 #pragma region Input Action by axis and action mappings
 	// basic movements by axis mapping
@@ -115,8 +115,7 @@ private:
 	void Execute();
 #pragma endregion
 
-
-
+#pragma region Attack Logics
 	// attack logics
 	void AttackMelee();
 	void AttackRange();
@@ -126,6 +125,7 @@ private:
 	void ResetAttackCombo();
 
 	void AttackCheck();
+#pragma endregion
 
 	UPROPERTY()
 	class UMIRAAnimInstance* MIRAAnim;
@@ -136,7 +136,6 @@ private:
 	float CurrentDashDistance;
 	float DashSpeed;
 #pragma endregion
-
 
 #pragma region Booleans for State/Mode
 

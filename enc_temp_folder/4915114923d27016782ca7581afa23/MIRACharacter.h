@@ -10,7 +10,7 @@
 
 // declare delegates
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAttackEnd);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStartDash);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStartDash, FVector, DashEfxLocation);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitEvent, FVector, HitLocation);		// if hit, get location and timing 
 
 UENUM()
@@ -54,7 +54,7 @@ public:
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 		AController* EventInstigator, AActor* DamageCauser) override;
 
-	// camera components
+	// components
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	USpringArmComponent* SpringArm;
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
@@ -70,15 +70,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	AMIRABlade* GetBladeLeft();
 
-	// getter for bIsWalking
-	UFUNCTION(BlueprintCallable, Category = "Player Movement")
-	bool IsWalking();
-
-	// getter for bIsDashing
-	UFUNCTION(BlueprintCallable, Category = "Player Movement")
-	bool IsDashing();
-
-	// attack action
 	void Attack();
 	void StartBlock();
 	void StopBlock();
@@ -86,6 +77,7 @@ public:
 	void StopAim();
 	void StartDash();
 
+#pragma region Delegates for BP event
 	// delegate for when attack hit
 	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FOnAttackEnd OnAttackEndBP;
@@ -93,13 +85,18 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FOnHitEvent OnHitBP;
 	// delegate for when start dash
+	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FOnStartDash OnStartDashBP;
+#pragma endregion
 
 	UPROPERTY(VisibleAnywhere, Category = "Character Data")
 	class UMIRACharacterStatComponent* CharacterStat;
 
 
 private:
+#pragma region
+
+#pragma endregion
 
 #pragma region Input Action by axis and action mappings
 	// basic movements by axis mapping
@@ -114,8 +111,7 @@ private:
 	void Execute();
 #pragma endregion
 
-
-
+#pragma region Attack Logics
 	// attack logics
 	void AttackMelee();
 	void AttackRange();
@@ -125,6 +121,7 @@ private:
 	void ResetAttackCombo();
 
 	void AttackCheck();
+#pragma endregion
 
 	UPROPERTY()
 	class UMIRAAnimInstance* MIRAAnim;
@@ -135,7 +132,6 @@ private:
 	float CurrentDashDistance;
 	float DashSpeed;
 #pragma endregion
-
 
 #pragma region Booleans for State/Mode
 

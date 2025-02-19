@@ -380,7 +380,10 @@ void AMIRACharacter::AttackCheck()
 
 			FDamageEvent DamageEvent;
 			Enemy->TakeDamage(20.0f, DamageEvent, nullptr, this);
-			//OnHitBP.Broadcast(Enemy.ImpactPoint);
+
+			// get expected impact point 
+			FVector EnemyLocation = Enemy->GetActorLocation();
+			OnHitBP.Broadcast(EnemyLocation);
 		}
 	}
 	//
@@ -397,16 +400,6 @@ AMIRABlade* AMIRACharacter::GetBladeRight()
 AMIRABlade* AMIRACharacter::GetBladeLeft()
 {
 	return LeftBlade;
-}
-
-bool AMIRACharacter::IsWalking()
-{
-	return bIsWalking;
-}
-
-bool AMIRACharacter::IsDashing()
-{
-	return bIsDashing;
 }
 
 void AMIRACharacter::Attack()
