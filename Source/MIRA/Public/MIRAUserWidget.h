@@ -14,4 +14,15 @@ class MIRA_API UMIRAUserWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
+protected:
+	virtual void NativeConstruct() override;
+
+	UFUNCTION()
+	void OnResumeClicked();
+
+
+protected:
+	UPROPERTY()
+	class UButton* ResumeButton;
+
 };

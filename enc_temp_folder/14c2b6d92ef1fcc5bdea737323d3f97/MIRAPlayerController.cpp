@@ -3,20 +3,6 @@
 
 #include "MIRAPlayerController.h"
 
-AMIRAPlayerController::AMIRAPlayerController()
-{
-	// widget binding
-}
-
-void AMIRAPlayerController::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// exclude ui and only send input to game
-	FInputModeGameOnly InputMode;
-	SetInputMode(InputMode);
-}
-
 void AMIRAPlayerController::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -27,3 +13,11 @@ void AMIRAPlayerController::OnPossess(APawn* aPawn)
 	Super::OnPossess(aPawn);
 }
 
+void AMIRAPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// exclude ui and only send input to game
+	FInputModeGameOnly InputMode;
+	SetInputMode(InputMode);
+}

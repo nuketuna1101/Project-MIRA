@@ -13,20 +13,15 @@ UCLASS()
 class MIRA_API AMIRAPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-public:
-	AMIRAPlayerController();
 	
-protected:
-	virtual void BeginPlay() override;
-
 public:
 	// components inits after instance created
 	virtual void PostInitializeComponents() override;
 	// use pawn by possessing
 	virtual void OnPossess(APawn* aPawn) override;
 
+
 protected:
-
-
+	virtual void BeginPlay() override;
 
 };
