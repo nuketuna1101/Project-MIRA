@@ -74,6 +74,7 @@ float AMIRAEnemyBaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const
 		if (TrooperAnim)	TrooperAnim->PlayHitMontage();
 	}
 	TrooperStat->SetDamage(FinalDamage);
+
 	return FinalDamage;
 }
 
@@ -99,7 +100,7 @@ void AMIRAEnemyBaseCharacter::SetTarget(AMIRACharacter* TargetActor)
 
 void AMIRAEnemyBaseCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
-	//MIRACHECK(IsAttacking);
+	MIRACHECK(IsAttacking);
 	IsAttacking = false;
 	// delegate broadcast
 	OnAttackEnd.Broadcast();
