@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "MIRACharacterStatComponent.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnZeroHPDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MIRA_API UMIRACharacterStatComponent : public UActorComponent
@@ -22,19 +24,28 @@ protected:
 	virtual void InitializeComponent() override;
 
 public:
+	// setter
 	void SetNewLevel(int32 NewLevel);
+	void SetDamage(float NewDamage);
+	void SetHP(float NewHP);
+
+	// getter
+	float GetPower();
+	float GetHPRatio();
+	int GetLevel() { return Level; }
+	float GetHP() { return CurrentHP; }
+
+#pragma region Delegates
+	FOnZeroHPDelegate OnZeroHP;
+	FOnHPChangedDelegate OnHPChanged;
+#pragma endregion
 
 private:
-	// character stats as game data
-	UPROPERTY(EditInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
+	struct FMIRACharacterData* CurrentStatData = nullptr;
+
+	UPROPERTY(EditInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = true))
 	int32 Level;
 
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	float MaxHP;
-
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = true))
 	float CurrentHP;
-		
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	float CurrentMP;
 };

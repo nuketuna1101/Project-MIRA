@@ -3,6 +3,7 @@
 #pragma once
 
 #include "MIRA.h"
+#include "MIRABaseCharacterComponent.h"
 #include "GameFramework/Character.h"
 #include "MIRAEnemyBaseCharacter.generated.h"
 
@@ -52,5 +53,8 @@ public:
 
 	UPROPERTY()
 	class UTrooperAnimInstance* TrooperAnim;
+
+	UPROPERTY(VisibleAnywhere, Category = "Trooper Data")
+	class UMIRABaseCharacterComponent* TrooperStat;
 
 };

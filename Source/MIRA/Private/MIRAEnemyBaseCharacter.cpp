@@ -38,6 +38,8 @@ AMIRAEnemyBaseCharacter::AMIRAEnemyBaseCharacter()
 	// collision setting
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
 
+	//
+	TrooperStat = CreateDefaultSubobject<UMIRABaseCharacterComponent>(TEXT("TrooperStat"));
 }
 
 // Called when the game starts or when spawned
@@ -45,6 +47,9 @@ void AMIRAEnemyBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// 임시
+	TrooperStat->SetHP(100.0f);
+
 }
 
 void AMIRAEnemyBaseCharacter::PostInitializeComponents()
@@ -68,6 +73,8 @@ float AMIRAEnemyBaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const
 		// TO DO: 피격 시 피격 애니메이션 재생
 		if (TrooperAnim)	TrooperAnim->PlayHitMontage();
 	}
+	TrooperStat->SetDamage(FinalDamage);
+
 	return FinalDamage;
 }
 

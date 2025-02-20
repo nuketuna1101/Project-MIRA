@@ -27,7 +27,7 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	UStaticMeshComponent* Weapon;
 
-	void FreeAllOverlappedEnemies() { OverlappedEnemies.Empty(); }
+	void ApplyBladeAttack();
 
 	TArray<AMIRAEnemyBaseCharacter*> GetOverlappedEnemies();
 
@@ -46,4 +46,9 @@ private:
 		bool bFromSweep,
 		const FHitResult& SweepResult);
 
+	UFUNCTION()
+	void OnEndOverlap(UPrimitiveComponent* OverlapeedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComponent,
+		int32 OtherBodyIndex);
 };

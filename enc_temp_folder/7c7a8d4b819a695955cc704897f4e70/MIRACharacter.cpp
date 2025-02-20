@@ -374,6 +374,9 @@ void AMIRACharacter::ResetAttackCombo()
 
 void AMIRACharacter::AttackCheck()
 {
+	//RightBlade->ApplyBladeAttack();
+	//LeftBlade->ApplyBladeAttack();
+
 	auto OverlappedEnemies = RightBlade->GetOverlappedEnemies();
 	auto OverlappedEnemiesLeft = LeftBlade->GetOverlappedEnemies();
 	for (auto Enemy : OverlappedEnemiesLeft)
@@ -386,7 +389,7 @@ void AMIRACharacter::AttackCheck()
 		if (Enemy && Enemy != GetOwner())
 		{
 			// take damage
-			MIRALOG(Warning, TEXT("[AttackCheck]"));
+			MIRALOG(Warning, TEXT("[ApplyBladeAttack]"));
 
 			FDamageEvent DamageEvent;
 			Enemy->TakeDamage(20.0f, DamageEvent, nullptr, this);
@@ -398,8 +401,8 @@ void AMIRACharacter::AttackCheck()
 	}
 	//
 	OverlappedEnemies.Empty();
-	RightBlade->FreeAllOverlappedEnemies();
-	LeftBlade->FreeAllOverlappedEnemies();
+
+
 }
 
 AMIRABlade* AMIRACharacter::GetBladeRight()

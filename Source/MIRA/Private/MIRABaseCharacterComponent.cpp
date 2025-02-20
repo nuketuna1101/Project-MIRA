@@ -27,25 +27,30 @@ void UMIRABaseCharacterComponent::InitializeComponent()
 
 void UMIRABaseCharacterComponent::SetDamage(float NewDamage)
 {
-	SetHP(FMath::Clamp<float>(CurrentHP - NewDamage, 0.0f, CurrentStatData->MaxHP));
+	MIRACHECK(nullptr != CurrentStatData);
 
+	SetHP(FMath::Clamp<float>(CurrentHP - NewDamage, 0.0f, CurrentStatData->MaxHP));
 }
 
 void UMIRABaseCharacterComponent::SetHP(float NewHP)
 {
 	CurrentHP = NewHP;
+	OnHPChanged.Broadcast();
 	if (CurrentHP < KINDA_SMALL_NUMBER)
 	{
 		CurrentHP = 0.0f;
+		OnZeroHP.Broadcast();
 	}
 }
 
 float UMIRABaseCharacterComponent::GetPower()
 {
-	return 0.0f;
+	MIRACHECK(nullptr != CurrentStatData, 0.0f);
+	return CurrentStatData->Power;
 }
 
 float UMIRABaseCharacterComponent::GetHPRatio()
 {
+	MIRACHECK(nullptr != CurrentStatData, 0.0f);
 	return(CurrentStatData->MaxHP < KINDA_SMALL_NUMBER) ? 0.0f : (CurrentHP / CurrentStatData->MaxHP);
 }

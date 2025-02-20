@@ -27,7 +27,7 @@ AMIRABlade::AMIRABlade()
 	BoxCollider->SetCollisionProfileName(TEXT("MIRABlade"));
 
 	BoxCollider->OnComponentBeginOverlap.AddDynamic(this, &AMIRABlade::OnBeginOverlap);
-
+	BoxCollider->OnComponentEndOverlap.AddDynamic(this, &AMIRABlade::OnEndOverlap);
 	// Box Collider setting
 	BoxCollider->SetBoxExtent(FVector(20.0f, 3.0f, 3.0f));
 }
@@ -49,6 +49,36 @@ void AMIRABlade::OnBeginOverlap(UPrimitiveComponent* OverlapeedComponent, AActor
 			OverlappedEnemies.Add(TargetEnemy);
 		}
 	}
+}
+
+void AMIRABlade::OnEndOverlap(UPrimitiveComponent* OverlapeedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex)
+{
+	AMIRAEnemyBaseCharacter* TargetEnemy = Cast<AMIRAEnemyBaseCharacter>(OtherActor);
+	if (TargetEnemy)
+	{
+		if (OverlappedEnemies.Contains(TargetEnemy))
+		{
+			OverlappedEnemies.Remove(TargetEnemy);
+		}
+	}
+}
+
+void AMIRABlade::ApplyBladeAttack()
+{
+	for (AMIRAEnemyBaseCharacter* Enemy : OverlappedEnemies)
+	{
+		if (Enemy && Enemy != GetOwner())
+		{
+			// take damage
+			MIRALOG(Warning, TEXT("[ApplyBladeAttack]"));
+
+			FDamageEvent DamageEvent;
+			Enemy->TakeDamage(20.0f, DamageEvent, nullptr, this);
+			//OnHitBP.Broadcast(HitResult.ImpactPoint);
+		}
+	}
+	//
+	OverlappedEnemies.Empty();
 }
 
 TArray<AMIRAEnemyBaseCharacter*> AMIRABlade::GetOverlappedEnemies()

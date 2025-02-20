@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "MIRABaseCharacterComponent.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnZeroHPDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MIRA_API UMIRABaseCharacterComponent : public UActorComponent
@@ -30,6 +32,12 @@ public:
 	float GetPower();
 	float GetHPRatio();
 	float GetHP() { return CurrentHP; }
+
+#pragma region Delegates
+	FOnZeroHPDelegate OnZeroHP;
+	FOnHPChangedDelegate OnHPChanged;
+#pragma endregion
+
 	
 private:
 	struct FMIRACharacterData* CurrentStatData = nullptr;
