@@ -22,6 +22,9 @@ protected:
 	void OnResumeClicked();
 
 	UFUNCTION()
+	void OnControlInfoClicked();
+
+	UFUNCTION()
 	void OnReturenToTitleClicked();
 #pragma endregion
 
@@ -31,6 +34,12 @@ protected:
 	class UButton* ResumeButton;
 
 	UPROPERTY()
+	class UButton* ControlInfoButton;
+
+	UPROPERTY()
 	class UButton* ReturnToTitleButton;
 #pragma endregion
+
+	UPROPERTY()
+	UUserWidget* ControlInfoWidget;
 };
