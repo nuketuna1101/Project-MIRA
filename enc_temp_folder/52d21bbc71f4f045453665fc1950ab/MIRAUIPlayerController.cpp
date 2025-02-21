@@ -9,8 +9,10 @@ void AMIRAUIPlayerController::BeginPlay()
 	Super::BeginPlay();
 
 	MIRACHECK(nullptr != UIWidgetClass);
+
 	UIWidgetInstance = CreateWidget<UUserWidget>(this, UIWidgetClass);
 	MIRACHECK(nullptr != UIWidgetInstance);
+
 	UIWidgetInstance->AddToViewport();
 
 	FInputModeUIOnly Mode;
