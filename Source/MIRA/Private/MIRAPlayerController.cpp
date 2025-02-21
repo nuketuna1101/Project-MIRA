@@ -36,8 +36,10 @@ void AMIRAPlayerController::BeginPlay()
 	Super::BeginPlay();
 
 	// exclude ui and only send input to game
-	FInputModeGameOnly InputMode;
-	SetInputMode(InputMode);
+	/*FInputModeGameOnly InputMode;
+	SetInputMode(InputMode);*/
+	ChangeInputMode(true);
+
 
 	//
 	HUDWidget = CreateWidget<UMIRAHUDWidget>(this, HUDWidgetClass);
@@ -53,6 +55,20 @@ void AMIRAPlayerController::PostInitializeComponents()
 void AMIRAPlayerController::OnPossess(APawn* aPawn)
 {
 	Super::OnPossess(aPawn);
+}
+
+void AMIRAPlayerController::ChangeInputMode(bool bGameMode)
+{
+	if (bGameMode)
+	{
+		SetInputMode(InputModeGame);
+		bShowMouseCursor = false;
+	}
+	else
+	{
+		SetInputMode(InputModeUI);
+		bShowMouseCursor = true;
+	}
 }
 
 void AMIRAPlayerController::SetupInputComponent()
@@ -71,6 +87,6 @@ void AMIRAPlayerController::OnGamePause()
 	GamePlayWidget->AddToViewport(3);
 
 	SetPause(true);
-	//ChangeInputMode(false);
+	ChangeInputMode(false);
 }
 

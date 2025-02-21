@@ -27,8 +27,6 @@ public:
 
 	class UMIRAHUDWidget* GetHUDWidget() const { return HUDWidget; }
 
-	void ChangeInputMode(bool bGameMode = true);
-
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
@@ -46,7 +44,4 @@ private:
 	class UMIRAHUDWidget* HUDWidget;
 	UPROPERTY()
 	class UMIRAGamePlayWidget* GamePlayWidget;
-
-	FInputModeGameOnly InputModeGame;
-	FInputModeUIOnly InputModeUI;
 };
