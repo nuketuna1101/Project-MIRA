@@ -1,6 +1,6 @@
 # Project MIRA
 
-![](https://velog.velcdn.com/images/nuketuna/post/124b5c52-0c79-451a-a44c-0805e68a2e35/image.png =192x)
+<img src="https://velog.velcdn.com/images/nuketuna/post/124b5c52-0c79-451a-a44c-0805e68a2e35/image.png" style="width:192; height: 192;">
 ![](https://velog.velcdn.com/images/nuketuna/post/8d4914bb-53a2-4489-acc5-7045fab42b78/image.png)
 
 `Mirage In Ruined Age`
