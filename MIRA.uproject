@@ -5,13 +5,22 @@
 	"Description": "",
 	"Modules": [
 		{
+			"Name": "MIRASetting",
+			"Type": "Runtime",
+			"LoadingPhase": "PreDefault",
+			"AdditionalDependencies": [
+				"CoreUObject"
+			]
+		},
+		{
 			"Name": "MIRA",
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
 				"Engine",
 				"AIModule",
-				"UMG"
+				"UMG",
+				"MIRASetting"
 			]
 		}
 	],

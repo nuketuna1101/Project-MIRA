@@ -12,5 +12,6 @@ public class MIRA : ModuleRules
 			{ "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", 
 				"UMG", "NavigationSystem", "AIModule", "GameplayTasks" }
 		);
-	}
+        PrivateDependencyModuleNames.AddRange(new string[] { "MIRASetting" });
+    }
 }

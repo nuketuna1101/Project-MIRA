@@ -10,6 +10,6 @@ public class MIRAEditorTarget : TargetRules
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V5;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_4;
-		ExtraModuleNames.Add("MIRA");
-	}
+        ExtraModuleNames.AddRange(new string[] { "MIRA", "MIRASetting" });
+    }
 }
