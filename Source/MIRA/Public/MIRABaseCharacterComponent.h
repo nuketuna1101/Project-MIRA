@@ -25,6 +25,7 @@ protected:
 
 public:	
 	// setter
+	void SetNewStat();
 	void SetDamage(float NewDamage);
 	void SetHP(float NewHP);
 

@@ -48,6 +48,8 @@ void UMIRAGamePlayWidget::OnResumeClicked()
 	RemoveFromParent();
 	MIRAPlayerController->SetInputMode(FInputModeGameOnly());
 	MIRAPlayerController->SetPause(false);
+
+	MIRAPlayerController->bShowMouseCursor = false;
 }
 
 void UMIRAGamePlayWidget::OnControlInfoClicked()

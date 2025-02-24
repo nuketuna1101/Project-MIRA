@@ -40,7 +40,6 @@ void AMIRAPlayerController::BeginPlay()
 	SetInputMode(InputMode);*/
 	ChangeInputMode(true);
 
-
 	//
 	HUDWidget = CreateWidget<UMIRAHUDWidget>(this, HUDWidgetClass);
 	MIRACHECK(nullptr != HUDWidget);

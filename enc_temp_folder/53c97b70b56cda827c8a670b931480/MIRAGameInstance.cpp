@@ -5,7 +5,6 @@
 
 UMIRAGameInstance::UMIRAGameInstance()
 {
-    // import CSV datatable
 	FString DataPath = TEXT("/Game/MIRA/GameData/MIRACharacterData.MIRACharacterData");
 	static ConstructorHelpers::FObjectFinder<UDataTable> 
 		DT_MIRACHARACTER(*DataPath);
@@ -19,7 +18,6 @@ void UMIRAGameInstance::Init()
 {
 	Super::Init();
 
-    // test: datatable
     PrintMIRACharacterDataAll();
 }
 
