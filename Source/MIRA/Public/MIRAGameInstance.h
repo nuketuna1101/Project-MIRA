@@ -5,6 +5,7 @@
 #include "MIRA.h"
 #include "Engine/GameInstance.h"
 #include "Engine/DataTable.h"
+#include "Engine/StreamableManager.h"
 #include "MIRAGameInstance.generated.h"
 
 // imported from csv data table
@@ -44,6 +45,9 @@ public:
 
 	virtual void Init() override;
 	FMIRACharacterData* GetMIRACharacterData(int32 Level);
+
+	// StreamableManager for Asset Async loading
+	FStreamableManager StreamableManager;
 
 private:
 	UPROPERTY()

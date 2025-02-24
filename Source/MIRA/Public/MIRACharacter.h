@@ -24,7 +24,7 @@ class MIRA_API AMIRACharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-	public:
+public:
 	// Sets default values for this character's properties
 	AMIRACharacter();
 
@@ -103,7 +103,13 @@ public:
 
 
 private:
-#pragma region
+
+#pragma region Asset Async Loading by Streamable Manager
+
+	//void OnAssetLoadCompleted();
+
+	//FSoftObjectPath CharacterAssetToLoad = FSoftObjectPath(nullptr);
+	//TSharedPtr<struct FStreamableHandle> AssetStreamingHandle;
 
 #pragma endregion
 
