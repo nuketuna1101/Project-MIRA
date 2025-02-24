@@ -41,7 +41,7 @@ void UMIRACharacterStatComponent::SetNewLevel(int32 NewLevel)
 	{
 		Level = NewLevel;
 		SetHP(CurrentStatData->MaxHP);
-		CurrentHP = CurrentStatData->MaxHP;
+		//CurrentHP = CurrentStatData->MaxHP;
 	}
 	else
 	{
@@ -51,7 +51,14 @@ void UMIRACharacterStatComponent::SetNewLevel(int32 NewLevel)
 
 void UMIRACharacterStatComponent::SetDamage(float NewDamage)
 {
+	//�������� �ִ� ���̿� ���� ���� �����ִ� �Լ� 
+	//CurrentHP = FMath::Clamp<float>(CurrentHP - NewDamage, 0.0f, CurrentStatData->MaxHP);
 	SetHP(FMath::Clamp<float>(CurrentHP - NewDamage, 0.0f, CurrentStatData->MaxHP));
+
+	//if (CurrentHP <= 0.0f)
+	//{
+	//	OnHPIsZero.Broadcast();
+	//}
 }
 
 void UMIRACharacterStatComponent::SetHP(float NewHP)
