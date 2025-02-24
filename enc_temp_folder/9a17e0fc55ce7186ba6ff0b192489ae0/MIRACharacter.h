@@ -28,13 +28,6 @@ public:
 	// Sets default values for this character's properties
 	AMIRACharacter();
 
-#pragma region CharacterState
-
-	void SetCharacterState(ECharacterState NewState);
-	ECharacterState GetCharacterState() const {	return ECharacterState(); }
-
-#pragma endregion
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -222,21 +215,5 @@ private:
 
 #pragma endregion
 
-#pragma region State and PlayerController
-
-	UPROPERTY(Transient, VisibleInstanceOnly, BlueprintReadOnly, Category = State, Meta = (AllowPrivateAccess = true))
-	ECharacterState CurrentState;
-
-	UPROPERTY()
-	class AMIRAPlayerController* MIRAPlayerController;
-
-#pragma endregion
-
-#pragma region Dead Timer
-
-	UPROPERTY(Transient, VisibleInstanceOnly, BlueprintReadOnly, Category = State, Meta = (AllowPrivateAccess = true))
-	float DeadTimer;
-	FTimerHandle DeadTimerHandle = {};
-#pragma endregion
 
 };

@@ -7,7 +7,6 @@
 #include "GameFramework/PawnMovementComponent.h"
 #include "Engine/DamageEvents.h"
 #include "DrawDebugHelpers.h"
-#include "MIRAPlayerController.h"
 
 // Sets default values
 AMIRACharacter::AMIRACharacter()
@@ -77,67 +76,6 @@ AMIRACharacter::AMIRACharacter()
 	MaxDashDistance = 400.0f;
 	DashSpeed = 800.0f;
 	CurrentDashDistance = 0.0f;
-
-	// character state control
-	SetActorHiddenInGame(true);
-	SetCanBeDamaged(false);
-
-	// dead timer
-	DeadTimer = 5.0f;
-}
-
-void AMIRACharacter::SetCharacterState(ECharacterState NewState)
-{
-	MIRACHECK(CurrentState != NewState);
-	CurrentState = NewState;
-
-	switch (CurrentState)
-	{
-	case ECharacterState::PREINIT:
-		break;
-	case ECharacterState::LOADING:
-	{
-		DisableInput(MIRAPlayerController);
-		//ABPlayerController->GetHUDWidget()->BindCharacterStat(CharacterStat);
-		//auto ABPlayerState = Cast<AABPlayerState>(GetPlayerState());
-		//MIRACHECK(nullptr != ABPlayerState);
-		//CharacterStat->SetNewLevel(ABPlayerState->GetCharacterLevel());
-		SetActorHiddenInGame(true);
-		SetCanBeDamaged(false);
-		break;
-	}
-	case ECharacterState::READY:
-	{
-		SetActorHiddenInGame(false);
-		SetCanBeDamaged(true);
-
-		CharacterStat->OnZeroHP.AddLambda([this]()->void
-			{
-				SetCharacterState(ECharacterState::DEAD);
-			});
-
-		//SetControlMode(EControlMode::DIABLO);
-		GetCharacterMovement()->MaxWalkSpeed = 600.0f;
-		EnableInput(MIRAPlayerController);
-		break;
-	}
-	case ECharacterState::DEAD:
-	{
-		SetActorEnableCollision(false);
-		GetMesh()->SetHiddenInGame(false);
-		if (MIRAAnim)
-			MIRAAnim->SetDeadAnim();
-		SetCanBeDamaged(false);
-		DisableInput(MIRAPlayerController);
-		GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle,
-			FTimerDelegate::CreateLambda([this]()->void {
-				//MIRAPlayerController->ShowResultUI();
-				}), DeadTimer, false);
-		break;
-	}
-	default:
-		break;
-	}
 }
 
 // Called when the game starts or when spawned
@@ -213,6 +151,16 @@ void AMIRACharacter::Tick(float DeltaTime)
 	}
 
 	//
+	if (bIsDodging)
+	{
+
+	}
+	else
+	{
+
+	}
+
+
 	if (bIsDashing)
 	{
 		float DashDelta = DashSpeed * DeltaTime;
@@ -244,7 +192,7 @@ void AMIRACharacter::Tick(float DeltaTime)
 		{
 			// 충돌 발생 시, 충돌 지점까지 이동
 			TargetLocation = HitResult.ImpactPoint;
-			bIsDashing = false;
+			bIsDashing = false; // 충돌 시 대쉬 종료
 		}
 
 		SetActorLocation(TargetLocation);
@@ -314,18 +262,18 @@ float AMIRACharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	}
 
 	// TO DO: STAT 기반 판별해서
-	
+	/*
 	CharacterStat->SetDamage(FinalDamage);
 	if (CurrentState == ECharacterState::DEAD)
 	{
-		//OnDead.Broadcast(DamageCauser);
+		OnDead.Broadcast(DamageCauser);
 		if (EventInstigator->IsPlayerController())
 		{
-			MIRAPlayerController = Cast<AMIRAPlayerController>(EventInstigator);
-			//MIRAPlayerController->NPCKill(this);
+			ABPlayerController = Cast<AABPlayerController>(EventInstigator);
+			ABPlayerController->NPCKill(this);
 		}
 	}
-	
+	*/
 
 	return FinalDamage;
 }

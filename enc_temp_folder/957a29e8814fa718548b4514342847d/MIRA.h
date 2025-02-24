@@ -6,15 +6,6 @@
 // public macro settting for logging project MIRA
 #include "EngineMinimal.h"
 
-UENUM(BlueprintType)
-enum class ECharacterState : uint8
-{
-	PREINIT,
-	LOADING,
-	READY,
-	DEAD
-};
-
 DECLARE_LOG_CATEGORY_EXTERN(MIRA, Log, All);
 
 // Add Logging Macros
