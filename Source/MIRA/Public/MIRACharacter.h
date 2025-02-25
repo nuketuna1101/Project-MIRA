@@ -29,46 +29,32 @@ public:
 	// Sets default values for this character's properties
 	AMIRACharacter();
 
-#pragma region CharacterState
-
-	void SetCharacterState(ECharacterState NewState);
-	ECharacterState GetCharacterState() const {	return ECharacterState(); }
-
-#pragma endregion
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-#pragma region Camera Setting
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
-	ECameraMode CurrentControlMode = ECameraMode::FreeTPS;
-
-	void SetCameraMode(ECameraMode CameraMode);
-
-	FRotator SpringArmRotation = FRotator::ZeroRotator;
-	float SpringArmLength = 0.0f;
-	float SpringArmRotationSpeed = 0.0f;
-	float SpringArmLengthSpeed = 0.0f;
-#pragma endregion
-
-public:
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void PostInitializeComponents() override;
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	// damage framework
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 		AController* EventInstigator, AActor* DamageCauser) override;
 
-#pragma region Camera and Blade Components
-	// components
+#pragma region CharacterState
+
+	void SetCharacterState(ECharacterState NewState);
+	ECharacterState GetCharacterState() const { return ECharacterState(); }
+
+#pragma endregion
+
+#pragma region CharacterStat
+	UPROPERTY(VisibleAnywhere, Category = "Character Data")
+	class UMIRACharacterStatComponent* CharacterStat;
+#pragma endregion
+
+#pragma region [PlayerOnly] Camera Components
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	USpringArmComponent* SpringArm;
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	UCameraComponent* Camera;
+#pragma endregion
+
+#pragma region [PlayerOnly] Blade Components
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	AMIRABlade* RightBlade;
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
@@ -76,10 +62,10 @@ public:
 
 	// getter for weapon mesh
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	AMIRABlade* GetBladeRight();
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	AMIRABlade* GetBladeLeft();
+	AMIRABlade* GetBladeRight() { return RightBlade; }
 
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	AMIRABlade* GetBladeLeft() { return LeftBlade; }
 #pragma endregion
 
 #pragma region Actions
@@ -103,8 +89,19 @@ public:
 	FOnStartDash OnStartDashBP;
 #pragma endregion
 
-	UPROPERTY(VisibleAnywhere, Category = "Character Data")
-	class UMIRACharacterStatComponent* CharacterStat;
+
+protected:
+	virtual void BeginPlay() override;
+
+#pragma region [PlayerOnly] Camera Setting
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	ECameraMode CurrentControlMode = ECameraMode::FreeTPS;
+	void SetCameraMode(ECameraMode CameraMode);
+	FRotator SpringArmRotation = FRotator::ZeroRotator;
+	float SpringArmLength = 0.0f;
+	float SpringArmRotationSpeed = 0.0f;
+	float SpringArmLengthSpeed = 0.0f;
+#pragma endregion
 
 
 private:
@@ -117,7 +114,7 @@ private:
 
 #pragma endregion
 
-#pragma region Input Action by axis and action mappings
+#pragma region [PlayerOnly] Input Action by axis and action mappings
 	// basic movements by axis mapping
 	void UpDown(float NewAxisValue);
 	void LeftRight(float NewAxisValue);
@@ -142,8 +139,10 @@ private:
 	void AttackCheck();
 #pragma endregion
 
+#pragma region Anim Instance
 	UPROPERTY()
 	class UMIRAAnimInstance* MIRAAnim;
+#pragma endregion
 
 #pragma region Dash Variable
 	FVector DashDirection;
@@ -188,34 +187,6 @@ private:
 	// walking variable
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Player Movement", Meta = (AllowPrivateAccess = true))
 	bool bIsWalking;
-
-#pragma endregion
-
-#pragma region CharacterStat
-
-	UPROPERTY(EditInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	int32 Level;
-
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	float MaxHP;
-
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	float CurrentHP;
-
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	float MaxMP;
-
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	float CurrentMP;
-
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	int32 TotalUP;
-
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	int32 CurrentUP;
-
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	float Power;
 
 #pragma endregion
 

@@ -9,57 +9,41 @@
 /**
  * 
  */
+
+/// <summary>
+/// player character
+/// 
+/// unique properties
+/// - camera components
+/// - blade components
+/// - input action mappings
+/// </summary>
 UCLASS()
 class MIRA_API AMIRAPlayerCharacter : public AMIRABaseCharacter
 {
 	GENERATED_BODY()
-	
+	/*
 public:
 	AMIRAPlayerCharacter();
-	/*
-	virtual void Tick(float DeltaTime) override;
-	virtual void PostInitializeComponents() override;
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	// damage framework
-	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
-		AController* EventInstigator, AActor* DamageCauser) override;
 
-#pragma region CharacterState
 
-	void SetCharacterState(ECharacterState NewState);
-	ECharacterState GetCharacterState() const { return ECharacterState(); }
+#pragma region Camera and Blade Components
+	// components
+	UPROPERTY(VisibleAnywhere, Category = "Camera")
+	USpringArmComponent* SpringArm;
+	UPROPERTY(VisibleAnywhere, Category = "Camera")
+	UCameraComponent* Camera;
+	UPROPERTY(VisibleAnywhere, Category = "Weapon")
+	AMIRABlade* RightBlade;
+	UPROPERTY(VisibleAnywhere, Category = "Weapon")
+	AMIRABlade* LeftBlade;
+
+	// getter for weapon mesh
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	AMIRABlade* GetBladeRight();
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	AMIRABlade* GetBladeLeft();
 
 #pragma endregion
-
-#pragma region Actions
-	void Attack();
-	void StartBlock();
-	void StopBlock();
-	void StartAim();
-	void StopAim();
-	void StartDash();
-#pragma endregion
-
-#pragma region Delegates for BP event
-	// delegate for when attack hit
-	UPROPERTY(BlueprintAssignable, Category = "Event")
-	FOnAttackEnd OnAttackEndBP;
-	// delegate for when be hitted
-	UPROPERTY(BlueprintAssignable, Category = "Event")
-	FOnHitEvent OnHitBP;
-	// delegate for when start dash
-	UPROPERTY(BlueprintAssignable, Category = "Event")
-	FOnStartDash OnStartDashBP;
-#pragma endregion
-
-#pragma region Character Stat
-
-	UPROPERTY(VisibleAnywhere, Category = "Character Data")
-	class UMIRACharacterStatComponent* CharacterStat;
-#pragma endregion
-
-protected:
-
-private:
-*/
+	*/
 };

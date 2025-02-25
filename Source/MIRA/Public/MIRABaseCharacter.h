@@ -23,13 +23,11 @@ class MIRA_API AMIRABaseCharacter : public ACharacter
 	GENERATED_BODY()
 	
 public:
-	/*
 	AMIRABaseCharacter();
 
 	virtual void Tick(float DeltaTime) override;
 	virtual void PostInitializeComponents() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	// damage framework
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 		AController* EventInstigator, AActor* DamageCauser) override;
 
@@ -40,13 +38,18 @@ public:
 
 #pragma endregion
 
-#pragma region Actions
-	void Attack();
-	void StartBlock();
-	void StopBlock();
-	void StartAim();
-	void StopAim();
-	void StartDash();
+#pragma region CharacterStat
+	UPROPERTY(VisibleAnywhere, Category = "Character Data")
+	class UMIRACharacterStatComponent* CharacterStat;
+#pragma endregion
+
+#pragma region [TO DO] Actions
+	//void Attack();
+	//void StartBlock();
+	//void StopBlock();
+	//void StartAim();
+	//void StopAim();
+	//void StartDash();
 #pragma endregion
 
 #pragma region Delegates for BP event
@@ -61,59 +64,16 @@ public:
 	FOnStartDash OnStartDashBP;
 #pragma endregion
 
-#pragma region Character Stat
-
-	UPROPERTY(VisibleAnywhere, Category = "Character Data")
-	class UMIRACharacterStatComponent* CharacterStat;
-#pragma endregion
-
-
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-#pragma region Camera and Blade Components
-	// components
-	UPROPERTY(VisibleAnywhere, Category = "Camera")
-	USpringArmComponent* SpringArm;
-	UPROPERTY(VisibleAnywhere, Category = "Camera")
-	UCameraComponent* Camera;
-	UPROPERTY(VisibleAnywhere, Category = "Weapon")
-	AMIRABlade* RightBlade;
-	UPROPERTY(VisibleAnywhere, Category = "Weapon")
-	AMIRABlade* LeftBlade;
-
-	// getter for weapon mesh
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	AMIRABlade* GetBladeRight();
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	AMIRABlade* GetBladeLeft();
-
-#pragma endregion
-
-
 #pragma region Asset Async Loading by Streamable Manager
-
 	void OnAssetLoadCompleted();
 	FSoftObjectPath CharacterAssetToLoad = FSoftObjectPath(nullptr);
 	TSharedPtr<struct FStreamableHandle> AssetStreamingHandle;
-
 #pragma endregion
 
-#pragma region Input Action by axis and action mappings
-	// basic movements by axis mapping
-	void UpDown(float NewAxisValue);
-	void LeftRight(float NewAxisValue);
-	void Turn(float NewAxisValue);
-	void LookUp(float NewAxisValue);
-
-	// player input actions by action mapping
-	void Block();
-	void Dodge();
-	void Execute();
-#pragma endregion
-
-#pragma region Attack Logics
+#pragma region [TO DO] Attack Logics
 	// attack logics
 	void AttackMelee();
 	void AttackRange();
@@ -138,6 +98,9 @@ protected:
 #pragma endregion
 
 #pragma region Booleans for State/Mode
+
+	UPROPERTY(Transient, VisibleInstanceOnly, BlueprintReadOnly, Category = "State", Meta = (AllowPrivateAccess = true))
+	bool bIsPlayer;
 
 	// boolean for blocking or allowing moves
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Combat", Meta = (AllowPrivateAccess = true))
@@ -192,5 +155,5 @@ protected:
 	float DeadTimer;
 	FTimerHandle DeadTimerHandle = {};
 #pragma endregion
-	*/
+
 };

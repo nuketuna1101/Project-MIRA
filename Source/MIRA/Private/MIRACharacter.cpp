@@ -4,6 +4,7 @@
 #include "MIRAAnimInstance.h"
 #include "MIRABlade.h"
 #include "MIRAPlayerState.h"
+#include "MIRAPlayerCameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Engine/DamageEvents.h"
@@ -18,18 +19,19 @@ AMIRACharacter::AMIRACharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// create defaultsubobject
+	CharacterStat = CreateDefaultSubobject<UMIRACharacterStatComponent>(TEXT("CharacterStat"));
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
+
+	//// springarm and camera
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	CharacterStat = CreateDefaultSubobject<UMIRACharacterStatComponent>(TEXT("CharacterStat"));
-
-	// hierarchy
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 	Camera->SetupAttachment(SpringArm);
-
-	// transform setting
-	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 	SpringArm->TargetArmLength = 400.0f;
 	SpringArm->SetRelativeRotation(FRotator(-15.0f, 0.0f, 0.0f));
+	SetCameraMode(ECameraMode::FreeTPS);
+	SpringArmRotationSpeed = 10.0f;
+	SpringArmLengthSpeed = 3.0f;
 
 	// mesh
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
@@ -47,11 +49,6 @@ AMIRACharacter::AMIRACharacter()
 	{
 		GetMesh()->SetAnimInstanceClass(MIRAPLAYER_ANIM.Class);
 	}
-
-	// camera mode
-	SetCameraMode(ECameraMode::FreeTPS);
-	SpringArmRotationSpeed = 10.0f;
-	SpringArmLengthSpeed = 3.0f;
 
 	// jump velocity
 	GetCharacterMovement()->JumpZVelocity = 500.0f;
@@ -127,8 +124,7 @@ void AMIRACharacter::SetCharacterState(ECharacterState NewState)
 	{
 		SetActorEnableCollision(false);
 		GetMesh()->SetHiddenInGame(false);
-		if (MIRAAnim)
-			MIRAAnim->SetDeadAnim();
+		if (MIRAAnim)	MIRAAnim->SetDeadAnim();
 		SetCanBeDamaged(false);
 		DisableInput(MIRAPlayerController);
 		GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle,
@@ -152,14 +148,12 @@ void AMIRACharacter::BeginPlay()
 	FName WeaponLeftSocket(TEXT("blade_left_socket"));
 
 	RightBlade = GetWorld()->SpawnActor<AMIRABlade>(FVector::ZeroVector, FRotator::ZeroRotator);
-	//auto RightBlade = GetWorld()->SpawnActor<AMIRABlade>(FVector::ZeroVector, FRotator::ZeroRotator);
 	if (nullptr != RightBlade)
 	{
 		RightBlade->SetActorScale3D(FVector(2.0f, 2.0f, 2.0f));
 		RightBlade->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponRightSocket);
 	}
 	LeftBlade = GetWorld()->SpawnActor<AMIRABlade>(FVector::ZeroVector, FRotator::ZeroRotator);
-	//auto LeftBlade = GetWorld()->SpawnActor<AMIRABlade>(FVector::ZeroVector, FRotator::ZeroRotator);
 	if (nullptr != LeftBlade)
 	{
 		LeftBlade->SetActorScale3D(FVector(2.0f, 2.0f, 2.0f));
@@ -224,7 +218,8 @@ void AMIRACharacter::Tick(float DeltaTime)
 	// spring arm interpolation
 	SpringArm->TargetArmLength = FMath::FInterpTo(SpringArm->TargetArmLength,
 		SpringArmLength, DeltaTime, SpringArmLengthSpeed);
-	// implementation of aiming by lerp
+	 
+	 //implementation of aiming by lerp
 	if (bIsAiming)
 	{
 		float CurrentFOV = Camera->FieldOfView;
@@ -238,7 +233,7 @@ void AMIRACharacter::Tick(float DeltaTime)
 		Camera->SetFieldOfView(NewFOV);
 	}
 
-	//
+	// implementation of dash
 	if (bIsDashing)
 	{
 		float DashDelta = DashSpeed * DeltaTime;
@@ -331,12 +326,10 @@ void AMIRACharacter::OnAssetLoadCompleted()
 float AMIRACharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	//MIRALOG(Warning, TEXT("Actor: %s / damage: %f"), *GetName(), FinalDamage);
 
-	// TMP: 일단은 조금이라도 피격 당하면 사망으로
+	// if dmg valid, play hit anim
 	if (FinalDamage > 0.0f)
 	{
-		// TO DO: 피격 시 피격 애니메이션 재생
 		if (MIRAAnim)	MIRAAnim->PlayHitMontage();
 	}
 
@@ -479,16 +472,6 @@ void AMIRACharacter::AttackCheck()
 	OverlappedEnemies.Empty();
 	RightBlade->FreeAllOverlappedEnemies();
 	LeftBlade->FreeAllOverlappedEnemies();
-}
-
-AMIRABlade* AMIRACharacter::GetBladeRight()
-{
-	return RightBlade;
-}
-
-AMIRABlade* AMIRACharacter::GetBladeLeft()
-{
-	return LeftBlade;
 }
 
 void AMIRACharacter::Attack()

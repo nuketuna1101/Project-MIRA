@@ -3,7 +3,6 @@
 
 #include "MIRABaseCharacter.h"
 #include "MIRAAnimInstance.h"
-#include "MIRABlade.h"
 #include "MIRAPlayerState.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
@@ -11,9 +10,8 @@
 #include "DrawDebugHelpers.h"
 #include "MIRAPlayerController.h"
 #include "MIRACharacterSetting.h"
+#include "MIRAGameMode.h"
 
-/*
-// Sets default values
 AMIRABaseCharacter::AMIRABaseCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -21,26 +19,11 @@ AMIRABaseCharacter::AMIRABaseCharacter()
 
 	// create defaultsubobject
 	CharacterStat = CreateDefaultSubobject<UMIRACharacterStatComponent>(TEXT("CharacterStat"));
-
-	// transform setting
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 
-	// setting for mesh and animations
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
-		SK_KALLARI(TEXT("/Game/ParagonKallari/Characters/Heroes/Kallari/Meshes/Kallari.Kallari"));
-	if (SK_KALLARI.Succeeded())
-	{
-		GetMesh()->SetSkeletalMesh(SK_KALLARI.Object);
-	}
+	// [TO DO] SetSkeletalMesh
 
-	// setting for animations
-	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
-	static ConstructorHelpers::FClassFinder<UAnimInstance>
-		MIRAPLAYER_ANIM(TEXT("/Game/MIRA/Characters/Animations/MIRAPlayer/MPlayerAnimBlueprint.MPlayerAnimBlueprint_C"));
-	if (MIRAPLAYER_ANIM.Succeeded())
-	{
-		GetMesh()->SetAnimInstanceClass(MIRAPLAYER_ANIM.Class);
-	}
+	// [TO DO] setting for animations
 
 	// jump velocity
 	GetCharacterMovement()->JumpZVelocity = 500.0f;
@@ -48,7 +31,7 @@ AMIRABaseCharacter::AMIRABaseCharacter()
 	// setting for collision channel
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("MIRACharacter"));
 
-	// bool varaibles
+	// bool varaible for actions
 	bCannotMove = false;
 	bIsDodging = false;
 
@@ -79,27 +62,240 @@ AMIRABaseCharacter::AMIRABaseCharacter()
 void AMIRABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	// [TO DO] spring arm interpolation
+	// [TO DO] implementation of aiming by lerp
+	
+	// implementation of dash
+	if (bIsDashing)
+	{
+		float DashDelta = DashSpeed * DeltaTime;
+		CurrentDashDistance += DashDelta;
+
+		if (CurrentDashDistance >= MaxDashDistance)
+		{
+			CurrentDashDistance = MaxDashDistance;
+			bIsDashing = false;
+		}
+
+		FVector TargetLocation = GetActorLocation() + DashDirection * DashDelta;
+
+		// Sweep 테스트를 통해 충돌 여부 확인
+		FHitResult HitResult;
+		FCollisionQueryParams QueryParams;
+		QueryParams.AddIgnoredActor(this); // 자기 자신은 무시
+
+		bool bHit = GetWorld()->SweepSingleByChannel(
+			HitResult,
+			GetActorLocation(),
+			TargetLocation,
+			FQuat::Identity,
+			ECC_Visibility,
+			FCollisionShape::MakeSphere(30.0f),
+			QueryParams); // 충돌체 크기 조절
+
+		if (bHit)
+		{
+			// 충돌 발생 시, 충돌 지점까지 이동
+			TargetLocation = HitResult.ImpactPoint;
+			bIsDashing = false;
+		}
+
+		SetActorLocation(TargetLocation);
+	}
 }
 
 void AMIRABaseCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	// initializing for anim montage
-	MIRAAnim = Cast<UMIRAAnimInstance>(GetMesh()->GetAnimInstance());
-	if (!MIRAAnim) return;
+	// [TO DO] initializing for anim montage
 
-	// binding logics to anim notify
-	MIRAAnim->OnSaveAttackCheck.AddLambda([this]() -> void {
-		SaveAttackCombo();
-		});
-	MIRAAnim->OnResetComboCheck.AddLambda([this]() -> void {
-		ResetAttackCombo();
-		});
-	MIRAAnim->OnAttackHitCheck.AddUObject(this, &AMIRACharacter::AttackCheck);
+	// [TO DO] binding logics to anim notify
 }
 
 void AMIRABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	// [TO DO] bindings for action mapping
+	// [TO DO] bindings for axis mapping
 }
-*/
+
+float AMIRABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	// if dmg valid, play hit anim
+	if (FinalDamage > 0.0f)
+	{
+		if (MIRAAnim)	MIRAAnim->PlayHitMontage();
+	}
+
+	// TO DO: STAT 기반 판별해서
+	CharacterStat->SetDamage(FinalDamage);
+	if (CurrentState == ECharacterState::DEAD)
+	{
+		//OnDead.Broadcast(DamageCauser);
+		if (EventInstigator->IsPlayerController())
+		{
+			MIRAPlayerController = Cast<AMIRAPlayerController>(EventInstigator);
+			//MIRAPlayerController->NPCKill(this);
+		}
+	}
+	return FinalDamage;
+}
+
+void AMIRABaseCharacter::SetCharacterState(ECharacterState NewState)
+{
+	MIRACHECK(CurrentState != NewState);
+	CurrentState = NewState;
+
+	switch (CurrentState)
+	{
+	case ECharacterState::PREINIT:
+		break;
+	case ECharacterState::LOADING:
+	{
+		if (bIsPlayer)
+		{
+			DisableInput(MIRAPlayerController);
+
+			//ABPlayerController->GetHUDWidget()->BindCharacterStat(CharacterStat);
+
+			auto MIRAPlayerState = Cast<AMIRAPlayerState>(GetPlayerState());
+			MIRACHECK(nullptr != MIRAPlayerState);
+			CharacterStat->SetNewLevel(MIRAPlayerState->GetCharacterLevel());
+		}
+		else
+		{
+			auto MIRAGameMode = Cast<AMIRAGameMode>(GetWorld()->GetAuthGameMode());
+			MIRACHECK(nullptr != MIRAGameMode);
+			// 임시 하드코딩
+			CharacterStat->SetNewLevel(1);
+		}
+
+		SetActorHiddenInGame(true);
+		SetCanBeDamaged(false);
+		//HPBarWidget->SetHiddenInGame(true);
+		break;
+	}
+	case ECharacterState::READY:
+	{
+		SetActorHiddenInGame(false);
+		SetCanBeDamaged(true);
+		//HPBarWidget->SetHiddenInGame(false);
+
+		CharacterStat->OnZeroHP.AddLambda([this]()->void
+			{
+				SetCharacterState(ECharacterState::DEAD);
+			});
+
+		//UABCharacterWidget* CharacterWidget = Cast<UABCharacterWidget>(HPBarWidget->GetUserWidgetObject());
+		//if (nullptr != CharacterWidget)
+		//{
+		//	CharacterWidget->BindCharacterStat(CharacterStat);
+		//}
+
+		if (bIsPlayer)
+		{
+			//SetCameraMode(ECameraMode::FreeTPS);
+			GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+			EnableInput(MIRAPlayerController);
+		}
+		else
+		{
+			//SetControlMode(EControlMode::NPC);
+			GetCharacterMovement()->MaxWalkSpeed = 400.0f;
+			//ABAIController->RunAI();
+		}
+		break;
+	}
+	case ECharacterState::DEAD:
+	{
+		SetActorEnableCollision(false);
+		GetMesh()->SetHiddenInGame(false);
+		//HPBarWidget->SetHiddenInGame(true);
+		if (MIRAAnim)	MIRAAnim->SetDeadAnim();
+		SetCanBeDamaged(false);
+
+		if (bIsPlayer)
+		{
+			DisableInput(MIRAPlayerController);
+		}
+		else
+		{
+			//ABAIController->StopAI();
+		}
+
+		GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle,
+			FTimerDelegate::CreateLambda([this]()->void {
+				if (bIsPlayer)
+				{
+					//ABPlayerController->ShowResultUI();
+					//ABPlayerController->RestartLevel();
+				}
+				else
+				{
+					Destroy();
+				}
+				}), DeadTimer, false);
+
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+void AMIRABaseCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// [TO DO] weapon attach
+
+	bIsPlayer = IsPlayerControlled();
+	if (bIsPlayer)
+	{
+		MIRAPlayerController = Cast<AMIRAPlayerController>(GetController());
+		MIRACHECK(nullptr != MIRAPlayerController);
+	}
+	else
+	{
+		//ABAIController = Cast<AABAIController>(GetController());
+		//ABCHECK(nullptr != ABAIController);
+	}
+
+	auto DefaultSetting = GetDefault<UMIRACharacterSetting>();
+
+	if (bIsPlayer)
+	{
+		auto MIRAPlayerState = Cast<AMIRAPlayerState>(GetPlayerState());
+		MIRACHECK(nullptr != MIRAPlayerState);
+		//AssetIndex = 0;
+	}
+	else
+	{
+		//AssetIndex = FMath::RandRange(0, DefaultSetting->CharacterAssets.Num() - 1);
+	}
+
+	// [TO DO] TEMP
+	CharacterAssetToLoad = DefaultSetting->CharacterAssets[0];
+	auto MIRAGameInstance = Cast<UMIRAGameInstance>(GetGameInstance());
+	MIRACHECK(nullptr != MIRAGameInstance);
+	AssetStreamingHandle = MIRAGameInstance->StreamableManager.RequestAsyncLoad(
+		CharacterAssetToLoad, FStreamableDelegate::CreateUObject(this, &AMIRABaseCharacter::
+			OnAssetLoadCompleted));
+	SetCharacterState(ECharacterState::LOADING);
+
+}
+
+void AMIRABaseCharacter::OnAssetLoadCompleted()
+{
+	AssetStreamingHandle->ReleaseHandle();
+	TSoftObjectPtr<USkeletalMesh> LoadAssetPath(CharacterAssetToLoad);
+	MIRACHECK(LoadAssetPath.IsValid());
+
+	GetMesh()->SetSkeletalMesh(LoadAssetPath.Get());
+	SetCharacterState(ECharacterState::READY);
+}

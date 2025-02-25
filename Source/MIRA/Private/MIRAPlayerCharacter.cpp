@@ -4,10 +4,10 @@
 #include "MIRAPlayerCharacter.h"
 
 
-AMIRAPlayerCharacter::AMIRAPlayerCharacter()
-{
-	
-}
+//AMIRAPlayerCharacter::AMIRAPlayerCharacter()
+//{
+//	
+//}
 /*
 void AMIRAPlayerCharacter::Tick(float DeltaTime)
 {
