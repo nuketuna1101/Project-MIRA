@@ -11,29 +11,32 @@
 UMIRAGameInstance::UMIRAGameInstance()
 {
     // import CSV datatable
-	FString DataPath1 = TEXT("/Game/MIRA/GameData/MIRACharacterData.MIRACharacterData");
-    FString DataPath2 = TEXT("/Game/MIRA/GameData/MIRAEnemyCharacterData.MIRAEnemyCharacterData");
+	//FString DataPath1 = TEXT("/Game/MIRA/GameData/MIRACharacterData.MIRACharacterData");
+ //   FString DataPath2 = TEXT("/Game/MIRA/GameData/MIRAEnemyCharacterData.MIRAEnemyCharacterData");
 
-	static ConstructorHelpers::FObjectFinder<UDataTable> 
-		DT_MIRACHARACTER(*DataPath1);
-	MIRACHECK(DT_MIRACHARACTER.Succeeded());
-	MIRACharacterDataTable = DT_MIRACHARACTER.Object;
-	MIRACHECK(MIRACharacterDataTable->GetRowMap().Num() > 0);
-    static ConstructorHelpers::FObjectFinder<UDataTable>
-        DT_MIRAENEMYCHARACTER(*DataPath2);
-    MIRACHECK(DT_MIRAENEMYCHARACTER.Succeeded());
-    MIRAEnemyCharacterDataTable = DT_MIRAENEMYCHARACTER.Object;
-    MIRACHECK(MIRAEnemyCharacterDataTable->GetRowMap().Num() > 0);
+	//static ConstructorHelpers::FObjectFinder<UDataTable> 
+	//	DT_MIRACHARACTER(*DataPath1);
+	//MIRACHECK(DT_MIRACHARACTER.Succeeded());
+
+	//MIRACharacterDataTable = DT_MIRACHARACTER.Object;
+	//MIRACHECK(MIRACharacterDataTable->GetRowMap().Num() > 0);
+
+ //   static ConstructorHelpers::FObjectFinder<UDataTable>
+ //       DT_MIRAENEMYCHARACTER(*DataPath2);
+ //   MIRACHECK(DT_MIRAENEMYCHARACTER.Succeeded());
+
+ //   MIRAEnemyCharacterDataTable = DT_MIRAENEMYCHARACTER.Object;
+ //   MIRACHECK(MIRAEnemyCharacterDataTable->GetRowMap().Num() > 0);
 
     // 데이터 테이블 경로 설정
-    //FString DataPath1 = TEXT("/Game/MIRA/GameData/MIRACharacterData.MIRACharacterData");
-    //FString DataPath2 = TEXT("/Game/MIRA/GameData/MIRAEnemyCharacterData.MIRAEnemyCharacterData");
-    //// FSoftObjectPath 생성
-    //FSoftObjectPath CharacterDataTablePath(DataPath1);
-    //FSoftObjectPath EnemyCharacterDataTablePath(DataPath2);
-    //// FStreamableManager를 사용하여 비동기 로딩
-    //this->StreamableManager.RequestAsyncLoad({ CharacterDataTablePath, EnemyCharacterDataTablePath },
-    //    FStreamableDelegate::CreateUObject(this, &UMIRAGameInstance::OnDataTablesLoaded));
+    FString DataPath1 = TEXT("/Game/MIRA/GameData/MIRACharacterData.MIRACharacterData");
+    FString DataPath2 = TEXT("/Game/MIRA/GameData/MIRAEnemyCharacterData.MIRAEnemyCharacterData");
+    // FSoftObjectPath 생성
+    FSoftObjectPath CharacterDataTablePath(DataPath1);
+    FSoftObjectPath EnemyCharacterDataTablePath(DataPath2);
+    // FStreamableManager를 사용하여 비동기 로딩
+    this->StreamableManager.RequestAsyncLoad({ CharacterDataTablePath, EnemyCharacterDataTablePath },
+        FStreamableDelegate::CreateUObject(this, &UMIRAGameInstance::OnDataTablesLoaded));
 }
 
 void UMIRAGameInstance::Init()
@@ -42,7 +45,6 @@ void UMIRAGameInstance::Init()
 
     // test: datatable
     PrintMIRACharacterDataAll();
-    PrintMIRAEnemyCharacterDataAll();
 }
 
 FMIRACharacterData* UMIRAGameInstance::GetMIRACharacterData(int32 Level)
@@ -79,7 +81,7 @@ FMIRACharacterData* UMIRAGameInstance::GetMIRACharacterData(int32 Level)
 
 void UMIRAGameInstance::PrintMIRACharacterDataAll()
 {
-    if (MIRACharacterDataTable)
+    if (MIRAEnemyCharacterDataTable)
     {
         TMap<FName, uint8*> MIRARowMap = MIRACharacterDataTable->GetRowMap();
         MIRALOG(Warning, TEXT("[MIRA CharacterData CSV Check]"));
@@ -113,37 +115,6 @@ void UMIRAGameInstance::PrintMIRACharacterDataAll()
 
 void UMIRAGameInstance::PrintMIRAEnemyCharacterDataAll()
 {
-    if (MIRAEnemyCharacterDataTable)
-    {
-        TMap<FName, uint8*> MIRARowMap = MIRAEnemyCharacterDataTable->GetRowMap();
-        MIRALOG(Warning, TEXT("[MIRA MIRAEnemyCharacterDataTable CSV Check]"));
-        for (auto& Pair : MIRARowMap)
-        {
-            FName RowName = Pair.Key;
-            uint8* RowData = Pair.Value;
-
-            FMIRAEnemyCharacterData* Data = reinterpret_cast<FMIRAEnemyCharacterData*>(RowData);
-
-            if (Data)
-            {
-                MIRALOG(Warning, TEXT("Row Name: %s"), *RowName.ToString());
-                MIRALOG(Warning, TEXT("EnemyName: %s"), *Data->EnemyName);
-                MIRALOG(Warning, TEXT("Alias: %s"), *Data->Alias);
-                MIRALOG(Warning, TEXT("MaxHP: %f"), Data->MaxHP);
-                MIRALOG(Warning, TEXT("Power: %f"), Data->Power);
-                MIRALOG(Warning, TEXT("IsBoss: %s"), Data->IsBoss ? TEXT("true") : TEXT("false"));
-                MIRALOG(Warning, TEXT("--------------------"));
-            }
-            else
-            {
-                MIRALOG(Error, TEXT("Invalid data for Row Name: %s"), *RowName.ToString());
-            }
-        }
-    }
-    else
-    {
-        MIRALOG(Error, TEXT("MIRAEnemyCharacterDataTable is not valid."));
-    }
 }
 
 void UMIRAGameInstance::OnDataTablesLoaded()

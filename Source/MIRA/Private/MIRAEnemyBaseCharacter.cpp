@@ -14,14 +14,11 @@ AMIRAEnemyBaseCharacter::AMIRAEnemyBaseCharacter()
 
 	// create default subobject
 	HPBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBar"));
-
 	// hierarchy
 	HPBar->SetupAttachment(GetMesh());
-
 	// transform
 	HPBar->SetRelativeLocation(FVector(0.0f, 0.0f, 250.0f));
 	HPBar->SetWidgetSpace(EWidgetSpace::Screen);
-
 	// set widget
 	static ConstructorHelpers::FClassFinder<UUserWidget> 
 		UI_HPBAR(TEXT("/Game/MIRA/UI/UI_HPBar.UI_HPBar_C"));
@@ -38,7 +35,7 @@ AMIRAEnemyBaseCharacter::AMIRAEnemyBaseCharacter()
 	// collision setting
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
 
-	//
+	// stat component
 	TrooperStat = CreateDefaultSubobject<UMIRABaseCharacterComponent>(TEXT("TrooperStat"));
 }
 

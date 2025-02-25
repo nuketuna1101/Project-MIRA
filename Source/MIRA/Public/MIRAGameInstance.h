@@ -30,6 +30,31 @@ public:
 	float Power;
 };
 
+// imported from csv data table
+USTRUCT()
+struct FMIRAEnemyCharacterData : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	FMIRAEnemyCharacterData() : EnemyName("Trooper"), Alias(""), MaxHP(100.0f), Power(10.0f), IsBoss(false) {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Data")
+	FString EnemyName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Data")
+	FString Alias;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Data")
+	float MaxHP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Data")
+	float Power;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Data")
+	bool IsBoss;
+};
+
 /**
  *
  */
@@ -45,6 +70,7 @@ public:
 
 	virtual void Init() override;
 	FMIRACharacterData* GetMIRACharacterData(int32 Level);
+	//FMIRAEnemyCharacterData* GetMIRAEnemyCharacterData(FString EnemyName);
 
 	// StreamableManager for Asset Async loading
 	FStreamableManager StreamableManager;
@@ -53,5 +79,17 @@ private:
 	UPROPERTY()
 	class UDataTable* MIRACharacterDataTable;
 	
+	UPROPERTY()
+	class UDataTable* MIRAEnemyCharacterDataTable;
+
 	void PrintMIRACharacterDataAll();
+	void PrintMIRAEnemyCharacterDataAll();
+
+
+#pragma region Asset Async Loading by Streamable Manager
+
+	void OnDataTablesLoaded();
+
+#pragma endregion
+
 };

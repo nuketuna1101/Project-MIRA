@@ -23,9 +23,8 @@ void UMIRABaseCharacterComponent::BeginPlay()
 void UMIRABaseCharacterComponent::InitializeComponent()
 {
 	Super::InitializeComponent();
+	SetNewStat();
 }
-
-
 
 void UMIRABaseCharacterComponent::SetNewStat()
 {
@@ -34,33 +33,12 @@ void UMIRABaseCharacterComponent::SetNewStat()
 	CurrentStatData = MIRAGameInstance->GetMIRACharacterData(1);
 	if (nullptr != CurrentStatData)
 	{
-		//Level = NewLevel;
 		SetHP(CurrentStatData->MaxHP);
-		//CurrentHP = CurrentStatData->MaxHP;
 	}
 	else
 	{
 		MIRALOG(Error, TEXT("data doesn't Exist"));
 	}
-
-
-	/*
-	auto ABGameInstance = Cast<UABGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-
-	ABCHECK(nullptr != ABGameInstance);
-	CurrentStatData = ABGameInstance->GetABCharacterData(NewLevel);
-
-	if (nullptr != CurrentStatData)
-	{
-		Level = NewLevel;
-		SetHP(CurrentStatData->MaxHP);
-		//CurrentHP = CurrentStatData->MaxHP;
-	}
-	else
-	{
-		ABLOG(Error, TEXT("Level (%d) data doesn't Exist"), NewLevel);
-	}
-	*/
 }
 
 void UMIRABaseCharacterComponent::SetDamage(float NewDamage)
