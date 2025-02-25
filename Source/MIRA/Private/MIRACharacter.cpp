@@ -33,7 +33,7 @@ AMIRACharacter::AMIRACharacter()
 	SpringArmRotationSpeed = 10.0f;
 	SpringArmLengthSpeed = 3.0f;
 
-	// mesh
+	// SetSkeletalMesh
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
 		SK_KALLARI(TEXT("/Game/ParagonKallari/Characters/Heroes/Kallari/Meshes/Kallari.Kallari"));
 	if (SK_KALLARI.Succeeded())

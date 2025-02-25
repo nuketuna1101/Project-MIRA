@@ -3,7 +3,6 @@
 #pragma once
 
 #include "MIRA.h"
-#include "MIRACharacter.h"
 #include "MIRABlade.h"
 #include "MIRAGameInstance.h"
 #include "MIRACharacterStatComponent.h"
@@ -11,11 +10,11 @@
 #include "MIRABaseCharacter.generated.h"
 
 // declare delegates
-/*
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAttackEnd);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStartDash, FVector, DashEfxLocation);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitEvent, FVector, HitLocation);		// if hit, get location and timing 
-*/
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAttackEndTempDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStartDashTempDelegate, FVector, DashEfxLocation);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitEventTempDelegate, FVector, HitLocation);		// if hit, get location and timing 
+
 
 UCLASS()
 class MIRA_API AMIRABaseCharacter : public ACharacter
@@ -52,16 +51,16 @@ public:
 	//void StartDash();
 #pragma endregion
 
-#pragma region Delegates for BP event
+#pragma region [TO DO] Delegates for BP event
 	// delegate for when attack hit
 	UPROPERTY(BlueprintAssignable, Category = "Event")
-	FOnAttackEnd OnAttackEndBP;
+	FOnAttackEndTempDelegate OnAttackEndBP;
 	// delegate for when be hitted
 	UPROPERTY(BlueprintAssignable, Category = "Event")
-	FOnHitEvent OnHitBP;
+	FOnHitEventTempDelegate OnHitBP;
 	// delegate for when start dash
 	UPROPERTY(BlueprintAssignable, Category = "Event")
-	FOnStartDash OnStartDashBP;
+	FOnStartDashTempDelegate OnStartDashBP;
 #pragma endregion
 
 protected:
@@ -74,15 +73,13 @@ protected:
 #pragma endregion
 
 #pragma region [TO DO] Attack Logics
-	// attack logics
-	void AttackMelee();
-	void AttackRange();
-
-	void PerformAttackCombo();
-	void SaveAttackCombo();
-	void ResetAttackCombo();
-
-	void AttackCheck();
+	//// attack logics
+	//void AttackMelee();
+	//void AttackRange();
+	//void PerformAttackCombo();
+	//void SaveAttackCombo();
+	//void ResetAttackCombo();
+	//void AttackCheck();
 #pragma endregion
 
 #pragma region Anim Instance
