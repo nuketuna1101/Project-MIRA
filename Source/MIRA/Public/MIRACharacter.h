@@ -4,6 +4,7 @@
 
 #include "MIRA.h"
 #include "MIRABlade.h"
+#include "MIRAGameInstance.h"
 #include "MIRACharacterStatComponent.h"
 #include "GameFramework/Character.h"
 #include "MIRACharacter.generated.h"
@@ -58,9 +59,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	virtual void OnAssetLoadCompleted();
-
-
 
 	// damage framework
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
@@ -113,10 +111,9 @@ private:
 
 #pragma region Asset Async Loading by Streamable Manager
 
-	//void OnAssetLoadCompleted();
-
-	//FSoftObjectPath CharacterAssetToLoad = FSoftObjectPath(nullptr);
-	//TSharedPtr<struct FStreamableHandle> AssetStreamingHandle;
+	void OnAssetLoadCompleted();
+	FSoftObjectPath CharacterAssetToLoad = FSoftObjectPath(nullptr);
+	TSharedPtr<struct FStreamableHandle> AssetStreamingHandle;
 
 #pragma endregion
 

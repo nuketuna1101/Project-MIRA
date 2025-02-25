@@ -3,11 +3,13 @@
 #include "MIRACharacter.h"
 #include "MIRAAnimInstance.h"
 #include "MIRABlade.h"
+#include "MIRAPlayerState.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Engine/DamageEvents.h"
 #include "DrawDebugHelpers.h"
 #include "MIRAPlayerController.h"
+#include "MIRACharacterSetting.h"
 
 // Sets default values
 AMIRACharacter::AMIRACharacter()
@@ -99,9 +101,9 @@ void AMIRACharacter::SetCharacterState(ECharacterState NewState)
 	{
 		DisableInput(MIRAPlayerController);
 		//ABPlayerController->GetHUDWidget()->BindCharacterStat(CharacterStat);
-		//auto ABPlayerState = Cast<AABPlayerState>(GetPlayerState());
-		//MIRACHECK(nullptr != ABPlayerState);
-		//CharacterStat->SetNewLevel(ABPlayerState->GetCharacterLevel());
+		auto MIRAPlayerState = Cast<AMIRAPlayerState>(GetPlayerState());
+		MIRACHECK(nullptr != MIRAPlayerState);
+		CharacterStat->SetNewLevel(MIRAPlayerState->GetCharacterLevel());
 		SetActorHiddenInGame(true);
 		SetCanBeDamaged(false);
 		break;
@@ -166,6 +168,30 @@ void AMIRACharacter::BeginPlay()
 
 	// character stat
 	CharacterStat->SetNewLevel(1);
+
+
+	// asset loading
+	if (IsPlayerControlled())
+	{
+		MIRAPlayerController = Cast<AMIRAPlayerController>(GetController());
+		MIRACHECK(nullptr != MIRAPlayerController);
+	}
+
+	auto DefaultSetting = GetDefault<UMIRACharacterSetting>();
+
+	if (IsPlayerControlled())
+	{
+		auto MIRAPlayerState = Cast<AMIRAPlayerState>(GetPlayerState());
+		MIRACHECK(nullptr != MIRAPlayerState);
+		//AssetIndex = 0;
+	}
+	CharacterAssetToLoad = DefaultSetting->CharacterAssets[0];
+	auto MIRAGameInstance = Cast<UMIRAGameInstance>(GetGameInstance());
+	MIRACHECK(nullptr != MIRAGameInstance);
+	AssetStreamingHandle = MIRAGameInstance->StreamableManager.RequestAsyncLoad(
+		CharacterAssetToLoad, FStreamableDelegate::CreateUObject(this, &AMIRACharacter::
+			OnAssetLoadCompleted));
+	SetCharacterState(ECharacterState::LOADING);
 
 }
 
@@ -294,11 +320,11 @@ void AMIRACharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void AMIRACharacter::OnAssetLoadCompleted()
 {
-	//AssetStreamingHandle->ReleaseHandle();
-	//TSoftObjectPtr<USkeletalMesh> LoadAssetPath(CharacterAssetToLoad);
+	AssetStreamingHandle->ReleaseHandle();
+	TSoftObjectPtr<USkeletalMesh> LoadAssetPath(CharacterAssetToLoad);
 
-	//GetMesh()->SetSkeletalMesh(LoadAssetPath.Get());
-	//SetCharacterState(ECharacterState::READY);
+	GetMesh()->SetSkeletalMesh(LoadAssetPath.Get());
+	SetCharacterState(ECharacterState::READY);
 }
 
 float AMIRACharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
