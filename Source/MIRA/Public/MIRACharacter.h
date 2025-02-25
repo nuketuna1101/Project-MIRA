@@ -59,7 +59,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
 	// damage framework
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 		AController* EventInstigator, AActor* DamageCauser) override;
@@ -74,13 +73,14 @@ public:
 	AMIRABlade* RightBlade;
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	AMIRABlade* LeftBlade;
-#pragma endregion
 
 	// getter for weapon mesh
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	AMIRABlade* GetBladeRight();
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	AMIRABlade* GetBladeLeft();
+
+#pragma endregion
 
 #pragma region Actions
 	void Attack();
