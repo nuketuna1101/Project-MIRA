@@ -36,6 +36,9 @@ AMIRAEnemyBaseCharacter::AMIRAEnemyBaseCharacter()
 
 	// stat component
 	TrooperStat = CreateDefaultSubobject<UMIRABaseCharacterComponent>(TEXT("TrooperStat"));
+
+	//
+	DeadTimer = 5.0f;
 }
 
 // Called when the game starts or when spawned
@@ -70,6 +73,7 @@ float AMIRAEnemyBaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const
 		if (TrooperAnim)	TrooperAnim->PlayHitMontage();
 	}
 	TrooperStat->SetDamage(FinalDamage);
+
 	return FinalDamage;
 }
 

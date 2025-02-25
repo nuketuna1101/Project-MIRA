@@ -57,4 +57,11 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Trooper Data")
 	class UMIRABaseCharacterComponent* TrooperStat;
 
+
+#pragma region Dead Timer
+
+	UPROPERTY(Transient, VisibleInstanceOnly, BlueprintReadOnly, Category = State, Meta = (AllowPrivateAccess = true))
+	float DeadTimer;
+	FTimerHandle DeadTimerHandle = {};
+#pragma endregion
 };
