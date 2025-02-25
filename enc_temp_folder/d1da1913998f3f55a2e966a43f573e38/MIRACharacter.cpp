@@ -118,7 +118,7 @@ void AMIRACharacter::SetCharacterState(ECharacterState NewState)
 				SetCharacterState(ECharacterState::DEAD);
 			});
 
-		SetCameraMode(ECameraMode::FreeTPS);
+		//SetControlMode(EControlMode::DIABLO);
 		GetCharacterMovement()->MaxWalkSpeed = 600.0f;
 		EnableInput(MIRAPlayerController);
 		break;
@@ -322,7 +322,6 @@ void AMIRACharacter::OnAssetLoadCompleted()
 {
 	AssetStreamingHandle->ReleaseHandle();
 	TSoftObjectPtr<USkeletalMesh> LoadAssetPath(CharacterAssetToLoad);
-	MIRACHECK(LoadAssetPath.IsValid());
 
 	GetMesh()->SetSkeletalMesh(LoadAssetPath.Get());
 	SetCharacterState(ECharacterState::READY);
