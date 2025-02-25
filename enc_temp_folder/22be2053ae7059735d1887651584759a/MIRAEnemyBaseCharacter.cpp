@@ -44,7 +44,7 @@ void AMIRAEnemyBaseCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	// 임시
-	TrooperStat->SetNewStat("MarksmanTrooper");
+	TrooperStat->SetHP(100.0f);
 
 }
 

@@ -25,7 +25,7 @@ protected:
 
 public:	
 	// setter
-	void SetNewStat(FString EnemyName);
+	void SetNewStat();
 	void SetDamage(float NewDamage);
 	void SetHP(float NewHP);
 	void SetPower(float NewPower);

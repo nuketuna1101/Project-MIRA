@@ -54,28 +54,17 @@ FMIRACharacterData* UMIRAGameInstance::GetMIRACharacterData(int32 Level)
 	return CharacterData;
 }
 
-FMIRAEnemyCharacterData* UMIRAGameInstance::GetMIRAEnemyCharacterData(int32 Index)
+FMIRAEnemyCharacterData* UMIRAGameInstance::GetMIRAEnemyCharacterData(FString EnemyName)
 {
-    TArray<FName> RowNames = MIRAEnemyCharacterDataTable->GetRowNames();
-    if (RowNames.IsValidIndex(Index))
+    FMIRAEnemyCharacterData* EnemyCharacterData = MIRAEnemyCharacterDataTable->FindRow<FMIRAEnemyCharacterData>(FName(*EnemyName), TEXT(""));
+
+    if (nullptr == EnemyCharacterData)
     {
-        FName RowName = RowNames[Index];
-        FMIRAEnemyCharacterData* EnemyCharacterData = MIRAEnemyCharacterDataTable->FindRow<FMIRAEnemyCharacterData>(RowName, TEXT(""));
-        if (EnemyCharacterData)
-        {
-            return EnemyCharacterData;
-        }
-        else
-        {
-            MIRALOG(Error, TEXT("EnemyCharacterData data not found for Index: %d"), Index);
-            return nullptr;
-        }
-    }
-    else
-    {
-        MIRALOG(Error, TEXT("Invalid Index: %d"), Index);
+        MIRALOG(Error, TEXT("EnemyCharacterData data not found for EnemyName"));
         return nullptr;
     }
+
+    return EnemyCharacterData;
 }
 
 void UMIRAGameInstance::PrintMIRACharacterDataAll()

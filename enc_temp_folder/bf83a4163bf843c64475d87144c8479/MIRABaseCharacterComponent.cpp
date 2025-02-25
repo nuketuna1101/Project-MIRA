@@ -23,18 +23,14 @@ void UMIRABaseCharacterComponent::BeginPlay()
 void UMIRABaseCharacterComponent::InitializeComponent()
 {
 	Super::InitializeComponent();
-	SetNewStat("MarksmanTrooper");
+	SetNewStat();
 }
 
-void UMIRABaseCharacterComponent::SetNewStat(FString EnemyName)
+void UMIRABaseCharacterComponent::SetNewStat()
 {
-	MIRALOG(Warning, TEXT("SetNewStat: EnemyName = %s"), *EnemyName);
-
-
 	auto MIRAGameInstance = Cast<UMIRAGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	MIRACHECK(nullptr != MIRAGameInstance);
-	CurrentStatData = MIRAGameInstance->GetMIRAEnemyCharacterData(1);
-	//CurrentStatData = MIRAGameInstance->GetMIRAEnemyCharacterData("MarksmanTrooper");
+	CurrentStatData = MIRAGameInstance->GetMIRAEnemyCharacterData("MarksmanTrooper");
 	if (nullptr != CurrentStatData)
 	{
 		SetHP(CurrentStatData->MaxHP);

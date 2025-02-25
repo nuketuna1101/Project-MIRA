@@ -70,7 +70,7 @@ public:
 
 	virtual void Init() override;
 	FMIRACharacterData* GetMIRACharacterData(int32 Level);
-	FMIRAEnemyCharacterData* GetMIRAEnemyCharacterData(int32 Index);
+	FMIRAEnemyCharacterData* GetMIRAEnemyCharacterData(FString EnemyName);
 
 	// StreamableManager for Asset Async loading
 	FStreamableManager StreamableManager;
