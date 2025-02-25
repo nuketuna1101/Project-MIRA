@@ -8,7 +8,7 @@
 #include "MIRAEnemyBaseCharacter.generated.h"
 
 // declare delegates
-DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegateTemp);
 
 UCLASS()
 class MIRA_API AMIRAEnemyBaseCharacter : public ACharacter
@@ -19,13 +19,6 @@ public:
 	// Sets default values for this character's properties
 	AMIRAEnemyBaseCharacter();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	class AMIRACharacter* Target = nullptr;
-
-public:	
 	// post initial
 	virtual void PostInitializeComponents() override;
 
@@ -39,7 +32,7 @@ public:
 
 	// attack
 	virtual void Attack();
-	FOnAttackEndDelegate OnAttackEnd;
+	FOnAttackEndDelegateTemp OnAttackEnd;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	bool IsAttacking;
@@ -64,4 +57,10 @@ public:
 	float DeadTimer;
 	FTimerHandle DeadTimerHandle = {};
 #pragma endregion
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	class AMIRACharacter* Target = nullptr;
 };

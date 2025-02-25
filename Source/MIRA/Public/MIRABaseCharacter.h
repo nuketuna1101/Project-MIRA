@@ -11,9 +11,9 @@
 
 // declare delegates
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAttackEndTempDelegate);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStartDashTempDelegate, FVector, DashEfxLocation);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitEventTempDelegate, FVector, HitLocation);		// if hit, get location and timing 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAttackEndDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStartDashDelegate, FVector, DashEfxLocation);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitEventDelegate, FVector, HitLocation);		// if hit, get location and timing 
 
 
 UCLASS()
@@ -54,13 +54,13 @@ public:
 #pragma region [TO DO] Delegates for BP event
 	// delegate for when attack hit
 	UPROPERTY(BlueprintAssignable, Category = "Event")
-	FOnAttackEndTempDelegate OnAttackEndBP;
+	FOnAttackEndDelegate OnAttackEndBP;
 	// delegate for when be hitted
 	UPROPERTY(BlueprintAssignable, Category = "Event")
-	FOnHitEventTempDelegate OnHitBP;
+	FOnHitEventDelegate OnHitBP;
 	// delegate for when start dash
 	UPROPERTY(BlueprintAssignable, Category = "Event")
-	FOnStartDashTempDelegate OnStartDashBP;
+	FOnStartDashDelegate OnStartDashBP;
 #pragma endregion
 
 protected:
@@ -84,6 +84,7 @@ protected:
 
 #pragma region Anim Instance
 	UPROPERTY()
+	//class UAnimInstance* MIRAAnim;
 	class UMIRAAnimInstance* MIRAAnim;
 #pragma endregion
 
