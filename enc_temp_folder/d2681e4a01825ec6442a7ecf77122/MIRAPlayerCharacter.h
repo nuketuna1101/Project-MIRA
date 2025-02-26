@@ -76,6 +76,12 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+#pragma region Asset Async Loading by Streamable Manager
+	//virtual void OnAssetLoadCompleted() override;
+	//FSoftObjectPath CharacterAssetToLoad = FSoftObjectPath(nullptr);
+	//TSharedPtr<struct FStreamableHandle> AssetStreamingHandle;
+#pragma endregion
+
 #pragma region [PlayerOnly] Camera Setting
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	ETempCameraMode CurrentControlMode = ETempCameraMode::FreeTPS;

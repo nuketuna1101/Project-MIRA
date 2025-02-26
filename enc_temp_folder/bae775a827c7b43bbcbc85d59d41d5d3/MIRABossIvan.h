@@ -18,13 +18,4 @@ public:
 	// Sets default values for this character's properties
 	AMIRABossIvan();
 	
-	//virtual void PostInitializeComponents() override;
-
-
-protected:
-	virtual void BeginPlay() override;
-
-	class AMIRACharacter* Target = nullptr;
-
-	UClass* BulletClass;
 };

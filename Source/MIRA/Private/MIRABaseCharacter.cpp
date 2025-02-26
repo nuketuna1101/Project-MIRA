@@ -267,28 +267,9 @@ void AMIRABaseCharacter::BeginPlay()
 		//ABAIController = Cast<AABAIController>(GetController());
 		//ABCHECK(nullptr != ABAIController);
 	}
-
-	auto DefaultSetting = GetDefault<UMIRACharacterSetting>();
-
-	if (bIsPlayer)
-	{
-		auto MIRAPlayerState = Cast<AMIRAPlayerState>(GetPlayerState());
-		MIRACHECK(nullptr != MIRAPlayerState);
-		//AssetIndex = 0;
-	}
-	else
-	{
-		//AssetIndex = FMath::RandRange(0, DefaultSetting->CharacterAssets.Num() - 1);
-	}
-
-	// [TO DO] TEMP
-	CharacterAssetToLoad = DefaultSetting->CharacterAssets[0];
-	auto MIRAGameInstance = Cast<UMIRAGameInstance>(GetGameInstance());
-	MIRACHECK(nullptr != MIRAGameInstance);
-	AssetStreamingHandle = MIRAGameInstance->StreamableManager.RequestAsyncLoad(
-		CharacterAssetToLoad, FStreamableDelegate::CreateUObject(this, &AMIRABaseCharacter::
-			OnAssetLoadCompleted));
 	SetCharacterState(ECharacterState::LOADING);
+
+	// [TO DO] Asset Loading
 
 }
 

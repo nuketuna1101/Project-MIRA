@@ -2,6 +2,8 @@
 
 
 #include "MIRAMarksmanTrooper.h"
+#include "MIRABaseCharacter.h"
+#include "MIRACharacterSetting.h"
 #include "TrooperAnimInstance.h"
 #include "TrooperAIController.h"
 #include "Components/WidgetComponent.h"
@@ -12,13 +14,13 @@
 
 AMIRAMarksmanTrooper::AMIRAMarksmanTrooper()
 {
-	// mesh
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
-		SK_MARKSMANTROOPER(TEXT("/Game/ParagonWraith/Characters/Heroes/Wraith/Meshes/Wraith.Wraith"));
-	if (SK_MARKSMANTROOPER.Succeeded())
-	{
-		GetMesh()->SetSkeletalMesh(SK_MARKSMANTROOPER.Object);
-	}
+	// [DONT HAVE TO] Skeletal mesh
+	//static ConstructorHelpers::FObjectFinder<USkeletalMesh>
+	//	SK_MARKSMANTROOPER(TEXT("/Game/ParagonWraith/Characters/Heroes/Wraith/Meshes/Wraith.Wraith"));
+	//if (SK_MARKSMANTROOPER.Succeeded())
+	//{
+	//	GetMesh()->SetSkeletalMesh(SK_MARKSMANTROOPER.Object);
+	//}
 
 	// setting for animations
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
@@ -105,4 +107,13 @@ void AMIRAMarksmanTrooper::BeginPlay()
 
 	// 임시
 	//TrooperStat->SetNewStat("MarksmanTrooper");
+
+	// Asset loading
+	auto DefaultSetting = GetDefault<UMIRACharacterSetting>();
+	CharacterAssetToLoad = DefaultSetting->TrooperAssets[0];
+	auto MIRAGameInstance = Cast<UMIRAGameInstance>(GetGameInstance());
+	MIRACHECK(nullptr != MIRAGameInstance);
+	AssetStreamingHandle = MIRAGameInstance->StreamableManager.RequestAsyncLoad(
+		CharacterAssetToLoad, FStreamableDelegate::CreateUObject(this, &AMIRABaseCharacter::
+			OnAssetLoadCompleted));
 }

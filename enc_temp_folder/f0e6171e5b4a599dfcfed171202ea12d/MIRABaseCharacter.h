@@ -84,6 +84,7 @@ protected:
 
 #pragma region Anim Instance
 	UPROPERTY()
+	//class UAnimInstance* MIRAAnim;
 	class UMIRAAnimInstance* MIRAAnim;
 #pragma endregion
 

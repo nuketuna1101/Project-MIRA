@@ -2,7 +2,10 @@
 
 
 #include "MIRAMarksmanTrooper.h"
+#include "MIRABaseCharacter.h"
+#include "MIRACharacterSetting.h"
 #include "TrooperAnimInstance.h"
+#include "TrooperAIController.h"
 #include "Components/WidgetComponent.h"
 #include "Projectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
@@ -32,6 +35,13 @@ AMIRAMarksmanTrooper::AMIRAMarksmanTrooper()
 	static ConstructorHelpers::FObjectFinder<UBlueprint>
 		blueprint_finder(TEXT("Blueprint'/Game/MIRA/Characters/Blueprints/BP_TrooperBullet.BP_TrooperBullet'"));
 	BulletClass = (UClass*)blueprint_finder.Object->GeneratedClass;
+
+	// ai controller
+	AIControllerClass = ATrooperAIController::StaticClass();
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	// collision setting
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
 }
 
 void AMIRAMarksmanTrooper::PostInitializeComponents()
@@ -97,4 +107,22 @@ void AMIRAMarksmanTrooper::BeginPlay()
 
 	// 임시
 	//TrooperStat->SetNewStat("MarksmanTrooper");
+
+	// asset loading
+	auto DefaultSetting = GetDefault<UMIRACharacterSetting>();
+	CharacterAssetToLoad = DefaultSetting->TrooperAssets[0];
+	auto MIRAGameInstance = Cast<UMIRAGameInstance>(GetGameInstance());
+	MIRACHECK(nullptr != MIRAGameInstance);
+	AssetStreamingHandle = MIRAGameInstance->StreamableManager.RequestAsyncLoad(
+		CharacterAssetToLoad, FStreamableDelegate::CreateUObject(this, &AMIRABaseCharacter::
+			OnAssetLoadCompleted));
 }
+
+//void AMIRAMarksmanTrooper::OnAssetLoadCompleted()
+//{
+//	AssetStreamingHandle->ReleaseHandle();
+//	TSoftObjectPtr<USkeletalMesh> LoadAssetPath(CharacterAssetToLoad);
+//	MIRACHECK(LoadAssetPath.IsValid());
+//	GetMesh()->SetSkeletalMesh(LoadAssetPath.Get());
+//	SetCharacterState(ECharacterState::READY);
+//}

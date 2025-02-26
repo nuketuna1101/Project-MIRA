@@ -19,13 +19,13 @@ AMIRAPlayerCharacter::AMIRAPlayerCharacter()
 	SpringArmRotationSpeed = 10.0f;
 	SpringArmLengthSpeed = 3.0f;
 
-	// [TO DO] [DONT HAVE TO] SetSkeletalMesh
-	//static ConstructorHelpers::FObjectFinder<USkeletalMesh>
-	//	SK_KALLARI(TEXT("/Game/ParagonKallari/Characters/Heroes/Kallari/Meshes/Kallari.Kallari"));
-	//if (SK_KALLARI.Succeeded())
-	//{
-	//	GetMesh()->SetSkeletalMesh(SK_KALLARI.Object);
-	//}
+	// [TO DO] SetSkeletalMesh
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
+		SK_KALLARI(TEXT("/Game/ParagonKallari/Characters/Heroes/Kallari/Meshes/Kallari.Kallari"));
+	if (SK_KALLARI.Succeeded())
+	{
+		GetMesh()->SetSkeletalMesh(SK_KALLARI.Object);
+	}
 
 	// [TO DO] setting for animations
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
@@ -183,7 +183,7 @@ void AMIRAPlayerCharacter::BeginPlay()
 		LeftBlade->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponLeftSocket);
 	}
 
-	// Asset loading
+	// asset loading
 	auto DefaultSetting = GetDefault<UMIRACharacterSetting>();
 	CharacterAssetToLoad = DefaultSetting->CharacterAssets[0];
 	auto MIRAGameInstance = Cast<UMIRAGameInstance>(GetGameInstance());
@@ -192,6 +192,15 @@ void AMIRAPlayerCharacter::BeginPlay()
 		CharacterAssetToLoad, FStreamableDelegate::CreateUObject(this, &AMIRABaseCharacter::
 			OnAssetLoadCompleted));
 }
+
+//void AMIRAPlayerCharacter::OnAssetLoadCompleted()
+//{
+//	AssetStreamingHandle->ReleaseHandle();
+//	TSoftObjectPtr<USkeletalMesh> LoadAssetPath(CharacterAssetToLoad);
+//	MIRACHECK(LoadAssetPath.IsValid());
+//	GetMesh()->SetSkeletalMesh(LoadAssetPath.Get());
+//	SetCharacterState(ECharacterState::READY);
+//}
 
 void AMIRAPlayerCharacter::SetCameraMode(ETempCameraMode CameraMode)
 {
