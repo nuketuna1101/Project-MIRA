@@ -110,7 +110,8 @@ void AMIRAMarksmanTrooper::BeginPlay()
 
 	// Asset loading
 	auto DefaultSetting = GetDefault<UMIRACharacterSetting>();
-	CharacterAssetToLoad = DefaultSetting->TrooperAssets[0];
+	//CharacterAssetToLoad = DefaultSetting->TrooperAssets[0];
+	CharacterAssetToLoad = DefaultSetting->TrooperAssets[FMath::RandRange(0, 2)];
 	auto MIRAGameInstance = Cast<UMIRAGameInstance>(GetGameInstance());
 	MIRACHECK(nullptr != MIRAGameInstance);
 	AssetStreamingHandle = MIRAGameInstance->StreamableManager.RequestAsyncLoad(

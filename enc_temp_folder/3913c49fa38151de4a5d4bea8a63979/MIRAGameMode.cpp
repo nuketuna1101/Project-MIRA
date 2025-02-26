@@ -18,6 +18,7 @@ AMIRAGameMode::AMIRAGameMode()
 void AMIRAGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	// post login on game mode
+	MIRALOG(Warning, TEXT("[PostLogin] called"));
 	Super::PostLogin(NewPlayer);
 
 	auto MIRAPlayerState = Cast<AMIRAPlayerState>(NewPlayer->PlayerState);
