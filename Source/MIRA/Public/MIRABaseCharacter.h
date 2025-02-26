@@ -3,7 +3,6 @@
 #pragma once
 
 #include "MIRA.h"
-#include "MIRABlade.h"
 #include "MIRAGameInstance.h"
 #include "MIRACharacterStatComponent.h"
 #include "GameFramework/Character.h"
@@ -11,6 +10,7 @@
 
 // declare delegates
 
+DECLARE_MULTICAST_DELEGATE(FOnAttackEndTrooper);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAttackEndDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStartDashDelegate, FVector, DashEfxLocation);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitEventDelegate, FVector, HitLocation);		// if hit, get location and timing 
@@ -43,7 +43,7 @@ public:
 #pragma endregion
 
 #pragma region [TO DO] Actions
-	//void Attack();
+	virtual void Attack();
 	//void StartBlock();
 	//void StopBlock();
 	//void StartAim();
@@ -52,6 +52,8 @@ public:
 #pragma endregion
 
 #pragma region [TO DO] Delegates for BP event
+	FOnAttackEndTrooper OnAttackEnd;
+
 	// delegate for when attack hit
 	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FOnAttackEndDelegate OnAttackEndBP;

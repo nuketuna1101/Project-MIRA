@@ -24,7 +24,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	class AMIRACharacter* Target = nullptr;
+	class AMIRAPlayerCharacter* Target = nullptr;
 
 	UClass* BulletClass;
 };

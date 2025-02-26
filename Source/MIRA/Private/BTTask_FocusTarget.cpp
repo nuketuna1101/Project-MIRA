@@ -3,8 +3,8 @@
 
 #include "BTTask_FocusTarget.h"
 #include "TrooperAIController.h"
-#include "MIRAEnemyBaseCharacter.h"
-#include "MIRACharacter.h"
+#include "MIRABaseCharacter.h"
+#include "MIRAPlayerCharacter.h"
 #include "TrooperAnimInstance.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
@@ -26,10 +26,10 @@ EBTNodeResult::Type UBTTask_FocusTarget::ExecuteTask(UBehaviorTreeComponent& Own
 	auto BBComp = OwnerComp.GetBlackboardComponent();
 	if (nullptr == BBComp)	return EBTNodeResult::Failed;
 
-	auto Trooper = Cast<AMIRAEnemyBaseCharacter>(OwnerComp.GetAIOwner()->GetPawn());
+	auto Trooper = Cast<AMIRABaseCharacter>(OwnerComp.GetAIOwner()->GetPawn());
 	if (nullptr == Trooper)	return EBTNodeResult::Failed;
 
-	auto Target = Cast<AMIRACharacter>(BBComp->GetValueAsObject(ATrooperAIController::TargetKey));
+	auto Target = Cast<AMIRAPlayerCharacter>(BBComp->GetValueAsObject(ATrooperAIController::TargetKey));
 	if (nullptr == Target)	return EBTNodeResult::Failed;
 
 	ElapsedTime = 0.0f;
@@ -56,10 +56,10 @@ void UBTTask_FocusTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	auto BBComp = OwnerComp.GetBlackboardComponent();
 	if (nullptr == BBComp)	return;
 
-	auto Trooper = Cast<AMIRAEnemyBaseCharacter>(OwnerComp.GetAIOwner()->GetPawn());
+	auto Trooper = Cast<AMIRABaseCharacter>(OwnerComp.GetAIOwner()->GetPawn());
 	if (nullptr == Trooper)	return;
 
-	auto Target = Cast<AMIRACharacter>(BBComp->GetValueAsObject(ATrooperAIController::TargetKey));
+	auto Target = Cast<AMIRAPlayerCharacter>(BBComp->GetValueAsObject(ATrooperAIController::TargetKey));
 	if (nullptr == Target)	return;
 
 	auto TrooperLocation = Trooper->GetActorLocation();

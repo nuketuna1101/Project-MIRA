@@ -89,7 +89,7 @@ void AMIRAMarksmanTrooper::Attack()
 	}
 }
 
-void AMIRAMarksmanTrooper::SetTarget(AMIRACharacter* TargetActor)
+void AMIRAMarksmanTrooper::SetTarget(AMIRAPlayerCharacter* TargetActor)
 {
 	Target = TargetActor;
 }
@@ -97,8 +97,7 @@ void AMIRAMarksmanTrooper::SetTarget(AMIRACharacter* TargetActor)
 void AMIRAMarksmanTrooper::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	IsAttacking = false;
-	//OnAttackEnd.Broadcast();
-	OnAttackEndBP.Broadcast();
+	OnAttackEnd.Broadcast();
 }
 
 void AMIRAMarksmanTrooper::BeginPlay()

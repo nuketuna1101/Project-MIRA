@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "MIRAGameMode.h"
-#include "MIRACharacter.h"
+#include "MIRAPlayerCharacter.h"
 #include "MIRAPawn.h"
 #include "MIRAPlayerController.h"
 #include "MIRAPlayerState.h"
@@ -10,7 +10,7 @@
 AMIRAGameMode::AMIRAGameMode()
 {
 	// settings for default class
-	DefaultPawnClass = AMIRACharacter::StaticClass();
+	DefaultPawnClass = AMIRAPlayerCharacter::StaticClass();
 	PlayerControllerClass = AMIRAPlayerController::StaticClass();
 	PlayerStateClass = AMIRAPlayerState::StaticClass();
 }

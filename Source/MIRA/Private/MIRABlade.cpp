@@ -41,7 +41,7 @@ void AMIRABlade::BeginPlay()
 
 void AMIRABlade::OnBeginOverlap(UPrimitiveComponent* OverlapeedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	AMIRAEnemyBaseCharacter* TargetEnemy = Cast<AMIRAEnemyBaseCharacter>(OtherActor);
+	AMIRABaseCharacter* TargetEnemy = Cast<AMIRABaseCharacter>(OtherActor);
 	if (TargetEnemy)
 	{
 		if (!OverlappedEnemies.Contains(TargetEnemy))
@@ -51,7 +51,7 @@ void AMIRABlade::OnBeginOverlap(UPrimitiveComponent* OverlapeedComponent, AActor
 	}
 }
 
-TArray<AMIRAEnemyBaseCharacter*> AMIRABlade::GetOverlappedEnemies()
+TArray<AMIRABaseCharacter*> AMIRABlade::GetOverlappedEnemies()
 {
 	return OverlappedEnemies;
 }

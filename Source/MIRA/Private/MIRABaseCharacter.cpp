@@ -250,6 +250,10 @@ void AMIRABaseCharacter::SetCharacterState(ECharacterState NewState)
 	}
 }
 
+void AMIRABaseCharacter::Attack()
+{
+}
+
 void AMIRABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();

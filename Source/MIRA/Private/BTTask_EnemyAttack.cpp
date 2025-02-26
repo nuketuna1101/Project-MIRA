@@ -2,8 +2,8 @@
 
 
 #include "BTTask_EnemyAttack.h"
+#include "MIRABaseCharacter.h"
 #include "TrooperAIController.h"
-#include "MIRAEnemyBaseCharacter.h"
 
 UBTTask_EnemyAttack::UBTTask_EnemyAttack()
 {
@@ -17,7 +17,7 @@ EBTNodeResult::Type UBTTask_EnemyAttack::ExecuteTask(UBehaviorTreeComponent& Own
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
 	//
-	auto Trooper = Cast<AMIRAEnemyBaseCharacter>(OwnerComp.GetAIOwner()->GetPawn());
+	auto Trooper = Cast<AMIRABaseCharacter>(OwnerComp.GetAIOwner()->GetPawn());
 	if (nullptr == Trooper)	return EBTNodeResult::Failed;
 
 	Trooper->Attack();

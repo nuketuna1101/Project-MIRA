@@ -2,8 +2,9 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "MIRA.h"
 #include "MIRABaseCharacter.h"
+#include "MIRAPlayerCharacter.h"
 #include "MIRAMarksmanTrooper.generated.h"
 
 /**
@@ -24,10 +25,10 @@ public:
 	//	AController* EventInstigator, AActor* DamageCauser) override;
 
 	// attack
-	virtual void Attack();
+	virtual void Attack() override;
 
 	UFUNCTION(BlueprintCallable, Category = "Attack")
-	void SetTarget(AMIRACharacter* TargetActor);
+	void SetTarget(AMIRAPlayerCharacter* TargetActor);
 
 	// anim montage
 	UFUNCTION()
@@ -43,7 +44,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	class AMIRACharacter* Target = nullptr;
+	class AMIRAPlayerCharacter* Target = nullptr;
 
 	UClass* BulletClass;
 

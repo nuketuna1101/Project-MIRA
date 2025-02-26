@@ -453,7 +453,7 @@ void AMIRACharacter::AttackCheck()
 		OverlappedEnemies.AddUnique(Enemy);
 	}
 
-	for (AMIRAEnemyBaseCharacter* Enemy : OverlappedEnemies)
+	for (AMIRABaseCharacter* Enemy : OverlappedEnemies)
 	{
 		if (Enemy && Enemy != GetOwner())
 		{

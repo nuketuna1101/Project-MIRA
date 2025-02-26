@@ -2,6 +2,7 @@
 
 
 #include "MIRAPlayerCharacter.h"
+#include "MIRABlade.h"
 #include "MIRAAnimInstance.h"
 #include "MIRACharacterSetting.h"
 #include "Engine/DamageEvents.h"
@@ -20,12 +21,12 @@ AMIRAPlayerCharacter::AMIRAPlayerCharacter()
 	SpringArmLengthSpeed = 3.0f;
 
 	// [TO DO] [DONT HAVE TO] SetSkeletalMesh
-	//static ConstructorHelpers::FObjectFinder<USkeletalMesh>
-	//	SK_KALLARI(TEXT("/Game/ParagonKallari/Characters/Heroes/Kallari/Meshes/Kallari.Kallari"));
-	//if (SK_KALLARI.Succeeded())
-	//{
-	//	GetMesh()->SetSkeletalMesh(SK_KALLARI.Object);
-	//}
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
+		SK_KALLARI(TEXT("/Game/ParagonKallari/Characters/Heroes/Kallari/Meshes/Kallari.Kallari"));
+	if (SK_KALLARI.Succeeded())
+	{
+		GetMesh()->SetSkeletalMesh(SK_KALLARI.Object);
+	}
 
 	// [TO DO] setting for animations
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
@@ -63,8 +64,43 @@ void AMIRAPlayerCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
+	// test
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
+	if (AnimInstance)
+	{
+		// 애니메이션 인스턴스의 클래스 이름 출력
+		MIRALOG(Warning, TEXT("Animation Instance Class: %s"), *AnimInstance->GetClass()->GetName());
+		// 애니메이션 인스턴스가 UMIRAAnimInstance 타입인지 확인
+		if (AnimInstance->IsA<UMIRAAnimInstance>())
+		{
+			MIRALOG(Warning, TEXT("Animation Instance is UMIRAAnimInstance"));
+		}
+		else
+		{
+			MIRALOG(Warning, TEXT("Animation Instance is NOT UMIRAAnimInstance"));
+		}
+		// 캐스팅 시도 및 결과 확인
+		MIRAAnim = Cast<UMIRAAnimInstance>(AnimInstance);
+		if (MIRAAnim)
+		{
+			MIRALOG(Warning, TEXT("Casting to UMIRAAnimInstance successful"));
+		}
+		else
+		{
+			MIRALOG(Warning, TEXT("Casting to UMIRAAnimInstance failed"));
+		}
+	}
+	else
+	{
+		MIRALOG(Warning, TEXT("Animation Instance is NOT UMIRAAnimInstance"));
+	}
+	// ===
+
+
 	// initializing for anim montage
 	MIRAAnim = Cast<UMIRAAnimInstance>(GetMesh()->GetAnimInstance());
+	MIRACHECK(nullptr != MIRAAnim);
 	if (!MIRAAnim) return;
 
 	// binding logics to anim notify
@@ -238,7 +274,8 @@ void AMIRAPlayerCharacter::PerformAttackCombo()
 	OnAttackEndBP.Broadcast();
 	bCannotMove = true;
 	CurrentComboCount = (CurrentComboCount + 1) % 5;
-	MIRAAnim->PlayAttackComboMontage(CurrentComboCount);
+	MIRACHECK(nullptr != MIRAAnim);
+	if(MIRAAnim) MIRAAnim->PlayAttackComboMontage(CurrentComboCount);
 }
 
 void AMIRAPlayerCharacter::SaveAttackCombo()
@@ -267,7 +304,7 @@ void AMIRAPlayerCharacter::AttackCheck()
 		OverlappedEnemies.AddUnique(Enemy);
 	}
 
-	for (AMIRAEnemyBaseCharacter* Enemy : OverlappedEnemies)
+	for (AMIRABaseCharacter* Enemy : OverlappedEnemies)
 	{
 		if (Enemy && Enemy != GetOwner())
 		{

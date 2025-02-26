@@ -3,7 +3,7 @@
 #pragma once
 
 #include "MIRA.h"
-#include "MIRAEnemyBaseCharacter.h"
+#include "MIRABaseCharacter.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
 #include "MIRABlade.generated.h"
@@ -29,14 +29,14 @@ public:
 
 	void FreeAllOverlappedEnemies() { OverlappedEnemies.Empty(); }
 
-	TArray<AMIRAEnemyBaseCharacter*> GetOverlappedEnemies();
+	TArray<AMIRABaseCharacter*> GetOverlappedEnemies();
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision", meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* BoxCollider;
 
 	UPROPERTY()
-	TArray<AMIRAEnemyBaseCharacter*> OverlappedEnemies;
+	TArray<AMIRABaseCharacter*> OverlappedEnemies;
 
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlapeedComponent,

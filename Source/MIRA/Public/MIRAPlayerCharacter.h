@@ -63,7 +63,7 @@ public:
 
 
 #pragma region [TO DO] Actions
-	void Attack();
+	virtual void Attack() override;
 	void StartBlock();
 	void StopBlock();
 	void StartAim();

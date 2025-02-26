@@ -3,8 +3,7 @@
 
 #include "BTService_Detect.h"
 #include "TrooperAIController.h"
-#include "MIRACharacter.h"
-#include "MIRAEnemyBaseCharacter.h"
+#include "MIRAPlayerCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/OverlapResult.h"
@@ -64,7 +63,7 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 			// check the overlapped thing is Player	
 			AActor* Overlapped = OverlapResult.GetActor();
 			if (!Overlapped || Overlapped == ControllingPawn) continue;
-			AMIRACharacter* PlayerCharacter = Cast<AMIRACharacter>(Overlapped);
+			AMIRAPlayerCharacter* PlayerCharacter = Cast<AMIRAPlayerCharacter>(Overlapped);
 			if (!PlayerCharacter) continue;
 
 			FVector PlayerLocation = PlayerCharacter->GetActorLocation();
