@@ -2,30 +2,20 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "MIRAEnemyBaseCharacter.h"
+#include "MIRA.h"
+#include "MIRABaseCharacter.h"
 #include "MIRABossIvan.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MIRA_API AMIRABossIvan : public AMIRAEnemyBaseCharacter
+class MIRA_API AMIRABossIvan : public AMIRABaseCharacter
 {
 	GENERATED_BODY()
 	
 public:
 	// Sets default values for this character's properties
 	AMIRABossIvan();
-
-	// attack
-	virtual void Attack() override;
-
-	// damage framework
-	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
-		AController* EventInstigator, AActor* DamageCauser) override;
-
-protected:
-	UClass* BulletClass;
 	
 };

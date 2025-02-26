@@ -297,6 +297,7 @@ void AMIRABaseCharacter::OnAssetLoadCompleted()
 	AssetStreamingHandle->ReleaseHandle();
 	TSoftObjectPtr<USkeletalMesh> LoadAssetPath(CharacterAssetToLoad);
 	MIRACHECK(LoadAssetPath.IsValid());
+
 	GetMesh()->SetSkeletalMesh(LoadAssetPath.Get());
 	SetCharacterState(ECharacterState::READY);
 }

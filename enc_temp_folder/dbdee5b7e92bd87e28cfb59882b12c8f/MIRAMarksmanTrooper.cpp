@@ -3,7 +3,6 @@
 
 #include "MIRAMarksmanTrooper.h"
 #include "TrooperAnimInstance.h"
-#include "TrooperAIController.h"
 #include "Components/WidgetComponent.h"
 #include "Projectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
@@ -33,13 +32,6 @@ AMIRAMarksmanTrooper::AMIRAMarksmanTrooper()
 	static ConstructorHelpers::FObjectFinder<UBlueprint>
 		blueprint_finder(TEXT("Blueprint'/Game/MIRA/Characters/Blueprints/BP_TrooperBullet.BP_TrooperBullet'"));
 	BulletClass = (UClass*)blueprint_finder.Object->GeneratedClass;
-
-	// ai controller
-	AIControllerClass = ATrooperAIController::StaticClass();
-	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-
-	// collision setting
-	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
 }
 
 void AMIRAMarksmanTrooper::PostInitializeComponents()
