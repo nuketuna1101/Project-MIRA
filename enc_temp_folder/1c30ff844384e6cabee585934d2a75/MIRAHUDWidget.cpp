@@ -37,7 +37,7 @@ void UMIRAHUDWidget::NativeConstruct()
 	PlayerLevel = Cast<UTextBlock>(GetWidgetFromName(TEXT("txtLevel")));
 	MIRACHECK(nullptr != PlayerLevel);
 
-	BossHUDWidget = Cast<UMIRABossHUDWidget>(GetWidgetFromName(TEXT("UI_MIRABossHUD")));
+	BossHUDWidget = Cast<UMIRABossHUDWidget>(GetWidgetFromName(TEXT("MIRABossHUD")));
 	MIRACHECK(nullptr != BossHUDWidget);
 	if (BossHUDWidget)
 	{

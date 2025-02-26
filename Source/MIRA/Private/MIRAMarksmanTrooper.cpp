@@ -15,12 +15,12 @@
 AMIRAMarksmanTrooper::AMIRAMarksmanTrooper()
 {
 	// [DONT HAVE TO] Skeletal mesh
-	//static ConstructorHelpers::FObjectFinder<USkeletalMesh>
-	//	SK_MARKSMANTROOPER(TEXT("/Game/ParagonWraith/Characters/Heroes/Wraith/Meshes/Wraith.Wraith"));
-	//if (SK_MARKSMANTROOPER.Succeeded())
-	//{
-	//	GetMesh()->SetSkeletalMesh(SK_MARKSMANTROOPER.Object);
-	//}
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
+		SK_MARKSMANTROOPER(TEXT("/Game/ParagonWraith/Characters/Heroes/Wraith/Meshes/Wraith.Wraith"));
+	if (SK_MARKSMANTROOPER.Succeeded())
+	{
+		GetMesh()->SetSkeletalMesh(SK_MARKSMANTROOPER.Object);
+	}
 
 	// setting for animations
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
@@ -48,10 +48,30 @@ void AMIRAMarksmanTrooper::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	//MIRAAnim = Cast<UTrooperAnimInstance>(GetMesh()->GetAnimInstance());
-	//MIRACHECK(nullptr != MIRAAnim);
-	//if (!MIRAAnim) return;
-	//MIRAAnim->OnMontageEnded.AddDynamic(this, &AMIRAMarksmanTrooper::OnAttackMontageEnded);
+	MMTrooperAnim = Cast<UTrooperAnimInstance>(GetMesh()->GetAnimInstance());
+	MIRACHECK(nullptr != MMTrooperAnim);
+	if (!MMTrooperAnim) return;
+	MMTrooperAnim->OnMontageEnded.AddDynamic(this, &AMIRAMarksmanTrooper::OnAttackMontageEnded);
+}
+
+float AMIRAMarksmanTrooper::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float FinalDamage = Super::Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+
+	// if dmg valid, play hit anim
+	if (FinalDamage > 0.0f)
+	{
+		if (MMTrooperAnim)	MMTrooperAnim->PlayHitMontage();
+	}
+
+	// TO DO: STAT 기반 판별해서
+	CharacterStat->SetDamage(FinalDamage);
+	if (CurrentState == ECharacterState::DEAD)
+	{
+		OnDead.Broadcast(DamageCauser);
+	}
+	return FinalDamage;
 }
 
 void AMIRAMarksmanTrooper::Attack()

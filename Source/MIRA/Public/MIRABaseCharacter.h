@@ -14,6 +14,7 @@ DECLARE_MULTICAST_DELEGATE(FOnAttackEndTrooper);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAttackEndDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStartDashDelegate, FVector, DashEfxLocation);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitEventDelegate, FVector, HitLocation);		// if hit, get location and timing 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeadEventDelegate, AActor*, DamageCauser);
 
 
 UCLASS()
@@ -63,6 +64,9 @@ public:
 	// delegate for when start dash
 	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FOnStartDashDelegate OnStartDashBP;
+
+	UPROPERTY(BlueprintAssignable, Category = "Event") //죽었을때 델리게이트
+	FOnDeadEventDelegate OnDead;
 #pragma endregion
 
 #pragma region Asset Async Loading by Streamable Manager

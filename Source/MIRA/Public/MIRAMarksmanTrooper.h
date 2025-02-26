@@ -19,7 +19,8 @@ public:
 	AMIRAMarksmanTrooper();
 
 	virtual void PostInitializeComponents() override;
-
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+		AController* EventInstigator, AActor* DamageCauser) override;
 
 	//virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	//	AController* EventInstigator, AActor* DamageCauser) override;
@@ -47,5 +48,11 @@ protected:
 	class AMIRAPlayerCharacter* Target = nullptr;
 
 	UClass* BulletClass;
+
+#pragma region Anim Instance
+	UPROPERTY()
+	class UTrooperAnimInstance* MMTrooperAnim;
+#pragma endregion
+
 
 };

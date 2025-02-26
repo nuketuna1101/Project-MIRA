@@ -15,7 +15,6 @@ UMIRACharacterStatComponent::UMIRACharacterStatComponent()
 	Level = 1;
 }
 
-
 // Called when the game starts
 void UMIRACharacterStatComponent::BeginPlay()
 {

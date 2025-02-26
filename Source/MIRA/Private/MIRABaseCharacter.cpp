@@ -138,12 +138,16 @@ float AMIRABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 	CharacterStat->SetDamage(FinalDamage);
 	if (CurrentState == ECharacterState::DEAD)
 	{
-		//OnDead.Broadcast(DamageCauser);
-		if (EventInstigator->IsPlayerController())
+		OnDead.Broadcast(DamageCauser);
+		if (nullptr != EventInstigator) 
 		{
-			MIRAPlayerController = Cast<AMIRAPlayerController>(EventInstigator);
-			//MIRAPlayerController->NPCKill(this);
+			if (EventInstigator->IsPlayerController())
+			{
+				MIRAPlayerController = Cast<AMIRAPlayerController>(EventInstigator);
+				MIRACHECK(nullptr != MIRAPlayerController, 0.0f);
+			}
 		}
+
 	}
 	return FinalDamage;
 }

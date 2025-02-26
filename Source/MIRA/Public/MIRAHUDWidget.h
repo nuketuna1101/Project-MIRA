@@ -3,6 +3,7 @@
 #pragma once
 
 #include "MIRA.h"
+#include "MIRABossHUDWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "MIRAHUDWidget.generated.h"
 
@@ -15,8 +16,10 @@ class MIRA_API UMIRAHUDWidget : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-	void BindCharacterStat(class UABCharacterStatComponent* CharacterStat);
-	void BindPlayerState(class AABPlayerState* PlayerState);
+	void BindCharacterStat(class UMIRACharacterStatComponent* CharacterStat);
+	void BindPlayerState(class AMIRAPlayerState* PlayerState);
+
+	void ShowBossHUD(bool bIsShowed);
 
 protected:
 	virtual void NativeConstruct()override;
@@ -24,8 +27,8 @@ protected:
 	void UpdatePlayerState();
 
 private:
-	TWeakObjectPtr<class UABCharacterStatComponent> CurrentCharacterStat;
-	TWeakObjectPtr<class AABPlayerState> CurrentPlayerState;
+	TWeakObjectPtr<class UMIRACharacterStatComponent> CurrentCharacterStat;
+	TWeakObjectPtr<class AMIRAPlayerState> CurrentPlayerState;
 
 	UPROPERTY()
 	class UProgressBar* HPBar;
@@ -39,4 +42,6 @@ private:
 	UPROPERTY()
 	class UTextBlock* PlayerLevel;
 
+	UPROPERTY()
+	UMIRABossHUDWidget* BossHUDWidget;
 };

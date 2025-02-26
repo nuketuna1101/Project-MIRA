@@ -6,6 +6,14 @@
 
 AMIRABossIvan::AMIRABossIvan()
 {
+	// [DONT HAVE TO] Skeletal mesh
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
+		SK_IVAN(TEXT("/Game/ParagonRevenant/Characters/Heroes/Revenant/Meshes/Revenant.Revenant"));
+	if (SK_IVAN.Succeeded())
+	{
+		GetMesh()->SetSkeletalMesh(SK_IVAN.Object);
+	}
+
 }
 
 void AMIRABossIvan::BeginPlay()
