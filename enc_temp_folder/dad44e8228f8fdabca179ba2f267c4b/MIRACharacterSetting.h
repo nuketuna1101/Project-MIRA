@@ -20,9 +20,4 @@ public:
 	UPROPERTY(config)
 	TArray<FSoftObjectPath> CharacterAssets;
 	
-	UPROPERTY(config)
-	TArray<FSoftObjectPath> TrooperAssets;
-
-	UPROPERTY(config)
-	TArray<FSoftObjectPath> BossAssets;
 };
