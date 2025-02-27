@@ -32,9 +32,19 @@ AMIRAMarksmanTrooper::AMIRAMarksmanTrooper()
 
 	// temp bullet
 	static ConstructorHelpers::FObjectFinder<UBlueprint>
-		blueprint_finder(TEXT("Blueprint'/Game/MIRA/Characters/Blueprints/BP_TrooperBulletProjectile.BP_TrooperBulletProjectile"));
+		blueprint_finder(TEXT("Blueprint'/Game/MIRA/Characters/Blueprints/BP_Tempbullet.BP_Tempbullet'"));
+		//blueprint_finder(TEXT("Blueprint'/Game/MIRA/Characters/Blueprints/BP_TrooperBullet.BP_TrooperBullet'"));
 	BulletClass = (UClass*)blueprint_finder.Object->GeneratedClass;
-
+	/////
+	if (BulletClass)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("BulletClass: %s"), *BulletClass->GetName());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("BulletClass is null!"));
+	}
+	/////
 	// ai controller
 	AIControllerClass = ATrooperAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
@@ -81,7 +91,7 @@ void AMIRAMarksmanTrooper::Attack()
 	if (!IsAttacking)
 	{
 		// handling by attack montage in anim instance
-		MMTrooperAnim->PlayAttackMontage();
+		//MIRAAnim->PlayAttackMontage();
 		IsAttacking = true;
 
 		// bullet
@@ -118,7 +128,6 @@ void AMIRAMarksmanTrooper::SetTarget(AMIRAPlayerCharacter* TargetActor)
 
 void AMIRAMarksmanTrooper::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
-	MIRALOG(Warning, TEXT("[AMIRAMarksmanTrooper::OnAttackMontageEnded]"));
 	IsAttacking = false;
 	OnAttackEnd.Broadcast();
 }

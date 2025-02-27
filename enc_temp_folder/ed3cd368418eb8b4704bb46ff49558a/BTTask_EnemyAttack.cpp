@@ -2,13 +2,14 @@
 
 
 #include "BTTask_EnemyAttack.h"
-#include "MIRAMarksmanTrooper.h"
+#include "MIRABaseCharacter.h"
 #include "TrooperAIController.h"
 
 UBTTask_EnemyAttack::UBTTask_EnemyAttack()
 {
 	NodeName = TEXT("Trooper Attack");
 	bNotifyTick = true;
+	IsAttacking = false;
 }
 
 EBTNodeResult::Type UBTTask_EnemyAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -16,13 +17,15 @@ EBTNodeResult::Type UBTTask_EnemyAttack::ExecuteTask(UBehaviorTreeComponent& Own
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
 	//
-	auto Trooper = Cast<AMIRAMarksmanTrooper>(OwnerComp.GetAIOwner()->GetPawn());
+	auto Trooper = Cast<AMIRABaseCharacter>(OwnerComp.GetAIOwner()->GetPawn());
 	if (nullptr == Trooper)	return EBTNodeResult::Failed;
 
-	MIRALOG(Warning, TEXT("bt enemy attack [ExecuteTask]"));
-
 	Trooper->Attack();
-	Trooper->IsAttacking = true;
+	Trooper->OnAttackEnd.AddLambda([this]() -> void {
+		IsAttacking = false;
+	});
+	IsAttacking = true;
+
 
 	return EBTNodeResult::InProgress;
 }
@@ -30,10 +33,7 @@ EBTNodeResult::Type UBTTask_EnemyAttack::ExecuteTask(UBehaviorTreeComponent& Own
 void UBTTask_EnemyAttack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
-	auto Trooper = Cast<AMIRAMarksmanTrooper>(OwnerComp.GetAIOwner()->GetPawn());
-	if (nullptr == Trooper)	return;
-
-	if (!Trooper->IsAttacking)
+	if (!IsAttacking) 
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}

@@ -27,21 +27,11 @@ public:
 
 	void SetDeadAnim() { IsDead = true; }
 
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
 	bool IsStrafing;
 
 private:
-
-#pragma region Anim Notifies
-	UFUNCTION()
-	void AnimNotify_MMFireStart();
-
-	UFUNCTION()
-	void AnimNotify_MMFireEnd();
-
-#pragma endregion
-
+	// anim notify
 
 	// variable for basic movement
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
@@ -53,8 +43,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
 	bool IsDead;
 
-#pragma region Anim Montage assets
-
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Attack", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackMontage;
 
@@ -63,6 +51,4 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Attack", meta = (AllowPrivateAccess = true))
 	UAnimMontage* DeadMontage;
-#pragma endregion
-
 };

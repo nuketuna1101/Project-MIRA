@@ -65,7 +65,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FOnStartDashDelegate OnStartDashBP;
 
-	UPROPERTY(BlueprintAssignable, Category = "Event") //죽었을때 델리게이트
+	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FOnDeadEventDelegate OnDead;
 #pragma endregion
 

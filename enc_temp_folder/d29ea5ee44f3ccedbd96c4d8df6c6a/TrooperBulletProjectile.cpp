@@ -32,10 +32,6 @@ ATrooperBulletProjectile::ATrooperBulletProjectile()
 
 	// collision profile setting
 	BoxComp->SetCollisionProfileName(TEXT("EnemyProjectile")); 
-	BoxComp->SetBoxExtent(FVector(75.0f, 15.0f, 15.0f));
-
-	// particle scaling
-	ParticleComp->SetRelativeScale3D(FVector(0.5f, 1.0f, 1.0f));
 
 	// projectilemovement comp setting
 	ProjectileMovement->InitialSpeed = 400.0f;

@@ -44,8 +44,7 @@ public:
 	void SetDeadAnim() { IsDead = true; }
 
 private:
-
-#pragma region Anim Notifies
+	// anim notify
 	UFUNCTION()
 	void AnimNotify_AttackHitCheck();
 
@@ -54,7 +53,6 @@ private:
 
 	UFUNCTION()
 	void AnimNotify_ResetComboCheck();
-#pragma endregion
 
 	FName GetAttackMontageSectionName(int32 Section);
 
@@ -70,7 +68,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
 	bool IsDead;
 
-#pragma region Anim Montage assets
+	// montage assets
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackMontage;
 
@@ -103,6 +101,4 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackComboMontageE;
-#pragma endregion
-
 };

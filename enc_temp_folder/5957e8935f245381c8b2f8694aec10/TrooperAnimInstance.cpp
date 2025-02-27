@@ -2,7 +2,6 @@
 
 
 #include "TrooperAnimInstance.h"
-#include "MIRAMarksmanTrooper.h"
 
 UTrooperAnimInstance::UTrooperAnimInstance()
 {
@@ -43,6 +42,8 @@ void UTrooperAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	auto Pawn = TryGetPawnOwner();
 	if (!IsValid(Pawn)) return;
 
+
+
 	if (!IsDead)
 	{
 		CurrentPawnSpeed = Pawn->GetVelocity().Size();
@@ -60,7 +61,9 @@ void UTrooperAnimInstance::PlayAttackMontage()
 {
 	if (!Montage_IsPlaying(AttackMontage))
 	{
+		//MIRALOG(Warning, TEXT("PlayAttackMontage"));
 		Montage_Play(AttackMontage, 1.0f);
+		//Montage_JumpToSection(FName("Attack"), AttackMontage);
 	}
 }
 
@@ -78,28 +81,5 @@ void UTrooperAnimInstance::PlayDeadMontage()
 	{
 		Montage_Play(DeadMontage, 1.0f);
 	}
-}
-
-void UTrooperAnimInstance::AnimNotify_MMFireStart()
-{
-	// get pawn speed from pawn
-	auto Pawn = TryGetPawnOwner();
-	if (!IsValid(Pawn)) return;
-
-	auto Trooper = Cast<AMIRAMarksmanTrooper>(Pawn);
-	if (nullptr == Trooper) return;
-
-}
-
-void UTrooperAnimInstance::AnimNotify_MMFireEnd()
-{
-	// get pawn speed from pawn
-	auto Pawn = TryGetPawnOwner();
-	if (!IsValid(Pawn)) return;
-
-	auto Trooper = Cast<AMIRAMarksmanTrooper>(Pawn);
-	if (nullptr == Trooper) return;
-
-	Trooper->IsAttacking = false;
 }
 
