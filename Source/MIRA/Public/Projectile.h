@@ -27,12 +27,12 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Visual", meta = (AllowPrivateAcess = "true"))
-	UStaticMeshComponent* _MeshComponent;
-	float _LifeCountingDown;
+	UStaticMeshComponent* MeshComp;
+	float CurLifeCount;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	FORCEINLINE UStaticMeshComponent* GetMeshComponent() const { return _MeshComponent; }
+	FORCEINLINE UStaticMeshComponent* GetMeshComponent() const { return MeshComp; }
 };

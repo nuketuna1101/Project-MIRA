@@ -41,8 +41,8 @@ void UMIRAHUDWidget::NativeConstruct()
 	MIRACHECK(nullptr != BossHUDWidget);
 	if (BossHUDWidget)
 	{
-		//BossHUDWidget->SetVisibility(ESlateVisibility::Hidden);
-		BossHUDWidget->SetVisibility(ESlateVisibility::Visible);
+		BossHUDWidget->SetVisibility(ESlateVisibility::Hidden);
+		//BossHUDWidget->SetVisibility(ESlateVisibility::Visible);
 	}
 }
 
