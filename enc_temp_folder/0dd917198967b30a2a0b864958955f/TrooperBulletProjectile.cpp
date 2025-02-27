@@ -2,9 +2,7 @@
 
 
 #include "TrooperBulletProjectile.h"
-#include "MIRAPlayerCharacter.h"
 #include "Components/ArrowComponent.h"
-#include "Engine/DamageEvents.h"
 
 // Sets default values
 ATrooperBulletProjectile::ATrooperBulletProjectile()
@@ -73,26 +71,15 @@ void ATrooperBulletProjectile::Tick(float DeltaTime)
 		if (GetWorld()->LineTraceSingleByObjectType(hitResult, CurLoc, NextLoc, objCollisionQueryParams))
 		{
 			auto TheActor = hitResult.GetActor();
-			if (nullptr != hitResult.GetActor())
+			if (hitResult.GetActor() != nullptr)
 			{
-				// 플레이어 캐릭터인지 확인
-				AMIRAPlayerCharacter* HitPlayer = Cast<AMIRAPlayerCharacter>(TheActor);
-				if (nullptr != HitPlayer)
-				{
-					// player take damage
-					FDamageEvent DamageEvent;
-					HitPlayer->TakeDamage(20.0f, DamageEvent, nullptr, this);
-
-					// fx for impact location
-					FVector ImpactLocation = hitResult.ImpactPoint;
-					BulletOnHitBP.Broadcast(ImpactLocation);
-
-					MIRALOG(Warning, TEXT("[Projectile] hit called"));
-					PrimaryActorTick.bCanEverTick = false;
-					Destroy();
-				}
+				MIRALOG(Warning, TEXT("[Projectile] hit called"));
+				// remove it
+				PrimaryActorTick.bCanEverTick = false;
+				Destroy();
 			}
 		}
+
 		// Reduce time
 		CurLifeCount -= DeltaTime;
 	}
@@ -104,3 +91,4 @@ void ATrooperBulletProjectile::Tick(float DeltaTime)
 		Destroy();
 	}
 }
+

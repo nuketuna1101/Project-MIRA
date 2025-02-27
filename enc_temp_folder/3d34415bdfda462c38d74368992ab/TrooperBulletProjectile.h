@@ -7,8 +7,6 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "TrooperBulletProjectile.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBulletOnHitDelegate, FVector, HitLocation);
-
 UCLASS()
 class MIRA_API ATrooperBulletProjectile : public AActor
 {
@@ -28,14 +26,6 @@ protected:
 public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
-
-#pragma region [TO DO] Delegates for BP event
-	// delegate for when be hitted
-	UPROPERTY(BlueprintAssignable, Category = "Event")
-	FBulletOnHitDelegate BulletOnHitBP;
-
-#pragma endregion
-
 
 #pragma region SubComponents
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
