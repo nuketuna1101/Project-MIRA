@@ -84,7 +84,7 @@ private:
 	UAnimMontage* ExecuteMontage;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
-	UAnimMontage* HitMontage;
+	UAnimMontage* GetHitMontage;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
 	UAnimMontage* StunnedMontage;

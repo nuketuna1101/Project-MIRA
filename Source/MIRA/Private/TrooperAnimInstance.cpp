@@ -28,7 +28,7 @@ UTrooperAnimInstance::UTrooperAnimInstance()
 	}
 
 	static ConstructorHelpers::FObjectFinder<UAnimMontage>
-		DEAD_MONTAGE(TEXT(""));
+		DEAD_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MarksmanTrooper/MarksmanTrooperDeadMontage.MarksmanTrooperDeadMontage"));
 	if (DEAD_MONTAGE.Succeeded())
 	{
 		DeadMontage = DEAD_MONTAGE.Object;

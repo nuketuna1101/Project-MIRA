@@ -2,6 +2,7 @@
 
 
 #include "TrooperAnimInstance.h"
+#include "MIRAMarksmanTrooper.h"
 
 UTrooperAnimInstance::UTrooperAnimInstance()
 {
@@ -20,14 +21,15 @@ UTrooperAnimInstance::UTrooperAnimInstance()
 	}
 
 	static ConstructorHelpers::FObjectFinder<UAnimMontage>
-		HIT_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MarksmanTrooper/MarksmanTrooperHitMontage.MarksmanTrooperHitMontage"));
+		HIT_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MarksmanTrooper/MarksmanTrooperAttackAnimMontage.MarksmanTrooperAttackAnimMontage"));
+	//HIT_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MarksmanTrooper/MarksmanTrooperAttackAnimMontage.MarksmanTrooperAttackAnimMontage"));
 	if (HIT_MONTAGE.Succeeded())
 	{
 		HitMontage = HIT_MONTAGE.Object;
 	}
 
 	static ConstructorHelpers::FObjectFinder<UAnimMontage>
-		DEAD_MONTAGE(TEXT(""));
+		DEAD_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MarksmanTrooper/MarksmanTrooperAttackAnimMontage.MarksmanTrooperAttackAnimMontage"));
 	if (DEAD_MONTAGE.Succeeded())
 	{
 		DeadMontage = DEAD_MONTAGE.Object;
@@ -41,8 +43,6 @@ void UTrooperAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	// get pawn speed from pawn
 	auto Pawn = TryGetPawnOwner();
 	if (!IsValid(Pawn)) return;
-
-
 
 	if (!IsDead)
 	{
@@ -61,9 +61,7 @@ void UTrooperAnimInstance::PlayAttackMontage()
 {
 	if (!Montage_IsPlaying(AttackMontage))
 	{
-		//MIRALOG(Warning, TEXT("PlayAttackMontage"));
 		Montage_Play(AttackMontage, 1.0f);
-		//Montage_JumpToSection(FName("Attack"), AttackMontage);
 	}
 }
 
@@ -81,5 +79,28 @@ void UTrooperAnimInstance::PlayDeadMontage()
 	{
 		Montage_Play(DeadMontage, 1.0f);
 	}
+}
+
+void UTrooperAnimInstance::AnimNotify_MMFireStart()
+{
+	// get pawn speed from pawn
+	auto Pawn = TryGetPawnOwner();
+	if (!IsValid(Pawn)) return;
+
+	auto Trooper = Cast<AMIRAMarksmanTrooper>(Pawn);
+	if (nullptr == Trooper) return;
+
+}
+
+void UTrooperAnimInstance::AnimNotify_MMFireEnd()
+{
+	// get pawn speed from pawn
+	auto Pawn = TryGetPawnOwner();
+	if (!IsValid(Pawn)) return;
+
+	auto Trooper = Cast<AMIRAMarksmanTrooper>(Pawn);
+	if (nullptr == Trooper) return;
+
+	Trooper->IsAttacking = false;
 }
 

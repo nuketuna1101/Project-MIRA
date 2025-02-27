@@ -42,10 +42,10 @@ UMIRAAnimInstance::UMIRAAnimInstance()
 	}
 
 	static ConstructorHelpers::FObjectFinder<UAnimMontage>
-		GETHIT_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MIRAPlayer/MIRAPlayerHitMontage.MIRAPlayerHitMontage"));
-	if (GETHIT_MONTAGE.Succeeded())
+		HIT_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MIRAPlayer/MPlayerHitMontage.MPlayerHitMontage"));
+	if (HIT_MONTAGE.Succeeded())
 	{
-		GetHitMontage = GETHIT_MONTAGE.Object;
+		HitMontage = HIT_MONTAGE.Object;
 	}
 
 	static ConstructorHelpers::FObjectFinder<UAnimMontage>
@@ -173,11 +173,9 @@ void UMIRAAnimInstance::PlayExecuteMontage()
 
 void UMIRAAnimInstance::PlayHitMontage()
 {
-	MIRALOG(Warning, TEXT("UMIRAAnimInstance::PlayHitMontage called"));
-	if (!Montage_IsPlaying(GetHitMontage))
+	if (!Montage_IsPlaying(HitMontage))
 	{
-		MIRALOG(Warning, TEXT("Montage_Play leggo called"));
-		Montage_Play(GetHitMontage, 1.0f);
+		Montage_Play(HitMontage, 1.0f);
 	}
 }
 

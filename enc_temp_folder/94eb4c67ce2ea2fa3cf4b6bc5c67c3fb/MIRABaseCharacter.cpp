@@ -131,15 +131,7 @@ float AMIRABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 	// if dmg valid, play hit anim
 	if (FinalDamage > 0.0f)
 	{
-		if (MIRAAnim)
-		{
-			MIRALOG(Warning, TEXT("[AMIRABaseCharacter::TakeDamage] PlayHitMontage"));
-			MIRAAnim->PlayHitMontage();
-		}
-		else
-		{
-			MIRALOG(Warning, TEXT("[AMIRABaseCharacter::TakeDamage] no MIRAAnim"));
-		}
+		if (MIRAAnim)	MIRAAnim->PlayHitMontage();
 	}
 
 	// TO DO: STAT 기반 판별해서
