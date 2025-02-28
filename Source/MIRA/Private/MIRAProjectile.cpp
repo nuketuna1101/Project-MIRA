@@ -89,20 +89,17 @@ void AMIRAProjectile::Tick(float DeltaTime)
 			auto TheActor = hitResult.GetActor();
 			if (nullptr != hitResult.GetActor())
 			{
-				// 플레이어 캐릭터인지 확인
+				if (nullptr == TargetClass) return;
 
-				//AMIRAPlayerCharacter* HitPlayer = Cast<AMIRAPlayerCharacter>(TheActor);
-				//if (nullptr != HitPlayer)
 				if (TargetClass.GetDefaultObject()->GetClass()->IsChildOf(TheActor->GetClass()))
 				{
 					// player take damage
 					FDamageEvent DamageEvent;
-					//HitPlayer->TakeDamage(20.0f, DamageEvent, nullptr, this);
 					TheActor->TakeDamage(20.0f, DamageEvent, nullptr, this);
 
 					// fx for impact location
 					FVector ImpactLocation = hitResult.ImpactPoint;
-					BulletOnHitBP.Broadcast(ImpactLocation);
+					POnHitBP.Broadcast(ImpactLocation);
 
 					MIRALOG(Warning, TEXT("[TBP] hit called"));
 					PrimaryActorTick.bCanEverTick = false;
@@ -118,6 +115,7 @@ void AMIRAProjectile::Tick(float DeltaTime)
 		// automatically returned if out of time
 		MIRALOG(Warning, TEXT("[TBP] projectile gone"));
 		PrimaryActorTick.bCanEverTick = false;
+		POnDeadBP.Broadcast(GetActorLocation());
 		Destroy();
 	}
 }
