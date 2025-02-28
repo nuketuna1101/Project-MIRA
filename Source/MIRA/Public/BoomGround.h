@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "MIRA.h"
 #include "GameFramework/Actor.h"
 #include "BoomGround.generated.h"
 
@@ -19,8 +19,29 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	FTimerHandle BoomTimerHandle;
 
+	float ElapsedTime;
+	float UpdateTime;
+	float BoomTime;
+
+	void BoomTimerUpdate();
+
+	void BoomExplode();
+
+public:	
+
+#pragma region SubComponents
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+    UStaticMeshComponent* MeshComp;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+    UBoxComponent* BoxComp;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+    UParticleSystemComponent* ParticleComp;
+#pragma endregion
+
+	// dynamic mateiral instance for lerping color
+	UMaterialInstanceDynamic* DynamicMaterial; 
 };
