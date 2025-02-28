@@ -22,9 +22,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(BlueprintAssignable, Category = "Event")
-	FBGOnExplodeDelegate BGOnExplodeBP;
-
 #pragma region TimerHandle Variables
 
 	FTimerHandle BoomTimerHandle;
@@ -52,6 +49,7 @@ protected:
 
 public:	
 
+	FBGOnExplodeDelegate BGOnExplodeBP;
 
 #pragma region SubComponents
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")

@@ -3,6 +3,7 @@
 
 #include "BoomGround.h"
 #include "TimerManager.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ABoomGround::ABoomGround()
@@ -27,6 +28,8 @@ ABoomGround::ABoomGround()
 	UpdateTime = 0.01f;
 	BoomTime = 5.0f;
 
+	//
+	bIsBoomed = false;
 }
 
 // Called when the game starts or when spawned
@@ -49,9 +52,15 @@ void ABoomGround::BoomTimerUpdate()
 	ElapsedTime += UpdateTime;
 
 	// if reached boomtime, explode BOOM!
-	if (ElapsedTime >= BoomTime)
+	if (ElapsedTime >= BoomTime + 1.0f)
 	{
 		GetWorldTimerManager().ClearTimer(BoomTimerHandle);
+		Destroy();
+	}
+
+	if (ElapsedTime >= BoomTime)
+	{
+		if (bIsBoomed) return;
 		BoomExplode();
 		return;
 	}
@@ -71,8 +80,12 @@ void ABoomGround::BoomTimerUpdate()
 void ABoomGround::BoomExplode()
 {
 	MIRALOG(Warning, TEXT("BOOM!"));
+	bIsBoomed = true;
+	BGOnExplodeBP.Broadcast();
 	if (ParticleComp)
 	{
 		ParticleComp->Activate(true);
 	}
+	MeshComp->SetVisibility(false);
+	UGameplayStatics::ApplyRadialDamage(GetWorld(), DamageAmount, GetActorLocation(), DamageRadius, UDamageType::StaticClass(), TArray<AActor*>(), this, GetInstigatorController(), true);
 }
