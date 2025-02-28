@@ -88,7 +88,6 @@ void AMIRAMarksmanTrooper::Attack()
 		auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(BulletClass));
 		// set owner
 		Bullet->Owner = this;
-
 		auto TargetPlayer = GetWorld()->GetFirstPlayerController()->GetPawn();
 		if (nullptr == TargetPlayer)	return;
 

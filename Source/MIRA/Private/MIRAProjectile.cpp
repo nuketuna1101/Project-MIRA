@@ -5,6 +5,7 @@
 #include "MIRAPlayerCharacter.h"
 #include "Components/ArrowComponent.h"
 #include "Engine/DamageEvents.h"
+#include "CollisionQueryParams.h"
 
 // Sets default values
 AMIRAProjectile::AMIRAProjectile()
@@ -81,29 +82,39 @@ void AMIRAProjectile::Tick(float DeltaTime)
 		// Ray cast w. line trace 
 		FHitResult hitResult;
 		FCollisionObjectQueryParams objCollisionQueryParams;
+		FCollisionQueryParams CollisionQueryParams;
+		CollisionQueryParams.AddIgnoredActor(this);
 		FVector CurLoc = GetActorLocation();
 		FVector NextLoc = CurLoc + GetActorForwardVector() * ProjectileMovement->MaxSpeed * DeltaTime;
 		// check if first collided
-		if (GetWorld()->LineTraceSingleByObjectType(hitResult, CurLoc, NextLoc, objCollisionQueryParams))
+		if (GetWorld()->LineTraceSingleByObjectType(hitResult, CurLoc, NextLoc, objCollisionQueryParams, CollisionQueryParams))
 		{
-			auto TheActor = hitResult.GetActor();
-			if (nullptr != hitResult.GetActor())
+			auto HitActor = hitResult.GetActor();
+			if (nullptr != HitActor)
 			{
 				if (nullptr == TargetClass) return;
 
-				if (TargetClass.GetDefaultObject()->GetClass()->IsChildOf(TheActor->GetClass()))
+				FVector ImpactLocation = hitResult.ImpactPoint;
+				if (TargetClass.GetDefaultObject()->GetClass()->IsChildOf(HitActor->GetClass()))
 				{
 					// player take damage
 					FDamageEvent DamageEvent;
-					TheActor->TakeDamage(20.0f, DamageEvent, nullptr, this);
+					HitActor->TakeDamage(20.0f, DamageEvent, nullptr, this);
 
 					// fx for impact location
-					FVector ImpactLocation = hitResult.ImpactPoint;
-					POnHitBP.Broadcast(ImpactLocation);
+					POnHitTargetBP.Broadcast(ImpactLocation);
 
-					MIRALOG(Warning, TEXT("[TBP] hit called"));
 					PrimaryActorTick.bCanEverTick = false;
 					Destroy();
+				}
+				else
+				{
+					if (HitActor == this) return;
+
+					// exception for owner charachter
+					if (this->Owner->IsValidLowLevel() && HitActor == this->Owner.Get()) return;
+
+					POnHitOtherBP.Broadcast(ImpactLocation);
 				}
 			}
 		}

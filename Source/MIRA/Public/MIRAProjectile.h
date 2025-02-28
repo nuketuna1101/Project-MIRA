@@ -7,7 +7,8 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "MIRAProjectile.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPOnHitDelegate, FVector, HitLocation);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPOnHitTargetDelegate, FVector, HitLocation);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPOnHitOtherDelegate, FVector, HitLocation);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPOnDeadDelegate, FVector, DeadLocation);
 
 UCLASS()
@@ -44,8 +45,11 @@ public:
 #pragma region [TO DO] Delegates for BP event
     // delegate for when be hitted
     UPROPERTY(BlueprintAssignable, Category = "Event")
-    FPOnHitDelegate POnHitBP;
+    FPOnHitTargetDelegate POnHitTargetBP;
 
+    UPROPERTY(BlueprintAssignable, Category = "Event")
+    FPOnHitOtherDelegate POnHitOtherBP;
+    
     UPROPERTY(BlueprintAssignable, Category = "Event")
     FPOnDeadDelegate POnDeadBP;
     

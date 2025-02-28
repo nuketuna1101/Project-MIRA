@@ -97,6 +97,12 @@ protected:
 	void AttackCheck();
 #pragma endregion
 
+#pragma region [TO DO] Projectile
+	// attack logics
+	UClass* BulletClass;
+
+#pragma endregion
+
 
 private:
 
