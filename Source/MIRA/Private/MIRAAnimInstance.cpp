@@ -11,13 +11,6 @@ UMIRAAnimInstance::UMIRAAnimInstance()
 	IsDead = false;
 
 	// set montage : attack
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> 
-		ATTACK_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MIRAPlayer/MPlayerAnimMontage.MPlayerAnimMontage"));
-	if (ATTACK_MONTAGE.Succeeded())
-	{
-		AttackMontage = ATTACK_MONTAGE.Object;
-	}
-
 	static ConstructorHelpers::FObjectFinder<UAnimMontage>
 		DASH_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MIRAPlayer/MPlayerDashMontage.MPlayerDashMontage"));
 	if (DASH_MONTAGE.Succeeded())
@@ -116,14 +109,6 @@ void UMIRAAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	}
 }
 
-void UMIRAAnimInstance::PlayAttackMontage()
-{
-	if (!Montage_IsPlaying(AttackMontage))
-	{
-		Montage_Play(AttackMontage, 1.0f);
-	}
-}
-
 void UMIRAAnimInstance::PlayAttackComboMontage(int32 CurrentComboCount)
 {
 	//MIRALOG(Warning, TEXT("[PlayAttackComboMontage] CurrentComboCount: %d"), CurrentComboCount);
@@ -192,7 +177,7 @@ void UMIRAAnimInstance::PlayStunnedMontage()
 void UMIRAAnimInstance::JumpToAttackMontageSection(int32 NewSection)
 {
 	//
-	Montage_JumpToSection(GetAttackMontageSectionName(NewSection), AttackMontage);
+	//Montage_JumpToSection(GetAttackMontageSectionName(NewSection), );
 }
 
 void UMIRAAnimInstance::AnimNotify_AttackHitCheck()

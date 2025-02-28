@@ -2,6 +2,7 @@
 
 
 #include "MIRABossIvan.h"
+#include "MIRAPlayerCharacter.h"
 #include "MIRACharacterSetting.h"
 
 AMIRABossIvan::AMIRABossIvan()
@@ -14,6 +15,21 @@ AMIRABossIvan::AMIRABossIvan()
 		GetMesh()->SetSkeletalMesh(SK_IVAN.Object);
 	}
 
+	// setting for animations
+	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+	static ConstructorHelpers::FClassFinder<UAnimInstance>
+		IVAN_ANIM(TEXT("/Game/MIRA/Characters/Animations/Ivan/ABP_Ivan.ABP_Ivan_C"));
+	if (IVAN_ANIM.Succeeded())
+	{
+		GetMesh()->SetAnimInstanceClass(IVAN_ANIM.Class);
+	}
+
+	// ai controller
+	//AIControllerClass = ATrooperAIController::StaticClass();
+	//AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	// collision setting
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
 }
 
 void AMIRABossIvan::BeginPlay()
@@ -28,4 +44,8 @@ void AMIRABossIvan::BeginPlay()
 	AssetStreamingHandle = MIRAGameInstance->StreamableManager.RequestAsyncLoad(
 		CharacterAssetToLoad, FStreamableDelegate::CreateUObject(this, &AMIRABaseCharacter::
 			OnAssetLoadCompleted));
+
+	// set player as Target
+	auto TargetPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
+	Target = Cast<AMIRAPlayerCharacter>(TargetPawn);
 }

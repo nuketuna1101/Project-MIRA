@@ -6,15 +6,6 @@
 #include "MIRABaseCharacter.h"
 #include "MIRABossIvan.generated.h"
 
-UENUM()
-enum class EBossState : uint8
-{
-	PATROL,
-	TRACE,
-	HUNT,
-	IDLE,
-};
-
 /**
  * 
  */

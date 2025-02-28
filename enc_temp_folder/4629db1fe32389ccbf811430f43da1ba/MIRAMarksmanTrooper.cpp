@@ -32,7 +32,7 @@ AMIRAMarksmanTrooper::AMIRAMarksmanTrooper()
 
 	// temp bullet
 	static ConstructorHelpers::FObjectFinder<UBlueprint>
-		blueprint_finder(TEXT("Blueprint'/Game/MIRA/Characters/Blueprints/BP_MMTrooperProjectile.BP_MMTrooperProjectile'"));
+		blueprint_finder(TEXT("Blueprint'/Game/MIRA/Characters/Blueprints/BP_TrooperBulletProjectile.BP_TrooperBulletProjectile'"));
 	BulletClass = (UClass*)blueprint_finder.Object->GeneratedClass;
 
 	// ai controller

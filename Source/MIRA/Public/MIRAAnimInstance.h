@@ -26,7 +26,6 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 	// play montages for proper action
-	void PlayAttackMontage();
 	void PlayAttackComboMontage(int32 CurrentComboCount);
 	void PlayDashMontage();
 	void PlayDodgeMontage();
@@ -71,9 +70,6 @@ private:
 	bool IsDead;
 
 #pragma region Anim Montage assets
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
-	UAnimMontage* AttackMontage;
-
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = true))
 	UAnimMontage* DashMontage;
 
