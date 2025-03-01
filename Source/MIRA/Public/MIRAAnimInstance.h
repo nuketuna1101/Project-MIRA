@@ -10,6 +10,7 @@
 DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnSaveAttackCheckDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnResetComboCheckDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnThrowRangedDelegate);
 
 /**
  * 
@@ -32,6 +33,7 @@ public:
 	void PlayExecuteMontage();
 	void PlayHitMontage();
 	void PlayStunnedMontage();
+	void PlayRangedAttackMontage();
 
 	void JumpToAttackMontageSection(int32 NewSection);
 
@@ -39,6 +41,7 @@ public:
 	FOnAttackHitCheckDelegate OnAttackHitCheck;
 	FOnSaveAttackCheckDelegate OnSaveAttackCheck;
 	FOnResetComboCheckDelegate OnResetComboCheck;
+	FOnThrowRangedDelegate OnThrowRangedCheck;
 
 	void SetDeadAnim() { IsDead = true; }
 
@@ -53,6 +56,9 @@ private:
 
 	UFUNCTION()
 	void AnimNotify_ResetComboCheck();
+
+	UFUNCTION()
+	void AnimNotify_ThrowRanged();
 #pragma endregion
 
 	FName GetAttackMontageSectionName(int32 Section);
@@ -99,6 +105,9 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackComboMontageE;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))
+	UAnimMontage* RangedAttackMontage;
 #pragma endregion
 
 };

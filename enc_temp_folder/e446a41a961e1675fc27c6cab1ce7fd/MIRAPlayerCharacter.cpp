@@ -118,7 +118,7 @@ void AMIRAPlayerCharacter::PostInitializeComponents()
 		});
 	MIRAAnim->OnAttackHitCheck.AddUObject(this, &AMIRAPlayerCharacter::AttackCheck);
 	MIRAAnim->OnThrowRangedCheck.AddLambda([this]() -> void {
-		ThrowRanged();
+		ResetAttackCombo();
 		});
 }
 

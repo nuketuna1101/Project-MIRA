@@ -85,6 +85,13 @@ UMIRAAnimInstance::UMIRAAnimInstance()
 	{
 		AttackComboMontageE = ATTACKCOMBO_MONTAGE_E.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>
+		RANGEDATTACK_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/MIRAPlayer/MPlayerRangedAttackMontage.MPlayerRangedAttackMontage"));
+	if (RANGEDATTACK_MONTAGE.Succeeded())
+	{
+		RangedAttackMontage = RANGEDATTACK_MONTAGE.Object;
+	}
 }
 
 void UMIRAAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -174,6 +181,14 @@ void UMIRAAnimInstance::PlayStunnedMontage()
 	}
 }
 
+void UMIRAAnimInstance::PlayRangedAttackMontage()
+{
+	if (!Montage_IsPlaying(RangedAttackMontage))
+	{
+		Montage_Play(RangedAttackMontage, 1.0f);
+	}
+}
+
 void UMIRAAnimInstance::JumpToAttackMontageSection(int32 NewSection)
 {
 	//
@@ -193,6 +208,12 @@ void UMIRAAnimInstance::AnimNotify_SaveAttackCheck()
 void UMIRAAnimInstance::AnimNotify_ResetComboCheck()
 {
 	OnResetComboCheck.Broadcast();
+}
+
+void UMIRAAnimInstance::AnimNotify_ThrowRanged()
+{
+	MIRALOG(Warning, TEXT("AnimNotify_ThrowRanged"));
+	OnThrowRangedCheck.Broadcast();
 }
 
 FName UMIRAAnimInstance::GetAttackMontageSectionName(int32 Section)

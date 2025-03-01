@@ -45,6 +45,9 @@ private:
     bool IsInAir;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
+    bool bIsVanished;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
     bool IsDead;
 
 

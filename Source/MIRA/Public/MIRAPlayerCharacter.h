@@ -95,6 +95,8 @@ protected:
 	void SaveAttackCombo();
 	void ResetAttackCombo();
 	void AttackCheck();
+
+	void ThrowRanged();
 #pragma endregion
 
 #pragma region [TO DO] Projectile

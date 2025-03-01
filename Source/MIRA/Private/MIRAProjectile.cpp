@@ -95,7 +95,8 @@ void AMIRAProjectile::Tick(float DeltaTime)
 				if (nullptr == TargetClass) return;
 				// exception for owner charachter
 				if (this->Owner->IsValidLowLevel() && HitActor == this->Owner.Get()) return;
-
+				// exception for projectile itself
+				if (nullptr != Cast<AMIRAProjectile>(HitActor)) return;
 				FVector ImpactLocation = hitResult.ImpactPoint;
 				//if (TargetClass.GetDefaultObject()->GetClass()->IsChildOf(HitActor->GetClass()))
 				if (HitActor->GetClass()->IsChildOf(TargetClass.GetDefaultObject()->GetClass()))
