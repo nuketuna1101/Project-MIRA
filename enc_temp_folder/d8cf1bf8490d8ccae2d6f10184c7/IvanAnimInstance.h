@@ -36,18 +36,6 @@ protected:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 private:
-
-    // variable for basic movement
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
-    float CurrentPawnSpeed;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
-    bool IsInAir;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
-    bool IsDead;
-
-
     EBossState CurrentState;
     float StateTimer;
 

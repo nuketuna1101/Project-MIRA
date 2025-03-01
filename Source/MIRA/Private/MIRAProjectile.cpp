@@ -93,9 +93,12 @@ void AMIRAProjectile::Tick(float DeltaTime)
 			if (nullptr != HitActor)
 			{
 				if (nullptr == TargetClass) return;
+				// exception for owner charachter
+				if (this->Owner->IsValidLowLevel() && HitActor == this->Owner.Get()) return;
 
 				FVector ImpactLocation = hitResult.ImpactPoint;
-				if (TargetClass.GetDefaultObject()->GetClass()->IsChildOf(HitActor->GetClass()))
+				//if (TargetClass.GetDefaultObject()->GetClass()->IsChildOf(HitActor->GetClass()))
+				if (HitActor->GetClass()->IsChildOf(TargetClass.GetDefaultObject()->GetClass()))
 				{
 					// player take damage
 					FDamageEvent DamageEvent;
@@ -110,10 +113,6 @@ void AMIRAProjectile::Tick(float DeltaTime)
 				else
 				{
 					if (HitActor == this) return;
-
-					// exception for owner charachter
-					if (this->Owner->IsValidLowLevel() && HitActor == this->Owner.Get()) return;
-
 					POnHitOtherBP.Broadcast(ImpactLocation);
 				}
 			}
