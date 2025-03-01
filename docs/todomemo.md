@@ -1,3 +1,3 @@
 # TO DO
 
-- Paragon Asset의 kallari 블루프린트를 참고해서 공격 콤보 다시 만들기
+- AI Controller도 기본 클래스 하나 만들고 bp로 확장시키기.

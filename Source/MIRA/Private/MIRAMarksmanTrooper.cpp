@@ -39,6 +39,13 @@ AMIRAMarksmanTrooper::AMIRAMarksmanTrooper()
 	AIControllerClass = ATrooperAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
+	// 이걸로 AI CONTROLLER 대체 예정
+	//ConstructorHelpers::FClassFinder<ATrooperAIController> BP_TrooperAIController1_BPClass(TEXT("/Game/블루프린트경로/BP_TrooperAIController1.BP_TrooperAIController1_C"));
+	//if (BP_TrooperAIController1_BPClass.Succeeded())
+	//{
+	//	AIControllerClass = BP_TrooperAIController1_BPClass.Class;
+	//}
+
 	// collision setting
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
 

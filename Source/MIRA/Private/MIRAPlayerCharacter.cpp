@@ -279,6 +279,7 @@ void AMIRAPlayerCharacter::AttackRange()
 	/* play attack range anim */
 	/* reduce projectile count */
 	if (MIRAAnim) MIRAAnim->PlayRangedAttackMontage();
+	bCannotMove = true;
 }
 
 void AMIRAPlayerCharacter::PerformAttackCombo()
@@ -340,6 +341,7 @@ void AMIRAPlayerCharacter::AttackCheck()
 void AMIRAPlayerCharacter::ThrowRanged()
 {
 	MIRALOG(Warning, TEXT("ThrowRanged"));
+	bCannotMove = false;
 
 	// bullet
 	auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(BulletClass));
