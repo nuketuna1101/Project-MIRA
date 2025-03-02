@@ -9,7 +9,6 @@
 #include "BehaviorTree/BlackboardComponent.h"
 
 const FName ATrooperAIController::HomePosKey(TEXT("HomePosKey"));
-const FName ATrooperAIController::PatrolPosKey(TEXT("PatrolPosKey"));
 const FName ATrooperAIController::TargetKey(TEXT("TargetKey"));
 
 ATrooperAIController::ATrooperAIController()
@@ -28,19 +27,12 @@ ATrooperAIController::ATrooperAIController()
 	{
 		BTAsset = BTObject.Object;
 	}
-
-	//RepeatInterval = 3.0f;
 }
 
 void ATrooperAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 
-	// set timer by calling OnRepeatTimer func for RepeatInterval loop
-	//GetWorld()->GetTimerManager().SetTimer(RepeatTimerHandle, this, &ATrooperAIController::OnRepeatTimer, RepeatInterval, true);
-
-	//
-	//MIRALOG(Warning, TEXT("[ATrooperAIController] OnPossess"));
 	auto BBComponent = GetBlackboardComponent();
 	if (UseBlackboard(BBAsset, BBComponent))
 	{
@@ -56,23 +48,4 @@ void ATrooperAIController::OnPossess(APawn* InPawn)
 void ATrooperAIController::OnUnPossess()
 {
 	Super::OnUnPossess();
-
-	GetWorld()->GetTimerManager().ClearTimer(RepeatTimerHandle);
-}
-
-void ATrooperAIController::OnRepeatTimer()
-{
-	// get pawn
-	auto CurrentPawn = GetPawn();
-	// get nav system
-	UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetNavigationSystem(GetWorld());
-	if (nullptr == NavSystem) return;
-
-	// get rand point and order to move
-	FNavLocation NextLocation;
-	if (NavSystem->GetRandomPointInNavigableRadius(FVector::ZeroVector, 500.0f, NextLocation))
-	{
-		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, NextLocation.Location);
-		MIRALOG(Warning, TEXT("Next Location : %s"), *NextLocation.Location.ToString());
-	}
 }

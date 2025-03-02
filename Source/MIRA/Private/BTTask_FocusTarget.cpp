@@ -2,7 +2,7 @@
 
 
 #include "BTTask_FocusTarget.h"
-#include "TrooperAIController.h"
+#include "MIRAAIController.h"
 #include "MIRABaseCharacter.h"
 #include "MIRAPlayerCharacter.h"
 #include "TrooperAnimInstance.h"
@@ -29,7 +29,7 @@ EBTNodeResult::Type UBTTask_FocusTarget::ExecuteTask(UBehaviorTreeComponent& Own
 	auto Trooper = Cast<AMIRABaseCharacter>(OwnerComp.GetAIOwner()->GetPawn());
 	if (nullptr == Trooper)	return EBTNodeResult::Failed;
 
-	auto Target = Cast<AMIRAPlayerCharacter>(BBComp->GetValueAsObject(ATrooperAIController::TargetKey));
+	auto Target = Cast<AMIRAPlayerCharacter>(BBComp->GetValueAsObject(AMIRAAIController::TargetActorKey));
 	if (nullptr == Target)	return EBTNodeResult::Failed;
 
 	ElapsedTime = 0.0f;
@@ -59,7 +59,7 @@ void UBTTask_FocusTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	auto Trooper = Cast<AMIRABaseCharacter>(OwnerComp.GetAIOwner()->GetPawn());
 	if (nullptr == Trooper)	return;
 
-	auto Target = Cast<AMIRAPlayerCharacter>(BBComp->GetValueAsObject(ATrooperAIController::TargetKey));
+	auto Target = Cast<AMIRAPlayerCharacter>(BBComp->GetValueAsObject(AMIRAAIController::TargetActorKey));
 	if (nullptr == Target)	return;
 
 	auto TrooperLocation = Trooper->GetActorLocation();

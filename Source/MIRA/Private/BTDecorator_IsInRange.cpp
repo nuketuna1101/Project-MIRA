@@ -2,7 +2,7 @@
 
 
 #include "BTDecorator_IsInRange.h"
-#include "TrooperAIController.h"
+#include "MIRAAIController.h"
 #include "MIRAPlayerCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
@@ -19,7 +19,7 @@ bool UBTDecorator_IsInRange::CalculateRawConditionValue(UBehaviorTreeComponent& 
 	if (nullptr == ControllingPawn) return false;
 
 	auto BBComp = OwnerComp.GetBlackboardComponent();
-	auto Target = Cast<AMIRAPlayerCharacter>(BBComp->GetValueAsObject(ATrooperAIController::TargetKey));
+	auto Target = Cast<AMIRAPlayerCharacter>(BBComp->GetValueAsObject(AMIRAAIController::TargetActorKey));
 	if (nullptr == Target) return false;
 
 	bSuper = Target->GetDistanceTo(ControllingPawn) <= 600.0f;

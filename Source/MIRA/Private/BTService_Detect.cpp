@@ -2,7 +2,7 @@
 
 
 #include "BTService_Detect.h"
-#include "TrooperAIController.h"
+#include "MIRAAIController.h"
 #include "MIRAPlayerCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
@@ -54,7 +54,7 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	// if nothing on sphere raycast, missed
 	if (!bSphereTraceResult)
 	{
-		BBComp->SetValueAsObject(ATrooperAIController::TargetKey, nullptr);
+		BBComp->SetValueAsObject(AMIRAAIController::TargetActorKey, nullptr);
 	}
 	else
 	{
@@ -100,10 +100,10 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 			if (!bLineTraceResult)
 			{
 				DrawDebugLine(World, TrooperLocation, PlayerLocation, FColor::Blue, false, 0.1f, 0, 2.0f);
-				BBComp->SetValueAsObject(ATrooperAIController::TargetKey, PlayerCharacter);
+				BBComp->SetValueAsObject(AMIRAAIController::TargetActorKey, PlayerCharacter);
 				return;
 			}
 		}
-		BBComp->SetValueAsObject(ATrooperAIController::TargetKey, nullptr);
+		BBComp->SetValueAsObject(AMIRAAIController::TargetActorKey, nullptr);
 	}
 }

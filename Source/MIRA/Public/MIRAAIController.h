@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "MIRA.h"
 #include "AIController.h"
 #include "MIRAAIController.generated.h"
 
@@ -14,4 +14,32 @@ class MIRA_API AMIRAAIController : public AAIController
 {
 	GENERATED_BODY()
 	
+public:
+	AMIRAAIController();
+	
+	virtual void OnPossess(APawn* InPawn) override;
+
+	virtual void OnUnPossess() override;
+
+#pragma region Declaration for BB Keys
+
+	static const FName InitLocKey;
+	static const FName TargetActorKey;
+
+#pragma endregion
+
+	void RunAI();
+	void StopAI();
+
+private:
+
+#pragma region AI module : BB, BT
+
+	UPROPERTY()
+	class UBlackboardData* BBAsset;
+
+	UPROPERTY()
+	class UBehaviorTree* BTAsset;
+#pragma endregion
+
 };

@@ -3,6 +3,7 @@
 
 #include "MIRABossIvan.h"
 #include "MIRAPlayerCharacter.h"
+#include "MIRAAIController.h"
 #include "MIRACharacterSetting.h"
 
 AMIRABossIvan::AMIRABossIvan()
@@ -27,6 +28,13 @@ AMIRABossIvan::AMIRABossIvan()
 	// ai controller
 	//AIControllerClass = ATrooperAIController::StaticClass();
 	//AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+	ConstructorHelpers::FClassFinder<AMIRAAIController>
+		BPCLASS_IVANAICONTROLLER(TEXT("/Game/MIRA/Characters/AI/BP_IvanAIController.BP_IvanAIController_C"));
+	if (BPCLASS_IVANAICONTROLLER.Succeeded())
+	{
+		AIControllerClass = BPCLASS_IVANAICONTROLLER.Class;
+	}
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	// collision setting
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));

@@ -3,7 +3,7 @@
 
 #include "BTTask_EnemyAttack.h"
 #include "MIRAMarksmanTrooper.h"
-#include "TrooperAIController.h"
+#include "MIRAAIController.h"
 
 UBTTask_EnemyAttack::UBTTask_EnemyAttack()
 {
