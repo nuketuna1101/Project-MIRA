@@ -17,6 +17,9 @@ class MIRA_API AMIRAAIController : public AAIController
 public:
 	AMIRAAIController();
 	
+	UFUNCTION(BlueprintCallable, Category = "AI Control")
+	void SetAIAssets(UBlackboardData* NewBBAsset, UBehaviorTree* NewBTAsset);
+
 	virtual void OnPossess(APawn* InPawn) override;
 
 	virtual void OnUnPossess() override;

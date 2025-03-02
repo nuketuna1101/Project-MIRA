@@ -21,8 +21,8 @@ void UIvanAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
-	UpdateState(DeltaSeconds);
-	PlayAnimation();
+	//UpdateState(DeltaSeconds);
+	//PlayAnimation();
 }
 
 void UIvanAnimInstance::ChangeState(EBossState NewState)

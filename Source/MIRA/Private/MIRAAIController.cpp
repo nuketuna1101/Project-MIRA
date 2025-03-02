@@ -31,6 +31,12 @@ AMIRAAIController::AMIRAAIController()
 	}
 }
 
+void AMIRAAIController::SetAIAssets(UBlackboardData* NewBBAsset, UBehaviorTree* NewBTAsset)
+{
+	BBAsset = NewBBAsset;
+	BTAsset = NewBTAsset;
+}
+
 void AMIRAAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);

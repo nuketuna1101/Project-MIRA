@@ -26,8 +26,6 @@ AMIRABossIvan::AMIRABossIvan()
 	}
 
 	// ai controller
-	//AIControllerClass = ATrooperAIController::StaticClass();
-	//AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	ConstructorHelpers::FClassFinder<AMIRAAIController>
 		BPCLASS_IVANAICONTROLLER(TEXT("/Game/MIRA/Characters/AI/BP_IvanAIController.BP_IvanAIController_C"));
 	if (BPCLASS_IVANAICONTROLLER.Succeeded())
