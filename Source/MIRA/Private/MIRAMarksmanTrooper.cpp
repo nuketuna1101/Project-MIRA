@@ -5,7 +5,6 @@
 #include "MIRABaseCharacter.h"
 #include "MIRACharacterSetting.h"
 #include "TrooperAnimInstance.h"
-//#include "TrooperAIController.h"
 #include "MIRAAIController.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
@@ -37,7 +36,6 @@ AMIRAMarksmanTrooper::AMIRAMarksmanTrooper()
 	BulletClass = (UClass*)blueprint_finder.Object->GeneratedClass;
 
 	// ai controller
-	//AIControllerClass = ATrooperAIController::StaticClass();
 	ConstructorHelpers::FClassFinder<AMIRAAIController> 
 		BPCLASS_MMTROOPERAICONTROLLER(TEXT("/Game/MIRA/Characters/AI/BP_MMTrooperAIController.BP_MMTrooperAIController_C"));
 	if (BPCLASS_MMTROOPERAICONTROLLER.Succeeded())
