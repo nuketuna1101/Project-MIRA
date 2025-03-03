@@ -89,7 +89,6 @@ void UTrooperAnimInstance::AnimNotify_MMFireStart()
 	auto Trooper = Cast<AMIRAMarksmanTrooper>(Pawn);
 	if (nullptr == Trooper) return;
 
-	Trooper->FireProjectile();
 }
 
 void UTrooperAnimInstance::AnimNotify_MMFireEnd()

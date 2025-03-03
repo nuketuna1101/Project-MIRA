@@ -31,10 +31,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Attack")
 	void SetTarget(AMIRAPlayerCharacter* TargetActor);
 
-	UFUNCTION(BlueprintCallable, Category = "Attack")
-
-	void FireProjectile();
-
 	// anim montage
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
@@ -58,9 +54,5 @@ protected:
 	class UTrooperAnimInstance* MMTrooperAnim;
 #pragma endregion
 
-#pragma region EFX and SFX
-	UParticleSystem* EFX_MuzzleFire;
-	USoundBase* SFX_TrooperFire;
-#pragma endregion
 
 };

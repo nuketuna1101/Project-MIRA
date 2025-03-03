@@ -6,7 +6,6 @@
 #include "MIRACharacterSetting.h"
 #include "TrooperAnimInstance.h"
 #include "MIRAAIController.h"
-#include "MIRAProjectile.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -31,26 +30,11 @@ AMIRAMarksmanTrooper::AMIRAMarksmanTrooper()
 		GetMesh()->SetAnimInstanceClass(MARKSMANTROOPER_ANIM.Class);
 	}
 
-	// Bullet projectile and sfx
-	static ConstructorHelpers::FClassFinder<AMIRAProjectile>
-		MMTROOPER_PROJECTILE(TEXT("/Game/MIRA/Characters/Blueprints/BP_MMTrooperProjectile.BP_MMTrooperProjectile_C"));
-	if (MMTROOPER_PROJECTILE.Succeeded())
-	{
-		BulletClass = MMTROOPER_PROJECTILE.Class;
-	}
-	static ConstructorHelpers::FObjectFinder<USoundBase>
-		SFX_TROOPERFIRE(TEXT("/Game/MIRA/Audio/SQ_SFX_TrooperFire.SQ_SFX_TrooperFire"));
-	if (SFX_TROOPERFIRE.Succeeded())
-	{
-		SFX_TrooperFire = SFX_TROOPERFIRE.Object;
-	}
-	static ConstructorHelpers::FObjectFinder<UParticleSystem>
-		EFX_MUZZLEFIRE(TEXT("/Game/ParagonWraith/FX/Particles/Abilities/Primary/FX/P_Wraith_Primary_MuzzleFlash.P_Wraith_Primary_MuzzleFlash"));
-	if (EFX_MUZZLEFIRE.Succeeded())
-	{
-		EFX_MuzzleFire = EFX_MUZZLEFIRE.Object;
-	}
-	
+	// temp bullet
+	static ConstructorHelpers::FObjectFinder<UBlueprint>
+		blueprint_finder(TEXT("Blueprint'/Game/MIRA/Characters/Blueprints/BP_MMTrooperProjectile.BP_MMTrooperProjectile'"));
+	BulletClass = (UClass*)blueprint_finder.Object->GeneratedClass;
+
 	// ai controller
 	ConstructorHelpers::FClassFinder<AMIRAAIController> 
 		BPCLASS_MMTROOPERAICONTROLLER(TEXT("/Game/MIRA/Characters/AI/BP_MMTrooperAIController.BP_MMTrooperAIController_C"));
@@ -104,6 +88,30 @@ void AMIRAMarksmanTrooper::Attack()
 		// handling by attack montage in anim instance
 		MMTrooperAnim->PlayAttackMontage();
 		IsAttacking = true;
+
+		// bullet
+		auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(BulletClass));
+		// set owner
+		Bullet->Owner = this;
+
+		auto TargetPlayer = GetWorld()->GetFirstPlayerController()->GetPawn();
+		if (nullptr == TargetPlayer)	return;
+
+		FVector TrooperLocation = GetActorLocation();
+		TrooperLocation.Z += 50.0f;
+		FVector TargetLocation = TargetPlayer->GetActorLocation();
+		TargetLocation.Z = TrooperLocation.Z;
+		FVector BulletDir = (TargetLocation - TrooperLocation).GetSafeNormal();
+
+
+		Bullet->SetActorLocation(TrooperLocation);
+
+		UProjectileMovementComponent* ProjectileMovement = Bullet->FindComponentByClass<UProjectileMovementComponent>();
+		if (ProjectileMovement)
+		{
+			FVector BulletVel = BulletDir * 800.0f;
+			ProjectileMovement->SetVelocityInLocalSpace(BulletVel);
+		}
 	}
 	else
 	{
@@ -132,40 +140,11 @@ void AMIRAMarksmanTrooper::BeginPlay()
 
 	// Asset loading
 	auto DefaultSetting = GetDefault<UMIRACharacterSetting>();
+	//CharacterAssetToLoad = DefaultSetting->TrooperAssets[0];
 	CharacterAssetToLoad = DefaultSetting->TrooperAssets[FMath::RandRange(0, 2)];
 	auto MIRAGameInstance = Cast<UMIRAGameInstance>(GetGameInstance());
 	MIRACHECK(nullptr != MIRAGameInstance);
 	AssetStreamingHandle = MIRAGameInstance->StreamableManager.RequestAsyncLoad(
 		CharacterAssetToLoad, FStreamableDelegate::CreateUObject(this, &AMIRABaseCharacter::
 			OnAssetLoadCompleted));
-}
-
-void AMIRAMarksmanTrooper::FireProjectile()
-{
-	// bullet
-	auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(BulletClass));
-	// set owner
-	Bullet->Owner = this;
-
-	auto TargetPlayer = GetWorld()->GetFirstPlayerController()->GetPawn();
-	if (nullptr == TargetPlayer)	return;
-
-	FVector BulletSpawnLocation = GetMesh()->GetSocketLocation(TEXT("Muzzle_01"));
-	FVector TargetLocation = TargetPlayer->GetActorLocation();
-	TargetLocation.Z = BulletSpawnLocation.Z;
-	FVector BulletDir = (TargetLocation - BulletSpawnLocation).GetSafeNormal();
-
-	Bullet->SetActorLocation(BulletSpawnLocation);
-
-	UProjectileMovementComponent* ProjectileMovement = Bullet->FindComponentByClass<UProjectileMovementComponent>();
-	if (ProjectileMovement)
-	{
-		FVector BulletVel = BulletDir * 800.0f;
-		ProjectileMovement->SetVelocityInLocalSpace(BulletVel);
-	}
-
-	// FX: EFX and SFX
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), EFX_MuzzleFire, BulletSpawnLocation, BulletDir.Rotation());
-	UGameplayStatics::PlaySoundAtLocation(this, SFX_TrooperFire, BulletSpawnLocation);
-
 }

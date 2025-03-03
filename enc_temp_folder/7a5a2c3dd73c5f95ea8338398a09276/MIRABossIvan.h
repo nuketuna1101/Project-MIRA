@@ -19,7 +19,7 @@ public:
 	AMIRABossIvan();
 	
 	//virtual void PostInitializeComponents() override;
-	void FireHomings();
+
 
 protected:
 	virtual void BeginPlay() override;
@@ -27,9 +27,4 @@ protected:
 	class AMIRAPlayerCharacter* Target = nullptr;
 
 	UClass* BulletClass;
-
-#pragma region EFX and SFX
-	UParticleSystem* EFX_MuzzleFire;
-	USoundBase* SFX_IvanFire;
-#pragma endregion
 };

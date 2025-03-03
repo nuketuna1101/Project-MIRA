@@ -1,3 +1,7 @@
 # TO DO
 
-- AI Controller도 기본 클래스 하나 만들고 bp로 확장시키기.
+- Boss Ivan 에 대한 AI 구현
+
+- Boss 시네마틱
+
+- 최종적으로 레벨 디자인

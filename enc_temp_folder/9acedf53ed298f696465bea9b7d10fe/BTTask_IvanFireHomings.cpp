@@ -3,35 +3,36 @@
 
 #include "BTTask_IvanFireHomings.h"
 #include "MIRABossIvan.h"
-#include "MIRAAIController.h"
 
 UBTTask_IvanFireHomings::UBTTask_IvanFireHomings()
 {
 	NodeName = TEXT("IvanFireHomings");
+
+	HomingsCount = 5;
 }
 
 EBTNodeResult::Type UBTTask_IvanFireHomings::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	MIRALOG(Warning, TEXT("bt IvanFireHomings [ExecuteTask]"));
 
-	auto Boss = Cast<AMIRABossIvan>(OwnerComp.GetAIOwner()->GetPawn());
-	if (nullptr == Boss)	return EBTNodeResult::Failed;
+	//auto Boss = Cast<AMIRABossIvan>(OwnerComp.GetAIOwner()->GetPawn());
+	//if (nullptr == Boss)	return EBTNodeResult::Failed;
 
-	Boss->FireHomings();
+	MIRALOG(Warning, TEXT("bt enemy attack [ExecuteTask]"));
 
-	return EBTNodeResult::Succeeded;
+
+	return EBTNodeResult::InProgress;
 }
 
 void UBTTask_IvanFireHomings::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
-	//if (HomingsCount == 0)
-	//{
-	//	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-	//}
+	if (HomingsCount == 0)
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	}
 }
 
 void UBTTask_IvanFireHomings::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)
