@@ -72,7 +72,7 @@ void AMIRABossIvan::FireHomings()
 	auto TargetPlayer = GetWorld()->GetFirstPlayerController()->GetPawn();
 	if (nullptr == TargetPlayer)	return;
 
-	FVector BulletSpawnLocation = GetMesh()->GetSocketLocation(TEXT("Muzzle_01_0"));
+	FVector BulletSpawnLocation = GetMesh()->GetSocketLocation(TEXT("Muzzle_02"));
 	FVector TargetLocation = TargetPlayer->GetActorLocation();
 	TargetLocation.Z = BulletSpawnLocation.Z;
 	FVector BulletDir = (TargetLocation - BulletSpawnLocation).GetSafeNormal();
