@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "MIRA.h"
 #include "Components/ActorComponent.h"
 #include "PoolComponent.generated.h"
 
@@ -25,6 +25,9 @@ public:
     TSubclassOf<AActor> ObjectClass;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pooling Manager")
+    int32 CurPoolSize = 30;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pooling Manager")
     int32 InitPoolSize = 30;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pooling Manager")
@@ -37,7 +40,7 @@ public:
     void ReturnObject(AActor* Object);
 		
 protected:
-    TArray<AActor*> ObjectPool;
+    TQueue<AActor*> ObjectPool;
 
     AActor* CreateObject();
 

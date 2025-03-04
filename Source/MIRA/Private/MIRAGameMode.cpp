@@ -13,6 +13,9 @@ AMIRAGameMode::AMIRAGameMode()
 	DefaultPawnClass = AMIRAPlayerCharacter::StaticClass();
 	PlayerControllerClass = AMIRAPlayerController::StaticClass();
 	PlayerStateClass = AMIRAPlayerState::StaticClass();
+
+	// pool manager
+	ProjectilePool = CreateDefaultSubobject<UPoolComponent>(TEXT("ProjectilePool"));
 }
 
 void AMIRAGameMode::PostLogin(APlayerController* NewPlayer)

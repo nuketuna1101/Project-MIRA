@@ -110,7 +110,7 @@ void AMIRAProjectile::Tick(float DeltaTime)
 					POnHitTargetBP.Broadcast(ImpactLocation);
 
 					PrimaryActorTick.bCanEverTick = false;
-					Destroy();
+					//Destroy();
 
 					//AMIRAGameMode* GameMode = Cast<AMIRAGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 					//if (!GameMode)
@@ -138,7 +138,7 @@ void AMIRAProjectile::Tick(float DeltaTime)
 		MIRALOG(Warning, TEXT("[TBP] projectile gone"));
 		PrimaryActorTick.bCanEverTick = false;
 		POnDeadBP.Broadcast(GetActorLocation());
-		Destroy();
+		//Destroy();
 		
 		//AMIRAGameMode* GameMode = Cast<AMIRAGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 		//if (!GameMode)
@@ -153,35 +153,38 @@ void AMIRAProjectile::Tick(float DeltaTime)
 
 void AMIRAProjectile::Activate()
 {
-	//MIRALOG(Warning, TEXT("Activate"));
-	//PrimaryActorTick.bCanEverTick = true;
-	//CurLifeCount = LifeSpan;
-	//if (bIsMIRAHoming)
-	//{
-	//	ProjectileMovement->bIsHomingProjectile = true;
-	//	ProjectileMovement->HomingAccelerationMagnitude = 800.0f;
-	//	ProjectileMovement->HomingTargetComponent = HomingTarget->GetRootComponent();
-	//}
-	//else
-	//{
-	//	ProjectileMovement->bIsHomingProjectile = false;
-	//}
+	MIRALOG(Warning, TEXT("Activate"));
+	PrimaryActorTick.bCanEverTick = true;
+	CurLifeCount = LifeSpan;
+
+	if (bIsMIRAHoming)
+	{
+		ProjectileMovement->bIsHomingProjectile = true;
+		ProjectileMovement->HomingAccelerationMagnitude = 800.0f;
+		ProjectileMovement->HomingTargetComponent = HomingTarget->GetRootComponent();
+	}
+	else
+	{
+		ProjectileMovement->bIsHomingProjectile = false;
+	}
 }
 
 void AMIRAProjectile::Deactivate()
 {
-	//MIRALOG(Warning, TEXT("Deactivate"));
-	//PrimaryActorTick.bCanEverTick = false;
-	//SetActorLocation(FVector::ZeroVector);
-	//SetActorRotation(FRotator::ZeroRotator);
-	//ProjectileMovement->Velocity = FVector::ZeroVector;
-	//CurLifeCount = LifeSpan;
-	//AMIRAGameMode* GameMode = Cast<AMIRAGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-	//if (!GameMode)
-	//{
-	//	MIRALOG(Error, TEXT("Failed to get GameMode"));
-	//	return;
-	//}
-	//GameMode->ProjectilePool->ReturnObject(this);
+	MIRALOG(Warning, TEXT("Deactivate"));
+
+	PrimaryActorTick.bCanEverTick = false;
+	SetActorLocation(FVector::ZeroVector);
+	SetActorRotation(FRotator::ZeroRotator);
+	ProjectileMovement->Velocity = FVector::ZeroVector;
+	CurLifeCount = LifeSpan;
+
+	AMIRAGameMode* GameMode = Cast<AMIRAGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (!GameMode)
+	{
+		MIRALOG(Error, TEXT("Failed to get GameMode"));
+		return;
+	}
+	GameMode->ProjectilePool->ReturnObject(this);
 }
 

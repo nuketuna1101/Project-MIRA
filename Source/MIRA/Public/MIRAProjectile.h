@@ -3,6 +3,7 @@
 #pragma once
 
 #include "MIRA.h"
+#include "PoolableInterface.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "MIRAProjectile.generated.h"
@@ -12,7 +13,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPOnHitOtherDelegate, FVector, HitLo
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPOnDeadDelegate, FVector, DeadLocation);
 
 UCLASS()
-class MIRA_API AMIRAProjectile : public AActor
+class MIRA_API AMIRAProjectile : public AActor, public IPoolableInterface
 {
 	GENERATED_BODY()
 	
@@ -35,6 +36,9 @@ protected:
 public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
+
+    virtual void Activate() override;
+    virtual void Deactivate() override;
 
     UPROPERTY(EditAnywhere, Category = "Projectile")
     float LifeSpan = 3.0f;

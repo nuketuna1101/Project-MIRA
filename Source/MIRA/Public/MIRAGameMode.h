@@ -4,6 +4,7 @@
 
 #include "MIRA.h"
 #include "GameFramework/GameModeBase.h"
+#include "PoolComponent.h"
 #include "MIRAGameMode.generated.h"
 
 UCLASS(minimalapi)
@@ -15,4 +16,12 @@ public:
 	AMIRAGameMode();
 
 	virtual void PostLogin(APlayerController* NewPlayer) override;
+
+#pragma region Pool Managing
+	//UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PoolManager")
+	//UPoolComponent* BaseCharacterPool;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PoolManager")
+	UPoolComponent* ProjectilePool;
+#pragma endregion
 };

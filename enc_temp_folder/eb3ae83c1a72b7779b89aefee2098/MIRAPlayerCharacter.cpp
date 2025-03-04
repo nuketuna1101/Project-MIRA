@@ -345,21 +345,21 @@ void AMIRAPlayerCharacter::ThrowRanged()
 	bCannotMove = false;
 
 	// bullet
-	//AMIRAGameMode* GameMode = Cast<AMIRAGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-	//if (!GameMode)
-	//{
-	//	MIRALOG(Error, TEXT("Failed to get GameMode"));
-	//	return;
-	//}
-	//AActor* Bullet = GameMode->ProjectilePool->GetObject();
-	//if (!Bullet)
-	//{
-	//	MIRALOG(Error, TEXT("Failed to get Bullet from Pool"));
-	//	return;
-	//}
+	AMIRAGameMode* GameMode = Cast<AMIRAGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (!GameMode)
+	{
+		MIRALOG(Error, TEXT("Failed to get GameMode"));
+		return;
+	}
+	AActor* Bullet = GameMode->ProjectilePool->GetObject();
+	if (!Bullet)
+	{
+		MIRALOG(Error, TEXT("Failed to get Bullet from Pool"));
+		return;
+	}
 
 
-	auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(BulletClass));
+	//auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(BulletClass));
 	// set owner
 	Bullet->Owner = this;
 
