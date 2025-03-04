@@ -6,7 +6,9 @@
 #include "MIRAAIController.h"
 #include "MIRAProjectile.h"
 #include "MIRACharacterSetting.h"
+#include "BoomGround.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Math/UnrealMathUtility.h"
 
 AMIRABossIvan::AMIRABossIvan()
 {
@@ -55,9 +57,6 @@ AMIRABossIvan::AMIRABossIvan()
 	{
 		EFX_MuzzleFire = EFX_MUZZLEFIRE.Object;
 	}
-
-
-
 	// collision setting
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
 }
@@ -89,6 +88,19 @@ void AMIRABossIvan::FireHomings()
 	// FX: EFX and SFX
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), EFX_MuzzleFire, BulletSpawnLocation, BulletDir.Rotation());
 	UGameplayStatics::PlaySoundAtLocation(this, SFX_IvanFire, BulletSpawnLocation);	
+}
+
+void AMIRABossIvan::LaunchBoomGrounds()
+{
+	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	if (PlayerPawn)
+	{
+		float BombRadius = 200.0f;
+		FVector PlayerLocation = PlayerPawn->GetActorLocation();
+		FVector2D RandomOffset = FMath::RandPointInCircle(BombRadius);
+		FVector SpawnLocation = PlayerLocation + FVector(RandomOffset.X, RandomOffset.Y, 0.0f);
+		ABoomGround* Bomb = GetWorld()->SpawnActor<ABoomGround>(ABoomGround::StaticClass(), SpawnLocation, FRotator::ZeroRotator);
+	}
 }
 
 void AMIRABossIvan::BeginPlay()

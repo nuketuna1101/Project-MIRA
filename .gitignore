@@ -95,3 +95,6 @@ Content/SmallSoundKit/*
 Content/KTP_Decal/*
 Content/Essential_Elements_SFX_SK/*
 Content/Free_Sounds_Pack/*
+
+# temp cache
+enc_temp_folder/*

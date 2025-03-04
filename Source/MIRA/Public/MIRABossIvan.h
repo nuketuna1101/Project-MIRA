@@ -19,7 +19,14 @@ public:
 	AMIRABossIvan();
 	
 	//virtual void PostInitializeComponents() override;
+
+#pragma region Skill Pattern
+
 	void FireHomings();
+
+	void LaunchBoomGrounds();
+#pragma endregion
+
 
 protected:
 	virtual void BeginPlay() override;
