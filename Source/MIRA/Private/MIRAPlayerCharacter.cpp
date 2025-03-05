@@ -230,7 +230,7 @@ void AMIRAPlayerCharacter::BeginPlay()
 
 	// Asset loading
 	auto DefaultSetting = GetDefault<UMIRACharacterSetting>();
-	CharacterAssetToLoad = DefaultSetting->CharacterAssets[0];
+	CharacterAssetToLoad = DefaultSetting->CharacterMeshAssets[0];
 	auto MIRAGameInstance = Cast<UMIRAGameInstance>(GetGameInstance());
 	MIRACHECK(nullptr != MIRAGameInstance);
 	AssetStreamingHandle = MIRAGameInstance->StreamableManager.RequestAsyncLoad(

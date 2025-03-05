@@ -39,7 +39,7 @@ AMIRABossIvan::AMIRABossIvan()
 	}
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
-	// setting bullet
+#pragma region BP assets
 	static ConstructorHelpers::FClassFinder<AMIRAProjectile>
 		IVAN_PROJECTILE(TEXT("/Game/MIRA/Characters/Blueprints/BP_IvanHomingProjectile.BP_IvanHomingProjectile_C"));
 	if (IVAN_PROJECTILE.Succeeded())
@@ -52,7 +52,9 @@ AMIRABossIvan::AMIRABossIvan()
 	{
 		BGClass = IVAN_BOOMGROUND.Class;
 	}
+#pragma endregion
 
+#pragma region EFX assets
 	static ConstructorHelpers::FObjectFinder<UParticleSystem>
 		EFX_MUZZLEFIRE(TEXT("/Game/ParagonRevenant/FX/Particles/Revenant/Abilities/Primary/FX/P_Revenant_Primary_MuzzleFlash.P_Revenant_Primary_MuzzleFlash"));
 	if (EFX_MUZZLEFIRE.Succeeded())
@@ -83,7 +85,7 @@ AMIRABossIvan::AMIRABossIvan()
 	{
 		EFX_Vanish = EFX_VANISH.Object;
 	}
-
+#pragma endregion
 
 	static ConstructorHelpers::FObjectFinder<USoundBase>
 		SFX_IVANFIRE(TEXT("/Game/MIRA/Audio/SQ_SFX_IvanFire.SQ_SFX_IvanFire"));
@@ -251,12 +253,11 @@ void AMIRABossIvan::BeginPlay()
 
 	// Asset loading
 	auto DefaultSetting = GetDefault<UMIRACharacterSetting>();
-	CharacterAssetToLoad = DefaultSetting->BossAssets[0];
+	CharacterAssetToLoad = DefaultSetting->BossMeshAssets[0];
 	auto MIRAGameInstance = Cast<UMIRAGameInstance>(GetGameInstance());
 	MIRACHECK(nullptr != MIRAGameInstance);
 	AssetStreamingHandle = MIRAGameInstance->StreamableManager.RequestAsyncLoad(
-		CharacterAssetToLoad, FStreamableDelegate::CreateUObject(this, &AMIRABaseCharacter::
-			OnAssetLoadCompleted));
+		CharacterAssetToLoad, FStreamableDelegate::CreateUObject(this, &AMIRABaseCharacter::OnAssetLoadCompleted));
 
 	// set player as Target
 	auto TargetPawn = GetWorld()->GetFirstPlayerController()->GetPawn();

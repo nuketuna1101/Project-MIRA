@@ -18,11 +18,17 @@ public:
 	UMIRACharacterSetting();
 
 	UPROPERTY(config)
-	TArray<FSoftObjectPath> CharacterAssets;
+	TArray<FSoftObjectPath> CharacterMeshAssets;
 	
 	UPROPERTY(config)
-	TArray<FSoftObjectPath> TrooperAssets;
+	TArray<FSoftObjectPath> TrooperMeshAssets;
 
 	UPROPERTY(config)
-	TArray<FSoftObjectPath> BossAssets;
+	TArray<FSoftObjectPath> BossMeshAssets;
+
+	UPROPERTY(config)
+	TArray<FSoftObjectPath> BossEFXAssets;
+
+	UPROPERTY(config)
+	TArray<FSoftObjectPath> BossSFXAssets;
 };
