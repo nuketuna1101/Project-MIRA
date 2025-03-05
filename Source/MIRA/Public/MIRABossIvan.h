@@ -18,7 +18,7 @@ public:
 	// Sets default values for this character's properties
 	AMIRABossIvan();
 	
-	//virtual void PostInitializeComponents() override;
+	virtual void PostInitializeComponents() override;
 
 #pragma region Skill Pattern
 
@@ -34,6 +34,12 @@ protected:
 	class AMIRAPlayerCharacter* Target = nullptr;
 
 	UClass* BulletClass;
+	UClass* BGClass;
+
+#pragma region Anim Instance
+	UPROPERTY()
+	class UIvanAnimInstance* IvanAnim;
+#pragma endregion
 
 #pragma region EFX and SFX
 	UParticleSystem* EFX_MuzzleFire;

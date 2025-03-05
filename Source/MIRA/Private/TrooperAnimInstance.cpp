@@ -2,10 +2,12 @@
 
 
 #include "TrooperAnimInstance.h"
-#include "MIRAMarksmanTrooper.h"
 
 UTrooperAnimInstance::UTrooperAnimInstance()
 {
+	// owner setting
+	OwnerTrooper = nullptr;
+
 	// setting varaibles for basic movement
 	CurrentPawnSpeed = 0.0f;
 	IsInAir = false;
@@ -35,23 +37,30 @@ UTrooperAnimInstance::UTrooperAnimInstance()
 	}
 }
 
-void UTrooperAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
+void UTrooperAnimInstance::NativeInitializeAnimation()
 {
-	Super::NativeUpdateAnimation(DeltaSeconds);
+	Super::NativeInitializeAnimation();
 
 	// get pawn speed from pawn
 	auto Pawn = TryGetPawnOwner();
 	if (!IsValid(Pawn)) return;
+	else
+	{
+		OwnerTrooper = Cast<AMIRAMarksmanTrooper>(Pawn);
+	}
+}
+
+void UTrooperAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
+{
+	Super::NativeUpdateAnimation(DeltaSeconds);
 
 	if (!IsDead)
 	{
-		CurrentPawnSpeed = Pawn->GetVelocity().Size();
-
+		CurrentPawnSpeed = OwnerTrooper->GetVelocity().Size();
 		// character jump
-		auto Character = Cast<ACharacter>(Pawn);
-		if (Character)
+		if (OwnerTrooper)
 		{
-			IsInAir = Character->GetMovementComponent()->IsFalling();
+			IsInAir = OwnerTrooper->GetMovementComponent()->IsFalling();
 		}
 	}
 }
@@ -82,25 +91,10 @@ void UTrooperAnimInstance::PlayDeadMontage()
 
 void UTrooperAnimInstance::AnimNotify_MMFireStart()
 {
-	// get pawn speed from pawn
-	auto Pawn = TryGetPawnOwner();
-	if (!IsValid(Pawn)) return;
-
-	auto Trooper = Cast<AMIRAMarksmanTrooper>(Pawn);
-	if (nullptr == Trooper) return;
-
-	Trooper->FireProjectile();
+	OwnerTrooper->FireProjectile();
 }
 
 void UTrooperAnimInstance::AnimNotify_MMFireEnd()
 {
-	// get pawn speed from pawn
-	auto Pawn = TryGetPawnOwner();
-	if (!IsValid(Pawn)) return;
-
-	auto Trooper = Cast<AMIRAMarksmanTrooper>(Pawn);
-	if (nullptr == Trooper) return;
-
-	Trooper->IsAttacking = false;
+	OwnerTrooper->IsAttacking = false;
 }
-

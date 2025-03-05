@@ -27,11 +27,6 @@ EBTNodeResult::Type UBTTask_IvanFireHomings::ExecuteTask(UBehaviorTreeComponent&
 void UBTTask_IvanFireHomings::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
-
-	//if (HomingsCount == 0)
-	//{
-	//	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-	//}
 }
 
 void UBTTask_IvanFireHomings::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)

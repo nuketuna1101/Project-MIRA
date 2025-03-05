@@ -1,36 +1,168 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "IvanAnimInstance.h"
 
 UIvanAnimInstance::UIvanAnimInstance()
 {
-	// asset loading
+    OwnerIvan = nullptr;
 
+	// asset loading
 	CurrentState = EBossState::Idle;
 	StateTimer = 0.0f;
+
+    // set montage : attack
+    static ConstructorHelpers::FObjectFinder<UAnimMontage>
+        PATTERN_A_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/Ivan/IvanPatternAMontage.IvanPatternAMontage"));
+    if (PATTERN_A_MONTAGE.Succeeded())
+    {
+        PatternAMontage = PATTERN_A_MONTAGE.Object;
+    }
+    static ConstructorHelpers::FObjectFinder<UAnimMontage>
+        PATTERN_B_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/Ivan/IvanPatternBMontage.IvanPatternBMontage"));
+    if (PATTERN_B_MONTAGE.Succeeded())
+    {
+        PatternBMontage = PATTERN_B_MONTAGE.Object;
+    }
+    static ConstructorHelpers::FObjectFinder<UAnimMontage>
+        PATTERN_C_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/Ivan/IvanPatternCMontage.IvanPatternCMontage"));
+    if (PATTERN_C_MONTAGE.Succeeded())
+    {
+        PatternCMontage = PATTERN_C_MONTAGE.Object;
+    }
+    static ConstructorHelpers::FObjectFinder<UAnimMontage>
+        EMOTE_A_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/Ivan/IvanStareEmoteMontage.IvanStareEmoteMontage"));
+    if (EMOTE_A_MONTAGE.Succeeded())
+    {
+        EmoteAMontage = EMOTE_A_MONTAGE.Object;
+    }
 }
 
 void UIvanAnimInstance::NativeInitializeAnimation()
 {
-	Super::NativeInitializeAnimation();
+    Super::NativeInitializeAnimation();
 
+    CurrentState = EBossState::Idle;
+    StateTimer = 0.0f;
+
+    auto Pawn = TryGetPawnOwner();
+    if (!IsValid(Pawn)) return;
+    else
+    {
+        OwnerIvan = Cast<AMIRABossIvan>(Pawn);
+    }
 }
 
 void UIvanAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
-	Super::NativeUpdateAnimation(DeltaSeconds);
+    Super::NativeUpdateAnimation(DeltaSeconds);
 
-	//UpdateState(DeltaSeconds);
-	//PlayAnimation();
+    UpdateState(DeltaSeconds);
+}
+
+void UIvanAnimInstance::PlayMontage(EBossState NewState)
+{
+    switch (NewState)
+    {
+    case EBossState::PatternA:
+        Montage_Play(PatternAMontage);
+        break;
+    case EBossState::PatternB:
+        Montage_Play(PatternBMontage);
+        break;
+    case EBossState::PatternC:
+        Montage_Play(PatternCMontage);
+        break;
+    default:
+        Montage_Play(PatternCMontage);
+        break;
+    }
+}
+
+void UIvanAnimInstance::AnimNotify_IvanFireHoming()
+{
+    OnIvanFireHomingBP.Broadcast();
+    if (OwnerIvan) OwnerIvan->FireHomings();
+}
+
+void UIvanAnimInstance::AnimNotify_IvanThrowGB()
+{
+    OnIvanThrowGBBP.Broadcast();
+}
+
+void UIvanAnimInstance::AnimNotify_IvanLaunchGB()
+{
+    OnIvanLaunchGBBP.Broadcast();
+    if (OwnerIvan) OwnerIvan->LaunchBoomGrounds();
+}
+
+void UIvanAnimInstance::AnimNotify_IvanCastDS()
+{
+    OnIvanCastDSBP.Broadcast();
+}
+
+void UIvanAnimInstance::AnimNotify_IvanDeathStare()
+{
+    OnIvanDeathStareBP.Broadcast();
+}
+
+void UIvanAnimInstance::AnimNotify_IvanStartVanish()
+{
+    OnIvanStartVanishBP.Broadcast();
+}
+
+void UIvanAnimInstance::AnimNotify_IvanEndVanish()
+{
+    OnIvanEndVanishBP.Broadcast();
 }
 
 void UIvanAnimInstance::ChangeState(EBossState NewState)
 {
 	if (CurrentState != NewState)
 	{
-		CurrentState = NewState;
+        FString CurrentStateString;
+        switch (CurrentState)
+        {
+        case EBossState::Idle:
+            CurrentStateString = TEXT("Idle");
+            break;
+        case EBossState::PatternA:
+            CurrentStateString = TEXT("PatternA");
+            break;
+        case EBossState::PatternB:
+            CurrentStateString = TEXT("PatternB");
+            break;
+        case EBossState::PatternC:
+            CurrentStateString = TEXT("PatternC");
+            break;
+        default:
+            CurrentStateString = TEXT("Unknown");
+            break;
+        }
+
+        FString NewStateString;
+        switch (NewState)
+        {
+        case EBossState::Idle:
+            NewStateString = TEXT("Idle");
+            break;
+        case EBossState::PatternA:
+            NewStateString = TEXT("PatternA");
+            break;
+        case EBossState::PatternB:
+            NewStateString = TEXT("PatternB");
+            break;
+        case EBossState::PatternC:
+            NewStateString = TEXT("PatternC");
+            break;
+        default:
+            NewStateString = TEXT("Unknown");
+            break;
+        }
+
+        MIRALOG(Warning, TEXT("State Changed: %s -> %s"), *CurrentStateString, *NewStateString);
+        CurrentState = NewState;
 		StateTimer = 0.0f;
+        PlayAnimation();
 	}
 }
 
@@ -42,53 +174,30 @@ void UIvanAnimInstance::UpdateState(float DeltaSeconds)
     switch (CurrentState)
     {
     case EBossState::Idle:
-        if (StateTimer > 3.0f)
+        if (StateTimer > 5.0f && Montage_GetIsStopped(EmoteAMontage))
         {
-            ChangeState(EBossState::Move);
+            MIRALOG(Warning, TEXT("StateTimer: %f, MontageStopped: %d"), StateTimer, Montage_GetIsStopped(EmoteAMontage));
+            int32 SkillIndex = FMath::RandRange(1, 3);
+            MIRALOG(Warning, TEXT("SkillIndex: %d"), SkillIndex);
+            if (SkillIndex == 1) ChangeState(EBossState::PatternA);
+            else if (SkillIndex == 2) ChangeState(EBossState::PatternA);
+            else if (SkillIndex == 3) ChangeState(EBossState::PatternA);
         }
         break;
-    case EBossState::Move:
-        if (FMath::FRand() < 0.1f)
-        {
-            int32 SkillIndex = FMath::RandRange(0, 3);
-            if (SkillIndex == 0) ChangeState(EBossState::BasicAttack);
-            else if (SkillIndex == 1) ChangeState(EBossState::Skill1);
-            else if (SkillIndex == 2) ChangeState(EBossState::Skill2);
-            else if (SkillIndex == 3) ChangeState(EBossState::Skill3);
-        }
-        break;
-    case EBossState::BasicAttack:
-        if (Montage_GetIsStopped(BasicAttackMontage))
+    case EBossState::PatternA:
+        if (Montage_GetIsStopped(PatternAMontage))
         {
             ChangeState(EBossState::Idle);
         }
         break;
-    case EBossState::Skill1:
-        if (Montage_GetIsStopped(Skill1Montage))
+    case EBossState::PatternB:
+        if (Montage_GetIsStopped(PatternBMontage))
         {
             ChangeState(EBossState::Idle);
         }
         break;
-    case EBossState::Skill2:
-        if (Montage_GetIsStopped(Skill2Montage))
-        {
-            ChangeState(EBossState::Idle);
-        }
-        break;
-    case EBossState::Skill3:
-        if (Montage_GetIsStopped(Skill3Montage))
-        {
-            ChangeState(EBossState::Idle);
-        }
-        break;
-    case EBossState::Hit:
-        if (Montage_GetIsStopped(HitMontage))
-        {
-            ChangeState(EBossState::Idle);
-        }
-        break;
-    case EBossState::Stunned:
-        if (Montage_GetIsStopped(StunnedMontage))
+    case EBossState::PatternC:
+        if (Montage_GetIsStopped(PatternCMontage))
         {
             ChangeState(EBossState::Idle);
         }
@@ -104,33 +213,21 @@ void UIvanAnimInstance::PlayAnimation()
     switch (CurrentState)
     {
     case EBossState::Idle:
-        Montage_Stop(0.0f);
-        PlaySlotAnimationAsDynamicMontage(IdleSequence, FName("DefaultSlot"), 0.2f, 0.2f);
+        //Montage_Stop(0.0f);
+        //PlaySlotAnimationAsDynamicMontage(IdleSequence, FName("DefaultSlot"), 0.2f, 0.2f);
+        Montage_Play(EmoteAMontage);
         break;
-    case EBossState::Move:
-        Montage_Stop(0.0f);
-        PlaySlotAnimationAsDynamicMontage(MoveSequence, FName("DefaultSlot"), 0.2f, 0.2f);
+    case EBossState::PatternA:
+        Montage_Play(PatternAMontage);
         break;
-    case EBossState::BasicAttack:
-        Montage_Play(BasicAttackMontage);
+    case EBossState::PatternB:
+        Montage_Play(PatternBMontage);
         break;
-    case EBossState::Skill1:
-        Montage_Play(Skill1Montage);
-        break;
-    case EBossState::Skill2:
-        Montage_Play(Skill2Montage);
-        break;
-    case EBossState::Skill3:
-        Montage_Play(Skill3Montage);
-        break;
-    case EBossState::Hit:
-        Montage_Play(HitMontage);
-        break;
-    case EBossState::Stunned:
-        Montage_Play(StunnedMontage);
+    case EBossState::PatternC:
+        Montage_Play(PatternCMontage);
         break;
     case EBossState::Dead:
-        Montage_Play(DeadMontage);
+        //Montage_Play(DeadMontage);
         break;
     }
 }

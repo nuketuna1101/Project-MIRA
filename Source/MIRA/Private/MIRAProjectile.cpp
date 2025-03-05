@@ -73,6 +73,8 @@ void AMIRAProjectile::BeginPlay()
 // Called every frame
 void AMIRAProjectile::Tick(float DeltaTime)
 {
+	if (!IsValid(this)) 	return;
+	
 	Super::Tick(DeltaTime);
 
 	if (CurLifeCount > 0.0f)

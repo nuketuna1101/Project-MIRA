@@ -96,7 +96,7 @@
 
 ## 2) Enemies
 
-### Rifle Trooper
+### Marksman Trooper
 
 - most basic trooper
 - only ranged attack with his rifle
@@ -117,7 +117,16 @@
 - boss character in mission 2
 - asset: paragon revenant
 
-- phase 1: 
+- pattern 1: fire a series of homing projectiles
+- pattern 2: throw invisible grenade (in fact, spawns some automatically-exploding field)
+- pattern 3: Stare of Death : after a period of casting time, cast a fatal spell that makes target stunned
+- pattern 4: vanish and instantly appear with little bit of hp gained
+
+- pattern 5 (challenged) : channeling skill (by grabbing) w. cinematic efx
+
+- (challenged) divided into phase 1 and phase 2
+
+(phase change shows a cinematic representation w. mesh change)
 
 
 `additional`

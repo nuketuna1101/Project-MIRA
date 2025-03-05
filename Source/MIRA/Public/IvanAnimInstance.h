@@ -3,20 +3,25 @@
 #pragma once
 
 #include "MIRA.h"
+#include "MIRABossIvan.h"
 #include "Animation/AnimInstance.h"
 #include "IvanAnimInstance.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnIvanFireHoming);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnIvanThrowGB);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnIvanLaunchGB);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnIvanCastDS);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnIvanDeathStare);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnIvanStartVanish);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnIvanEndVanish);
 
 UENUM(BlueprintType)
 enum class EBossState : uint8
 {
     Idle,
-    Move,
-    BasicAttack,
-    Skill1,
-    Skill2,
-    Skill3,
-    Hit,
-    Stunned,
+    PatternA,
+    PatternB,
+    PatternC,
     Dead
 };
 
@@ -35,8 +40,50 @@ protected:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
-private:
+public:
+    void PlayMontage(EBossState NewState);
 
+#pragma region Anim Notifies
+
+    UPROPERTY(BlueprintAssignable, Category = "Event")
+    FOnIvanFireHoming OnIvanFireHomingBP;
+    UPROPERTY(BlueprintAssignable, Category = "Event")
+    FOnIvanThrowGB OnIvanThrowGBBP;
+    UPROPERTY(BlueprintAssignable, Category = "Event")
+    FOnIvanLaunchGB OnIvanLaunchGBBP;
+    UPROPERTY(BlueprintAssignable, Category = "Event")
+    FOnIvanCastDS OnIvanCastDSBP;
+    UPROPERTY(BlueprintAssignable, Category = "Event")
+    FOnIvanDeathStare OnIvanDeathStareBP;
+    UPROPERTY(BlueprintAssignable, Category = "Event")
+    FOnIvanStartVanish OnIvanStartVanishBP;
+    UPROPERTY(BlueprintAssignable, Category = "Event")
+    FOnIvanEndVanish OnIvanEndVanishBP;
+
+#pragma endregion
+
+
+private:
+    AMIRABossIvan* OwnerIvan;
+
+#pragma region Anim Notifies
+    UFUNCTION()
+    void AnimNotify_IvanFireHoming();
+    UFUNCTION()
+    void AnimNotify_IvanThrowGB();
+    UFUNCTION()
+    void AnimNotify_IvanLaunchGB();
+    UFUNCTION()
+    void AnimNotify_IvanCastDS();
+    UFUNCTION()
+    void AnimNotify_IvanDeathStare();
+    UFUNCTION()
+    void AnimNotify_IvanStartVanish();
+    UFUNCTION()
+    void AnimNotify_IvanEndVanish();
+#pragma endregion
+
+#pragma region other variables
     // variable for basic movement
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
     float CurrentPawnSpeed;
@@ -49,39 +96,36 @@ private:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
     bool IsDead;
+#pragma endregion
 
+#pragma region Anim Montage assets
 
+    UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))
+    UAnimMontage* PatternAMontage;
+
+    UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))
+    UAnimMontage* PatternBMontage;
+
+    UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))
+    UAnimMontage* PatternCMontage;
+
+    UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))
+    UAnimMontage* VanishMontage;
+
+    UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))
+    UAnimMontage* EmoteAMontage;
+
+    //UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))
+    //UAnimMontage* DeadMontage;
+
+#pragma endregion
+
+#pragma region State for anim control
     EBossState CurrentState;
     float StateTimer;
-
-    UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))
-    UAnimSequence* IdleSequence;
-
-    UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))
-    UAnimSequence* MoveSequence;
-
-    UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))
-    UAnimMontage* BasicAttackMontage;
-
-    UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))
-    UAnimMontage* Skill1Montage;
-
-    UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))
-    UAnimMontage* Skill2Montage;
-
-    UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))
-    UAnimMontage* Skill3Montage;
-
-    UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))
-    UAnimMontage* HitMontage;
-
-    UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))
-    UAnimMontage* StunnedMontage;
-
-    UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))
-    UAnimMontage* DeadMontage;
 
     void ChangeState(EBossState NewState);
     void UpdateState(float DeltaSeconds);
     void PlayAnimation();
+#pragma endregion
 };

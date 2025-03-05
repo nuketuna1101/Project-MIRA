@@ -6,6 +6,7 @@
 #include "MIRAAIController.h"
 #include "MIRAProjectile.h"
 #include "MIRACharacterSetting.h"
+#include "IvanAnimInstance.h"
 #include "BoomGround.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Math/UnrealMathUtility.h"
@@ -57,37 +58,58 @@ AMIRABossIvan::AMIRABossIvan()
 	{
 		EFX_MuzzleFire = EFX_MUZZLEFIRE.Object;
 	}
+
+	static ConstructorHelpers::FClassFinder<AMIRAProjectile>
+		IVAN_BOOMGROUND(TEXT("/Game/MIRA/Characters/Blueprints/BP_BoomGround.BP_BoomGround_C"));
+	if (IVAN_BOOMGROUND.Succeeded())
+	{
+		BGClass = IVAN_BOOMGROUND.Class;
+	}
+
 	// collision setting
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
 }
 
+void AMIRABossIvan::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	IvanAnim = Cast<UIvanAnimInstance>(GetMesh()->GetAnimInstance());
+	MIRACHECK(nullptr != IvanAnim);
+	if (!IvanAnim) return;
+	//IvanAnim->OnMontageEnded.AddDynamic(this, &AMIRAMarksmanTrooper::OnAttackMontageEnded);
+}
+
 void AMIRABossIvan::FireHomings()
 {
-	// bullet
-	auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(BulletClass));
-	// set owner
-	Bullet->Owner = this;
+	MIRALOG(Warning, TEXT("씨발 적당히해"));
+	return;
 
-	auto TargetPlayer = GetWorld()->GetFirstPlayerController()->GetPawn();
-	if (nullptr == TargetPlayer)	return;
+	//// bullet
+	//auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(BulletClass));
+	//// set owner
+	//Bullet->Owner = this;
 
-	FVector BulletSpawnLocation = GetMesh()->GetSocketLocation(TEXT("Muzzle_02"));
-	FVector TargetLocation = TargetPlayer->GetActorLocation();
-	TargetLocation.Z = BulletSpawnLocation.Z;
-	FVector BulletDir = (TargetLocation - BulletSpawnLocation).GetSafeNormal();
+	//auto TargetPlayer = GetWorld()->GetFirstPlayerController()->GetPawn();
+	//if (nullptr == TargetPlayer)	return;
 
-	Bullet->SetActorLocation(BulletSpawnLocation);
+	//FVector BulletSpawnLocation = GetMesh()->GetSocketLocation(TEXT("Muzzle_02"));
+	//FVector TargetLocation = TargetPlayer->GetActorLocation();
+	//TargetLocation.Z = BulletSpawnLocation.Z;
+	//FVector BulletDir = (TargetLocation - BulletSpawnLocation).GetSafeNormal();
 
-	UProjectileMovementComponent* ProjectileMovement = Bullet->FindComponentByClass<UProjectileMovementComponent>();
-	if (ProjectileMovement)
-	{
-		FVector BulletVel = BulletDir * 800.0f;
-		ProjectileMovement->SetVelocityInLocalSpace(BulletVel);
-	}
+	//Bullet->SetActorLocation(BulletSpawnLocation);
 
-	// FX: EFX and SFX
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), EFX_MuzzleFire, BulletSpawnLocation, BulletDir.Rotation());
-	UGameplayStatics::PlaySoundAtLocation(this, SFX_IvanFire, BulletSpawnLocation);	
+	//UProjectileMovementComponent* ProjectileMovement = Bullet->FindComponentByClass<UProjectileMovementComponent>();
+	//if (ProjectileMovement)
+	//{
+	//	FVector BulletVel = BulletDir * 800.0f;
+	//	ProjectileMovement->SetVelocityInLocalSpace(BulletVel);
+	//}
+
+	//// FX: EFX and SFX
+	//UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), EFX_MuzzleFire, BulletSpawnLocation, BulletDir.Rotation());
+	//UGameplayStatics::PlaySoundAtLocation(this, SFX_IvanFire, BulletSpawnLocation);	
 }
 
 void AMIRABossIvan::LaunchBoomGrounds()
@@ -99,7 +121,7 @@ void AMIRABossIvan::LaunchBoomGrounds()
 		FVector PlayerLocation = PlayerPawn->GetActorLocation();
 		FVector2D RandomOffset = FMath::RandPointInCircle(BombRadius);
 		FVector SpawnLocation = PlayerLocation + FVector(RandomOffset.X, RandomOffset.Y, 0.0f);
-		ABoomGround* Bomb = GetWorld()->SpawnActor<ABoomGround>(ABoomGround::StaticClass(), SpawnLocation, FRotator::ZeroRotator);
+		ABoomGround* Bomb = GetWorld()->SpawnActor<ABoomGround>(BGClass, SpawnLocation, FRotator::ZeroRotator);
 	}
 }
 

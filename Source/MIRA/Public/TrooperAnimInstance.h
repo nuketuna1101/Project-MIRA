@@ -3,6 +3,7 @@
 #pragma once
 
 #include "MIRA.h"
+#include "MIRAMarksmanTrooper.h"
 #include "Animation/AnimInstance.h"
 #include "TrooperAnimInstance.generated.h"
 
@@ -18,6 +19,7 @@ public:
 	UTrooperAnimInstance();
 
 	// 
+	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 	//
@@ -32,6 +34,8 @@ public:
 	bool IsStrafing;
 
 private:
+
+	AMIRAMarksmanTrooper* OwnerTrooper;
 
 #pragma region Anim Notifies
 	UFUNCTION()
