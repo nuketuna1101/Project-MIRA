@@ -22,8 +22,16 @@
 
 
 
-# To be Added/Advanced
+# To be Added/Advanced 
 
 1. 처형 액션 : motion warping을 통해 처형 액션의 구현
 
 2. npc ai 고도화 : 소음 noise 을 탐지하여 
+
+3. server for multiplay
+
+4. LLM NPC interaction
+
+https://dev.epicgames.com/documentation/ko-kr/unreal-engine/motion-warping-in-unreal-engine?application_version=5.4
+
+https://dev.epicgames.com/documentation/ko-kr/unreal-engine/environment-query-system-user-guide-in-unreal-engine
