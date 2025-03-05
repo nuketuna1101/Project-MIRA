@@ -10,7 +10,7 @@
 
 
 
-프로젝트
+# What i've done 
 
 1. 최적화
 
@@ -19,3 +19,11 @@
 오브젝트 풀링
 
 2. csv를 통한 데이터 로딩
+
+
+
+# To be Added/Advanced
+
+1. 처형 액션 : motion warping을 통해 처형 액션의 구현
+
+2. npc ai 고도화 : 소음 noise 을 탐지하여 
