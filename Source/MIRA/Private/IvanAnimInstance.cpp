@@ -30,6 +30,12 @@ UIvanAnimInstance::UIvanAnimInstance()
         PatternCMontage = PATTERN_C_MONTAGE.Object;
     }
     static ConstructorHelpers::FObjectFinder<UAnimMontage>
+        VANISH_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/Ivan/IvanVanishMontage.IvanVanishMontage"));
+    if (VANISH_MONTAGE.Succeeded())
+    {
+        VanishMontage = VANISH_MONTAGE.Object;
+    }
+    static ConstructorHelpers::FObjectFinder<UAnimMontage>
         EMOTE_A_MONTAGE(TEXT("/Game/MIRA/Characters/Animations/Ivan/IvanStareEmoteMontage.IvanStareEmoteMontage"));
     if (EMOTE_A_MONTAGE.Succeeded())
     {
@@ -72,6 +78,9 @@ void UIvanAnimInstance::PlayMontage(EBossState NewState)
     case EBossState::PatternC:
         Montage_Play(PatternCMontage);
         break;
+    case EBossState::Vanish:
+        Montage_Play(VanishMontage);
+        break;
     default:
         Montage_Play(PatternCMontage);
         break;
@@ -87,6 +96,7 @@ void UIvanAnimInstance::AnimNotify_IvanFireHoming()
 void UIvanAnimInstance::AnimNotify_IvanThrowGB()
 {
     OnIvanThrowGBBP.Broadcast();
+    if (OwnerIvan) OwnerIvan->ThrowBoomGrounds();
 }
 
 void UIvanAnimInstance::AnimNotify_IvanLaunchGB()
@@ -98,21 +108,25 @@ void UIvanAnimInstance::AnimNotify_IvanLaunchGB()
 void UIvanAnimInstance::AnimNotify_IvanCastDS()
 {
     OnIvanCastDSBP.Broadcast();
+    if (OwnerIvan) OwnerIvan->CastDeathStare();
 }
 
 void UIvanAnimInstance::AnimNotify_IvanDeathStare()
 {
     OnIvanDeathStareBP.Broadcast();
+    if (OwnerIvan) OwnerIvan->DeathStare();
 }
 
 void UIvanAnimInstance::AnimNotify_IvanStartVanish()
 {
     OnIvanStartVanishBP.Broadcast();
+    if (OwnerIvan) OwnerIvan->StartVanish();
 }
 
 void UIvanAnimInstance::AnimNotify_IvanEndVanish()
 {
     OnIvanEndVanishBP.Broadcast();
+    if (OwnerIvan) OwnerIvan->EndVanish();
 }
 
 void UIvanAnimInstance::ChangeState(EBossState NewState)
@@ -134,6 +148,9 @@ void UIvanAnimInstance::ChangeState(EBossState NewState)
         case EBossState::PatternC:
             CurrentStateString = TEXT("PatternC");
             break;
+        case EBossState::Vanish:
+            CurrentStateString = TEXT("Vanish");
+            break;
         default:
             CurrentStateString = TEXT("Unknown");
             break;
@@ -153,6 +170,9 @@ void UIvanAnimInstance::ChangeState(EBossState NewState)
             break;
         case EBossState::PatternC:
             NewStateString = TEXT("PatternC");
+            break;
+        case EBossState::Vanish:
+            NewStateString = TEXT("Vanish");
             break;
         default:
             NewStateString = TEXT("Unknown");
@@ -177,11 +197,12 @@ void UIvanAnimInstance::UpdateState(float DeltaSeconds)
         if (StateTimer > 5.0f && Montage_GetIsStopped(EmoteAMontage))
         {
             MIRALOG(Warning, TEXT("StateTimer: %f, MontageStopped: %d"), StateTimer, Montage_GetIsStopped(EmoteAMontage));
-            int32 SkillIndex = FMath::RandRange(1, 3);
+            int32 SkillIndex = FMath::RandRange(1, 4);
             MIRALOG(Warning, TEXT("SkillIndex: %d"), SkillIndex);
             if (SkillIndex == 1) ChangeState(EBossState::PatternA);
-            else if (SkillIndex == 2) ChangeState(EBossState::PatternA);
-            else if (SkillIndex == 3) ChangeState(EBossState::PatternA);
+            else if (SkillIndex == 2) ChangeState(EBossState::PatternB);
+            else if (SkillIndex == 3) ChangeState(EBossState::PatternC);
+            else if (SkillIndex == 4) ChangeState(EBossState::Vanish);
         }
         break;
     case EBossState::PatternA:
@@ -202,6 +223,12 @@ void UIvanAnimInstance::UpdateState(float DeltaSeconds)
             ChangeState(EBossState::Idle);
         }
         break;
+    case EBossState::Vanish:
+        if (Montage_GetIsStopped(VanishMontage))
+        {
+            ChangeState(EBossState::Idle);
+        }
+        break;
     case EBossState::Dead:
         //
         break;
@@ -213,8 +240,6 @@ void UIvanAnimInstance::PlayAnimation()
     switch (CurrentState)
     {
     case EBossState::Idle:
-        //Montage_Stop(0.0f);
-        //PlaySlotAnimationAsDynamicMontage(IdleSequence, FName("DefaultSlot"), 0.2f, 0.2f);
         Montage_Play(EmoteAMontage);
         break;
     case EBossState::PatternA:
@@ -225,6 +250,9 @@ void UIvanAnimInstance::PlayAnimation()
         break;
     case EBossState::PatternC:
         Montage_Play(PatternCMontage);
+        break;
+    case EBossState::Vanish:
+        Montage_Play(VanishMontage);
         break;
     case EBossState::Dead:
         //Montage_Play(DeadMontage);

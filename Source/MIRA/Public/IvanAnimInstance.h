@@ -22,6 +22,7 @@ enum class EBossState : uint8
     PatternA,
     PatternB,
     PatternC,
+    Vanish,
     Dead
 };
 
@@ -43,7 +44,7 @@ protected:
 public:
     void PlayMontage(EBossState NewState);
 
-#pragma region Anim Notifies
+#pragma region delegates
 
     UPROPERTY(BlueprintAssignable, Category = "Event")
     FOnIvanFireHoming OnIvanFireHomingBP;

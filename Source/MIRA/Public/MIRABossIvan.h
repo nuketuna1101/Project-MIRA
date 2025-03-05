@@ -24,7 +24,17 @@ public:
 
 	void FireHomings();
 
+	void ThrowBoomGrounds();
+
 	void LaunchBoomGrounds();
+
+	void CastDeathStare();
+
+	void DeathStare();
+
+	void StartVanish();
+
+	void EndVanish();
 #pragma endregion
 
 
@@ -43,6 +53,17 @@ protected:
 
 #pragma region EFX and SFX
 	UParticleSystem* EFX_MuzzleFire;
+	UParticleSystem* EFX_ThrowTrail;
+	UParticleSystem* EFX_Casting;
+	UParticleSystem* EFX_DeathStare;
+	UParticleSystem* EFX_Vanish;
+
 	USoundBase* SFX_IvanFire;
+	USoundBase* SFX_Throw;
+	USoundBase* SFX_Casting;
+	USoundBase* SFX_DeathStare;
+	USoundBase* SFX_StartVanish;
+	USoundBase* SFX_EndVanish;
+
 #pragma endregion
 };
