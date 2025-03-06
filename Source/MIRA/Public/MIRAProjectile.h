@@ -3,6 +3,7 @@
 #pragma once
 
 #include "MIRA.h"
+#include "MIRAPoolable.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "MIRAProjectile.generated.h"
@@ -12,7 +13,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPOnHitOtherDelegate, FVector, HitLo
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPOnDeadDelegate, FVector, DeadLocation);
 
 UCLASS()
-class MIRA_API AMIRAProjectile : public AActor
+class MIRA_API AMIRAProjectile : public AMIRAPoolable
 {
 	GENERATED_BODY()
 	
@@ -55,7 +56,6 @@ public:
     
 #pragma endregion
 
-
 #pragma region SubComponents
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
     UStaticMeshComponent* MeshComp;
@@ -72,5 +72,10 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
     UProjectileMovementComponent* ProjectileMovement;
 #pragma endregion
+
+#pragma region Poolable
+    virtual void Activate(bool bActivationFlag) override;
+    void InitObject();
+#pragma endregion SubComponents
 
 };

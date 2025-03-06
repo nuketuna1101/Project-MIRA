@@ -7,6 +7,8 @@
 #include "Engine/DamageEvents.h"
 #include "CollisionQueryParams.h"
 
+#include "MIRAGameMode.h"
+
 // Sets default values
 AMIRAProjectile::AMIRAProjectile()
 {
@@ -111,7 +113,17 @@ void AMIRAProjectile::Tick(float DeltaTime)
 					POnHitTargetBP.Broadcast(ImpactLocation);
 
 					PrimaryActorTick.bCanEverTick = false;
-					Destroy();
+					//Destroy();
+
+					//AMIRAGameMode* GameMode = Cast<AMIRAGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+					//if (!GameMode)
+					//{
+					//	MIRALOG(Error, TEXT("Failed to get GameMode"));
+					//	return;
+					//}
+					//GameMode->ProjectilePool->ReturnObject(this);
+					Activate(false);
+
 				}
 				else
 				{
@@ -129,7 +141,22 @@ void AMIRAProjectile::Tick(float DeltaTime)
 		MIRALOG(Warning, TEXT("[TBP] projectile gone"));
 		PrimaryActorTick.bCanEverTick = false;
 		POnDeadBP.Broadcast(GetActorLocation());
-		Destroy();
+		//Destroy();
+
+		//AMIRAGameMode* GameMode = Cast<AMIRAGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+		//if (!GameMode)
+		//{
+		//	MIRALOG(Error, TEXT("Failed to get GameMode"));
+		//	return;
+		//}
+		//GameMode->ProjectilePool->ReturnObject(this);
+		Activate(false);
 	}
+}
+
+void AMIRAProjectile::Activate(bool bActivationFlag)
+{
+	Super::Activate(bActivationFlag);
+	ProjectileMovement->SetActive(bActivationFlag);
 }
 

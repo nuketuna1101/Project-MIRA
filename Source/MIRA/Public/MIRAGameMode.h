@@ -4,6 +4,7 @@
 
 #include "MIRA.h"
 #include "GameFramework/GameModeBase.h"
+#include "PoolComponent.h"
 #include "MIRAGameMode.generated.h"
 
 UCLASS(minimalapi)
@@ -15,4 +16,7 @@ public:
 	AMIRAGameMode();
 
 	virtual void PostLogin(APlayerController* NewPlayer) override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PoolManager")
+	TWeakObjectPtr<class UPoolComponent> ProjectilePool;
 };

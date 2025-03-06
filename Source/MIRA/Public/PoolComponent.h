@@ -2,7 +2,8 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "MIRA.h"
+#include "MIRAPool.h"
 #include "Components/ActorComponent.h"
 #include "PoolComponent.generated.h"
 
@@ -17,18 +18,31 @@ public:
 	UPoolComponent();
 
 protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+    // Called when the game starts
+    virtual void BeginPlay() override;
 
-public:	
+
+
+public:
+    AMIRAPool* ProjectilePool;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pooling Manager")
     TSubclassOf<AActor> ObjectClass;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pooling Manager")
-    int32 InitPoolSize = 30;
+    template <typename T>
+    T* CreateObjectFromClass(UClass* ObjectClass)
+    {
+        return Cast<T>(GetWorld()->SpawnActor(ObjectClass));
+    }
 
+
+    /*
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pooling Manager")
-    int32 AddPoolSize = 10;
+    TSubclassOf<AActor> ObjectClass;
+
+    int32 InitPoolSize = 3;
+
+    int32 AddPoolSize = 1;
 
     UFUNCTION(BlueprintCallable, Category = "Pooling Manager")
     AActor* GetObject();
@@ -37,11 +51,16 @@ public:
     void ReturnObject(AActor* Object);
 		
 protected:
+    // Called when the game starts
+    virtual void BeginPlay() override;
+
     TArray<AActor*> ObjectPool;
+    //TQueue<AActor*> ObjectPool;
 
     AActor* CreateObject();
 
     void ActivateObject(AActor* Object);
 
     void DeactivateObject(AActor* Object);
+    */
 };

@@ -3,6 +3,8 @@
 
 #include "MIRAPlayerCharacter.h"
 #include "MIRABlade.h"
+#include "MIRAGameMode.h"
+#include "MIRAProjectile.h"
 #include "MIRAAnimInstance.h"
 #include "MIRACharacterSetting.h"
 #include "Engine/DamageEvents.h"
@@ -344,7 +346,48 @@ void AMIRAPlayerCharacter::ThrowRanged()
 	bCannotMove = false;
 
 	// bullet
-	auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(BulletClass));
+	//auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(BulletClass));
+
+	AMIRAGameMode* GameMode = Cast<AMIRAGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+
+
+	if (nullptr == GameMode)
+	{
+		MIRALOG(Warning, TEXT("11"));
+
+	}
+	else
+	{
+		MIRALOG(Warning, TEXT("22"));
+
+	}
+
+	if (nullptr == GameMode->ProjectilePool.Get())
+	{
+		MIRALOG(Warning, TEXT("33"));
+
+	}
+	else
+	{
+		MIRALOG(Warning, TEXT("44"));
+
+	}
+
+	auto Bullet = GameMode->ProjectilePool.Get()->ProjectilePool->GetObject<AMIRAProjectile>();
+	if (Bullet)
+	{
+		Bullet->Activate(true);
+		//Projectile->Initialize(MuzzleLocation, ShootDirection, WeaponData->ProjectileSpeed, WeaponData->Damage);
+	}
+	/*
+	AActor* Bullet = GameMode->ProjectilePool.Get()->GetObject();
+	if (!Bullet)
+	{
+		MIRALOG(Error, TEXT("Failed to get Bullet from Pool"));
+		return;
+	}
+
+
 	// set owner
 	Bullet->Owner = this;
 
@@ -362,6 +405,7 @@ void AMIRAPlayerCharacter::ThrowRanged()
 		FVector BulletVel = BulletDir * 2000.0f;
 		ProjectileMovement->SetVelocityInLocalSpace(BulletVel);
 	}
+	*/
 }
 
 void AMIRAPlayerCharacter::UpDown(float NewAxisValue)
