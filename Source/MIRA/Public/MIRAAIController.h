@@ -28,6 +28,7 @@ public:
 
 	static const FName InitLocKey;
 	static const FName TargetActorKey;
+	static const FName TargetDistanceKey;
 
 #pragma endregion
 

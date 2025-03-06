@@ -194,7 +194,7 @@ void UIvanAnimInstance::UpdateState(float DeltaSeconds)
     switch (CurrentState)
     {
     case EBossState::Idle:
-        if (StateTimer > 5.0f && Montage_GetIsStopped(EmoteAMontage))
+        if (Montage_GetIsStopped(EmoteAMontage))
         {
             MIRALOG(Warning, TEXT("StateTimer: %f, MontageStopped: %d"), StateTimer, Montage_GetIsStopped(EmoteAMontage));
             int32 SkillIndex = FMath::RandRange(1, 4);

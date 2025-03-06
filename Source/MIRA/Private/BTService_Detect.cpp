@@ -28,12 +28,9 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	// npc ai pawn
 	APawn* ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
 	if (nullptr == ControllingPawn) return;
-
 	UWorld* World = ControllingPawn->GetWorld();
 	if (nullptr == World) return;
-
 	FVector TrooperLocation = ControllingPawn->GetActorLocation();
-
 	float DetectRadius = 800.0f;
 
 	// step1. sphere trace

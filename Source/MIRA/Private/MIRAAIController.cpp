@@ -11,6 +11,7 @@
 #pragma region Definition for BB Keys
 const FName AMIRAAIController::InitLocKey(TEXT("InitLocKey"));
 const FName AMIRAAIController::TargetActorKey(TEXT("TargetActorKey"));
+const FName AMIRAAIController::TargetDistanceKey(TEXT("TargetDistanceKey"));
 #pragma endregion
 
 AMIRAAIController::AMIRAAIController()

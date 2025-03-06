@@ -142,14 +142,13 @@ void AMIRABossIvan::FireHomings()
 {
 	// bullet
 	auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(BulletClass));
-	// set owner
 	Bullet->Owner = this;
-	auto TargetPlayer = GetWorld()->GetFirstPlayerController()->GetPawn();
-	if (nullptr == TargetPlayer)	return;
+
 	FVector BulletSpawnLocation = GetMesh()->GetSocketLocation(TEXT("Muzzle_02"));
-	FVector TargetLocation = TargetPlayer->GetActorLocation();
+	FVector TargetLocation = Target->GetActorLocation();
 	TargetLocation.Z = BulletSpawnLocation.Z;
 	FVector BulletDir = (TargetLocation - BulletSpawnLocation).GetSafeNormal();
+
 	Bullet->SetActorLocation(BulletSpawnLocation);
 	UProjectileMovementComponent* ProjectileMovement = Bullet->FindComponentByClass<UProjectileMovementComponent>();
 	if (ProjectileMovement)
@@ -173,17 +172,16 @@ void AMIRABossIvan::ThrowBoomGrounds()
 
 void AMIRABossIvan::LaunchBoomGrounds()
 {
-	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-	if (PlayerPawn)
+	if (Target)
 	{
 		float BombRadius = 200.0f;
-		FVector PlayerLocation = PlayerPawn->GetActorLocation();
+		FVector PlayerLocation = Target->GetActorLocation();
 		// perform line trace to get GROUNDED location
 		FVector TraceStart = PlayerLocation + FVector(0.0f, 0.0f, 1000.0f);
 		FVector TraceEnd = PlayerLocation - FVector(0.0f, 0.0f, 1000.0f);
 		FHitResult HitResult;
 		FCollisionQueryParams CollisionParams;
-		CollisionParams.AddIgnoredActor(this);
+		CollisionParams.AddIgnoredActor(Target);
 		if (GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionParams))
 		{
 			FVector SpawnLocation = HitResult.ImpactPoint;
@@ -195,8 +193,6 @@ void AMIRABossIvan::LaunchBoomGrounds()
 		}
 	}
 
-	// TO DO
-	//UGameplayStatics::PlaySoundAtLocation(this, SFX_IvanFire, SpawnLocation);
 }
 
 void AMIRABossIvan::CastDeathStare()
@@ -213,10 +209,7 @@ void AMIRABossIvan::DeathStare()
 	// FX: EFX and SFX
 	FVector DeathStareLocation = GetMesh()->GetSocketLocation(TEXT("Muzzle_04"));
 
-
-	auto TargetPlayer = GetWorld()->GetFirstPlayerController()->GetPawn();
-	if (nullptr == TargetPlayer)	return;
-	FVector TargetLocation = TargetPlayer->GetActorLocation();
+	FVector TargetLocation = Target->GetActorLocation();
 	TargetLocation.Z = DeathStareLocation.Z;
 
 	FRotator DeathStareRotation = (TargetLocation - DeathStareLocation).GetSafeNormal().Rotation();
@@ -239,6 +232,10 @@ void AMIRABossIvan::StartVanish()
 void AMIRABossIvan::EndVanish()
 {
 	// FX: EFX and SFX
+	FVector TargetLocation = Target->GetActorLocation();
+	FVector RandomOffset = FVector(FMath::RandRange(-200.0f, 200.0f), FMath::RandRange(-200.0f, 200.0f), 0.0f);
+	FVector FinalLocation = TargetLocation + RandomOffset;
+	SetActorLocation(FinalLocation);
 	FVector EndVanishLocation = GetActorLocation();
 
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), EFX_MuzzleFire, EndVanishLocation, FRotator::ZeroRotator);
