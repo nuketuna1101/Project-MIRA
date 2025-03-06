@@ -129,4 +129,20 @@ private:
     void UpdateState(float DeltaSeconds);
     void PlayAnimation();
 #pragma endregion
+
+
+#pragma region Pattern Selection Algorithm
+
+    const float WeightDecreaseRate = 2.0f;
+
+    TMap<EBossState, float> PatternWeights;
+
+    void InitPatternWeight();
+
+    EBossState GetSelectedPattern();
+
+    void UpdatePatternWeight(EBossState SelectedPattern);
+
+#pragma endregion
+
 };

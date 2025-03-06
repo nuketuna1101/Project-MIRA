@@ -56,6 +56,9 @@ void UIvanAnimInstance::NativeInitializeAnimation()
     {
         OwnerIvan = Cast<AMIRABossIvan>(Pawn);
     }
+
+    // initialize weights
+    InitPatternWeight();
 }
 
 void UIvanAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -183,6 +186,8 @@ void UIvanAnimInstance::ChangeState(EBossState NewState)
         CurrentState = NewState;
 		StateTimer = 0.0f;
         PlayAnimation();
+
+        UpdatePatternWeight(NewState);
 	}
 }
 
@@ -194,15 +199,16 @@ void UIvanAnimInstance::UpdateState(float DeltaSeconds)
     switch (CurrentState)
     {
     case EBossState::Idle:
-        if (Montage_GetIsStopped(EmoteAMontage))
+        if (StateTimer > 3.0f && Montage_GetIsStopped(EmoteAMontage))
         {
-            MIRALOG(Warning, TEXT("StateTimer: %f, MontageStopped: %d"), StateTimer, Montage_GetIsStopped(EmoteAMontage));
-            int32 SkillIndex = FMath::RandRange(1, 4);
-            MIRALOG(Warning, TEXT("SkillIndex: %d"), SkillIndex);
-            if (SkillIndex == 1) ChangeState(EBossState::PatternA);
-            else if (SkillIndex == 2) ChangeState(EBossState::PatternB);
-            else if (SkillIndex == 3) ChangeState(EBossState::PatternC);
-            else if (SkillIndex == 4) ChangeState(EBossState::Vanish);
+            //MIRALOG(Warning, TEXT("StateTimer: %f, MontageStopped: %d"), StateTimer, Montage_GetIsStopped(EmoteAMontage));
+            //int32 SkillIndex = FMath::RandRange(1, 4);
+            //MIRALOG(Warning, TEXT("SkillIndex: %d"), SkillIndex);
+            //if (SkillIndex == 1) ChangeState(EBossState::PatternA);
+            //else if (SkillIndex == 2) ChangeState(EBossState::PatternB);
+            //else if (SkillIndex == 3) ChangeState(EBossState::PatternC);
+            //else if (SkillIndex == 4) ChangeState(EBossState::Vanish);
+            ChangeState(GetSelectedPattern());
         }
         break;
     case EBossState::PatternA:
@@ -257,5 +263,69 @@ void UIvanAnimInstance::PlayAnimation()
     case EBossState::Dead:
         //Montage_Play(DeadMontage);
         break;
+    }
+}
+
+void UIvanAnimInstance::InitPatternWeight()
+{
+    PatternWeights.Add(EBossState::PatternA, 25.0f);
+    PatternWeights.Add(EBossState::PatternB, 25.0f);
+    PatternWeights.Add(EBossState::PatternC, 25.0f);
+    PatternWeights.Add(EBossState::Vanish, 25.0f);
+}
+
+EBossState UIvanAnimInstance::GetSelectedPattern()
+{
+    float TotalWeight = 0.0f;
+    for (auto& Pair : PatternWeights)
+    {
+        TotalWeight += Pair.Value;
+    }
+    float RandomNum = FMath::FRandRange(0.0f, TotalWeight);
+
+    float CheckNum = 0.0f;
+
+    for (auto& Pattern : PatternWeights)
+    {
+        CheckNum += Pattern.Value;
+        if (RandomNum <= CheckNum) return Pattern.Key;
+    }
+    MIRALOG(Warning, TEXT("RandomNum: %f"), RandomNum);
+    return EBossState::PatternA;
+}
+
+void UIvanAnimInstance::UpdatePatternWeight(EBossState SelectedPattern)
+{
+    float AdjustValue = 0.0f;
+    for (auto& Pair : PatternWeights)
+    {
+        if (Pair.Key == SelectedPattern)
+        {
+            Pair.Value /= WeightDecreaseRate;
+            AdjustValue = Pair.Value;
+        }
+    }
+    for (auto& Pair : PatternWeights)
+    {
+        if (Pair.Key != SelectedPattern)
+        {
+            Pair.Value += (AdjustValue / (PatternWeights.Num() - 1));
+            MIRALOG(Warning, TEXT("hi bro: %f"), Pair.Value);
+        }
+    }
+    // normalize so as to make sum one hunnit
+    float CurrentTotalWeight = 0.0f;
+    for (auto& Pair : PatternWeights)
+    {
+        CurrentTotalWeight += Pair.Value;
+    }
+    for (auto& Pair : PatternWeights)
+    {
+        if (FMath::IsNearlyZero(CurrentTotalWeight)) 
+        { 
+            CurrentTotalWeight = 0.0f;
+            return;
+        }
+        Pair.Value = (Pair.Value / CurrentTotalWeight) * 100.0f;
     }
 }

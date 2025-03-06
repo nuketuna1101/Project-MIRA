@@ -345,6 +345,7 @@ void AMIRAPlayerCharacter::ThrowRanged()
 
 	// bullet
 	auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(BulletClass));
+
 	// set owner
 	Bullet->Owner = this;
 
