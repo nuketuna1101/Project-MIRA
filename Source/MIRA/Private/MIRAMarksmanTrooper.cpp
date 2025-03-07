@@ -6,6 +6,7 @@
 #include "MIRACharacterSetting.h"
 #include "TrooperAnimInstance.h"
 #include "MIRAAIController.h"
+#include "MIRAHPBarWidget.h"
 #include "MIRAProjectile.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
@@ -59,6 +60,22 @@ AMIRAMarksmanTrooper::AMIRAMarksmanTrooper()
 		AIControllerClass = BPCLASS_MMTROOPERAICONTROLLER.Class;
 	}
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+#pragma region HPBar UI
+	// HPBar UI widget
+	HPBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBAR"));
+	HPBar->SetupAttachment(GetMesh());
+	HPBar->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
+	HPBar->SetWidgetSpace(EWidgetSpace::Screen);
+	static ConstructorHelpers::FClassFinder<UUserWidget> 
+		UI_HPBAR(TEXT("/Game/MIRA/UI/UI_HPBar.UI_HPBar_C"));
+	if (UI_HPBAR.Succeeded())
+	{
+		HPBar->SetWidgetClass(UI_HPBAR.Class);
+		HPBar->SetDrawSize(FVector2D(150.0f, 50.0f));
+	}
+	HPBar->SetHiddenInGame(true);
+#pragma endregion
 
 	// collision setting
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
@@ -121,6 +138,41 @@ void AMIRAMarksmanTrooper::OnAttackMontageEnded(UAnimMontage* Montage, bool bInt
 	MIRALOG(Warning, TEXT("[AMIRAMarksmanTrooper::OnAttackMontageEnded]"));
 	IsAttacking = false;
 	OnAttackEnd.Broadcast();
+}
+
+void AMIRAMarksmanTrooper::SetCharacterState(ECharacterState NewState)
+{
+	Super::SetCharacterState(NewState);
+
+	switch (CurrentState)
+	{
+	case ECharacterState::LOADING:
+	{
+		MIRALOG(Warning, TEXT("LOADING : HPBar->SetHiddenInGame(true)"));
+		HPBar->SetHiddenInGame(true);
+		break;
+	}
+	case ECharacterState::READY:
+	{
+		MIRALOG(Warning, TEXT("READY : HPBar->SetHiddenInGame(false)"));
+		HPBar->SetHiddenInGame(false);
+
+		UMIRAHPBarWidget* CharacterWidget = Cast<UMIRAHPBarWidget>(HPBar->GetUserWidgetObject());
+		if (nullptr != CharacterWidget)
+		{
+			CharacterWidget->BindCharacterStat(CharacterStat);
+		}
+		break;
+	}
+	case ECharacterState::DEAD:
+	{
+		MIRALOG(Warning, TEXT("DEAD : HPBar->SetHiddenInGame(true)"));
+		HPBar->SetHiddenInGame(true);
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void AMIRAMarksmanTrooper::BeginPlay()

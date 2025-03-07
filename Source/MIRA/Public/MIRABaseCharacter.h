@@ -33,7 +33,7 @@ public:
 
 #pragma region CharacterState
 
-	void SetCharacterState(ECharacterState NewState);
+	virtual void SetCharacterState(ECharacterState NewState);
 	ECharacterState GetCharacterState() const { return ECharacterState(); }
 
 #pragma endregion

@@ -177,9 +177,7 @@ void AMIRABaseCharacter::SetCharacterState(ECharacterState NewState)
 		if (bIsPlayer)
 		{
 			DisableInput(MIRAPlayerController);
-
 			MIRAPlayerController->GetHUDWidget()->BindCharacterStat(CharacterStat);
-
 			auto MIRAPlayerState = Cast<AMIRAPlayerState>(GetPlayerState());
 			MIRACHECK(nullptr != MIRAPlayerState);
 			CharacterStat->SetNewLevel(MIRAPlayerState->GetCharacterLevel());
@@ -194,25 +192,17 @@ void AMIRABaseCharacter::SetCharacterState(ECharacterState NewState)
 
 		SetActorHiddenInGame(true);
 		SetCanBeDamaged(false);
-		//HPBarWidget->SetHiddenInGame(true);
 		break;
 	}
 	case ECharacterState::READY:
 	{
 		SetActorHiddenInGame(false);
 		SetCanBeDamaged(true);
-		//HPBarWidget->SetHiddenInGame(false);
 
 		CharacterStat->OnZeroHP.AddLambda([this]()->void
 			{
 				SetCharacterState(ECharacterState::DEAD);
 			});
-
-		//UABCharacterWidget* CharacterWidget = Cast<UABCharacterWidget>(HPBarWidget->GetUserWidgetObject());
-		//if (nullptr != CharacterWidget)
-		//{
-		//	CharacterWidget->BindCharacterStat(CharacterStat);
-		//}
 
 		if (bIsPlayer)
 		{

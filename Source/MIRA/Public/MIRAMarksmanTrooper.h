@@ -39,12 +39,19 @@ public:
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
+
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	bool IsAttacking;
+
+
+#pragma region UI HPbar and CharacterState
 	// ui widgets
 	UPROPERTY(VisibleAnywhere, Category = "UI")
 	class UWidgetComponent* HPBar;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
-	bool IsAttacking;
+	void SetCharacterState(ECharacterState NewState) override;
+#pragma endregion
 
 protected:
 	virtual void BeginPlay() override;
