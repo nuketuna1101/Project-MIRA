@@ -46,6 +46,9 @@ private:
 	class UMIRAHUDWidget* HUDWidget;
 	UPROPERTY()
 	class UMIRAGamePlayWidget* GamePlayWidget;
+	UPROPERTY()
+	class AMIRAPlayerState* MIRAPlayerState;
+
 
 	FInputModeGameOnly InputModeGame;
 	FInputModeUIOnly InputModeUI;

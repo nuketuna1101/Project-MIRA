@@ -9,8 +9,10 @@
 #include "Engine/DamageEvents.h"
 #include "DrawDebugHelpers.h"
 #include "MIRAPlayerController.h"
+#include "MIRAHUDWidget.h"
 #include "MIRACharacterSetting.h"
 #include "MIRAGameMode.h"
+#include "MIRAAIController.h"
 
 AMIRABaseCharacter::AMIRABaseCharacter()
 {
@@ -153,6 +155,7 @@ float AMIRABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 			{
 				MIRAPlayerController = Cast<AMIRAPlayerController>(EventInstigator);
 				MIRACHECK(nullptr != MIRAPlayerController, 0.0f);
+				//MIRAPlayerController->NPCKill(this);
 			}
 		}
 
@@ -175,7 +178,7 @@ void AMIRABaseCharacter::SetCharacterState(ECharacterState NewState)
 		{
 			DisableInput(MIRAPlayerController);
 
-			//ABPlayerController->GetHUDWidget()->BindCharacterStat(CharacterStat);
+			MIRAPlayerController->GetHUDWidget()->BindCharacterStat(CharacterStat);
 
 			auto MIRAPlayerState = Cast<AMIRAPlayerState>(GetPlayerState());
 			MIRACHECK(nullptr != MIRAPlayerState);
@@ -221,7 +224,7 @@ void AMIRABaseCharacter::SetCharacterState(ECharacterState NewState)
 		{
 			//SetControlMode(EControlMode::NPC);
 			GetCharacterMovement()->MaxWalkSpeed = 400.0f;
-			//ABAIController->RunAI();
+			//MIRAAIController->RunAI();
 		}
 		break;
 	}
@@ -239,7 +242,7 @@ void AMIRABaseCharacter::SetCharacterState(ECharacterState NewState)
 		}
 		else
 		{
-			//ABAIController->StopAI();
+			//MIRAAIController->StopAI();
 		}
 
 		GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle,
@@ -280,13 +283,21 @@ void AMIRABaseCharacter::BeginPlay()
 	}
 	else
 	{
-		//ABAIController = Cast<AABAIController>(GetController());
-		//ABCHECK(nullptr != ABAIController);
+		//MIRAAIController = Cast<AMIRAAIController>(GetController());
+		//MIRACHECK(nullptr != MIRAAIController);
 	}
 	SetCharacterState(ECharacterState::LOADING);
 
 	// [TO DO] Asset Loading
 
+}
+
+void AMIRABaseCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	GetCharacterMovement()->MaxWalkSpeed
+		= (IsPlayerControlled() ? 600.0f : 400.0f);
 }
 
 void AMIRABaseCharacter::OnAssetLoadCompleted()

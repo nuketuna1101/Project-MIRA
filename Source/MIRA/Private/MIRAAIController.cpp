@@ -62,8 +62,22 @@ void AMIRAAIController::OnUnPossess()
 
 void AMIRAAIController::RunAI()
 {
+	auto BBComp = GetBlackboardComponent();
+	if (UseBlackboard(BBAsset, BBComp))
+	{
+		//Blackboard->SetValueAsVector(HomePosKey, GetPawn()->GetActorLocation());
+		if (!RunBehaviorTree(BTAsset))
+		{
+			MIRALOG(Error, TEXT("cannot run BT"));
+		}
+	}
 }
 
 void AMIRAAIController::StopAI()
 {
+	auto BTComp = Cast<UBehaviorTreeComponent>(BrainComponent);
+	if (nullptr != BTComp)
+	{
+		BTComp->StopTree(EBTStopMode::Safe);
+	}
 }

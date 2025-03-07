@@ -6,6 +6,8 @@
 #include "GameFramework/PlayerState.h"
 #include "MIRAPlayerState.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnPlayerStateUpdate);
+
 /**
  * 
  */
@@ -27,10 +29,15 @@ public:
 
     //bool IsGameCleared() const;
 
+    FOnPlayerStateUpdate OnPlayerStateUpdate;
+
 private:
     UPROPERTY(Transient)
     int32 GameScore;
 
     UPROPERTY(Transient)
     int32 CharacterLevel;
+
+
+
 };

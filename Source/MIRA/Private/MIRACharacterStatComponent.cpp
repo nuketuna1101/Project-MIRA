@@ -26,7 +26,6 @@ void UMIRACharacterStatComponent::InitializeComponent()
 	Super::InitializeComponent();
 
 	SetNewLevel(Level);
-
 }
 
 void UMIRACharacterStatComponent::SetNewLevel(int32 NewLevel)

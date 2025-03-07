@@ -4,6 +4,7 @@
 #include "MIRAPlayerController.h"
 #include "MIRAHUDWidget.h"
 #include "MIRAGamePlayWidget.h"
+#include "MIRAPlayerState.h"
 
 AMIRAPlayerController::AMIRAPlayerController()
 {
@@ -40,10 +41,16 @@ void AMIRAPlayerController::BeginPlay()
 	SetInputMode(InputMode);*/
 	ChangeInputMode(true);
 
-	//
+	// HUD
 	HUDWidget = CreateWidget<UMIRAHUDWidget>(this, HUDWidgetClass);
 	MIRACHECK(nullptr != HUDWidget);
 	HUDWidget->AddToViewport(1);
+
+	// PlayerState and HUD Binding
+	MIRAPlayerState = Cast<AMIRAPlayerState>(PlayerState);
+	MIRACHECK(nullptr != MIRAPlayerState);
+	HUDWidget->BindPlayerState(MIRAPlayerState);
+	MIRAPlayerState->OnPlayerStateUpdate.Broadcast();
 }
 
 void AMIRAPlayerController::PostInitializeComponents()
