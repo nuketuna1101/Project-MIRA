@@ -56,6 +56,8 @@ void UTrooperAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	if (!IsDead)
 	{
+		if (!IsValid(OwnerTrooper)) return;
+
 		CurrentPawnSpeed = OwnerTrooper->GetVelocity().Size();
 		// character jump
 		if (OwnerTrooper)

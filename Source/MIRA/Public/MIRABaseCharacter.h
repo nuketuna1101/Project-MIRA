@@ -152,6 +152,8 @@ protected:
 	UPROPERTY()
 	class AMIRAPlayerController* MIRAPlayerController;
 
+	UPROPERTY()
+	class AMIRAAIController* MIRAAIController;
 #pragma endregion
 
 #pragma region Dead Timer

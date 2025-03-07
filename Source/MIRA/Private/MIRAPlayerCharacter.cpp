@@ -325,7 +325,7 @@ void AMIRAPlayerCharacter::AttackCheck()
 			MIRALOG(Warning, TEXT("[AttackCheck]"));
 
 			FDamageEvent DamageEvent;
-			Enemy->TakeDamage(20.0f, DamageEvent, nullptr, this);
+			Enemy->TakeDamage(80.0f, DamageEvent, nullptr, this);
 
 			// get expected impact point 
 			FVector EnemyLocation = Enemy->GetActorLocation();

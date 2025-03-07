@@ -214,7 +214,8 @@ void AMIRABaseCharacter::SetCharacterState(ECharacterState NewState)
 		{
 			//SetControlMode(EControlMode::NPC);
 			GetCharacterMovement()->MaxWalkSpeed = 400.0f;
-			//MIRAAIController->RunAI();
+			if (MIRAAIController)
+				MIRAAIController->RunAI();
 		}
 		break;
 	}
@@ -232,7 +233,10 @@ void AMIRABaseCharacter::SetCharacterState(ECharacterState NewState)
 		}
 		else
 		{
-			//MIRAAIController->StopAI();
+			if (MIRAAIController) 
+			{
+				MIRAAIController->StopAI();
+			}
 		}
 
 		GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle,
@@ -273,8 +277,8 @@ void AMIRABaseCharacter::BeginPlay()
 	}
 	else
 	{
-		//MIRAAIController = Cast<AMIRAAIController>(GetController());
-		//MIRACHECK(nullptr != MIRAAIController);
+		MIRAAIController = Cast<AMIRAAIController>(GetController());
+		MIRACHECK(nullptr != MIRAAIController);
 	}
 	SetCharacterState(ECharacterState::LOADING);
 

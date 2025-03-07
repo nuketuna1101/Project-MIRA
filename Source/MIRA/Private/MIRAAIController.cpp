@@ -62,6 +62,7 @@ void AMIRAAIController::OnUnPossess()
 
 void AMIRAAIController::RunAI()
 {
+	MIRALOG(Warning, TEXT("[RUN AI]"));
 	auto BBComp = GetBlackboardComponent();
 	if (UseBlackboard(BBAsset, BBComp))
 	{
@@ -75,6 +76,7 @@ void AMIRAAIController::RunAI()
 
 void AMIRAAIController::StopAI()
 {
+	MIRALOG(Warning, TEXT("[Stop AI]"));
 	auto BTComp = Cast<UBehaviorTreeComponent>(BrainComponent);
 	if (nullptr != BTComp)
 	{

@@ -166,6 +166,7 @@ void AMIRAMarksmanTrooper::SetCharacterState(ECharacterState NewState)
 	}
 	case ECharacterState::DEAD:
 	{
+		if (MMTrooperAnim)	MMTrooperAnim->SetDeadAnim();
 		MIRALOG(Warning, TEXT("DEAD : HPBar->SetHiddenInGame(true)"));
 		HPBar->SetHiddenInGame(true);
 		break;

@@ -43,7 +43,7 @@ public:
 	FOnResetComboCheckDelegate OnResetComboCheck;
 	FOnThrowRangedDelegate OnThrowRangedCheck;
 
-	void SetDeadAnim() { IsDead = true; }
+	void SetDeadAnim() { IsDead = true;	}
 
 private:
 
