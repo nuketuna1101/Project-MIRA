@@ -6,6 +6,8 @@
 #include "MIRABaseCharacter.h"
 #include "MIRAPlayerCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerActionDelegate, uint8, ActionIndex);
+
 /**
  * 
  */
@@ -62,7 +64,14 @@ public:
 
 
 
+#pragma region Action Delegate
+	UPROPERTY(BlueprintAssignable, Category = "Event")
+	FOnPlayerActionDelegate OnPlayerAction;
+#pragma endregion
+
+
 #pragma region [TO DO] Actions
+	virtual void Jump() override;
 	virtual void Attack() override;
 	void StartBlock();
 	void StopBlock();

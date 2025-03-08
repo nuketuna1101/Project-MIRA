@@ -1,6 +1,6 @@
 # TO DO
 
-- Boss Ivan 에 대한 AI 구현
+- csv 데이터 기반해서 서로 다른  trooper의 스탯과 메쉬 입히기 설정
 
 - Boss 시네마틱
 

@@ -127,7 +127,8 @@ void AMIRAPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	// bindings for action mapping
-	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
+	//PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &AMIRAPlayerCharacter::Jump);
 
 	PlayerInputComponent->BindAction(TEXT("Aim"), EInputEvent::IE_Pressed, this, &AMIRAPlayerCharacter::StartAim);
 	PlayerInputComponent->BindAction(TEXT("Aim"), EInputEvent::IE_Released, this, &AMIRAPlayerCharacter::StopAim);
@@ -142,6 +143,12 @@ void AMIRAPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis(TEXT("LeftRight"), this, &AMIRAPlayerCharacter::LeftRight);
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AMIRAPlayerCharacter::Turn);
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AMIRAPlayerCharacter::LookUp);
+}
+
+void AMIRAPlayerCharacter::Jump()
+{
+	ACharacter::Jump();
+	OnPlayerAction.Broadcast(0);
 }
 
 void AMIRAPlayerCharacter::Attack()
@@ -284,6 +291,7 @@ void AMIRAPlayerCharacter::AttackRange()
 
 void AMIRAPlayerCharacter::PerformAttackCombo()
 {
+	OnPlayerAction.Broadcast(1);
 	OnAttackEndBP.Broadcast();
 	bCannotMove = true;
 	CurrentComboCount = (CurrentComboCount + 1) % 5;
@@ -340,6 +348,8 @@ void AMIRAPlayerCharacter::AttackCheck()
 
 void AMIRAPlayerCharacter::ThrowRanged()
 {
+	OnPlayerAction.Broadcast(1);
+
 	MIRALOG(Warning, TEXT("ThrowRanged"));
 	bCannotMove = false;
 
