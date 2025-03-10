@@ -6,6 +6,8 @@
 #include "MIRABaseCharacter.h"
 #include "MIRABossIvan.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnBossAliveOrDeath, bool);
+
 /**
  * 
  */
@@ -19,6 +21,13 @@ public:
 	AMIRABossIvan();
 	
 	virtual void PostInitializeComponents() override;
+
+#pragma region CharacterState
+
+	FOnBossAliveOrDeath OnBossAliveOrDeath;
+
+	void SetCharacterState(ECharacterState NewState) override;
+#pragma endregion
 
 #pragma region Skill Pattern
 

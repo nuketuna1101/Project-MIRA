@@ -7,8 +7,10 @@
 #include "MIRAProjectile.h"
 #include "MIRACharacterSetting.h"
 #include "MIRAEnemyStatComponent.h"
+#include "MIRABossHUDWidget.h"
 #include "IvanAnimInstance.h"
 #include "BoomGround.h"
+#include "Components/WidgetComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Math/UnrealMathUtility.h"
 
@@ -88,6 +90,8 @@ AMIRABossIvan::AMIRABossIvan()
 	}
 #pragma endregion
 
+#pragma region SFX assets
+
 	static ConstructorHelpers::FObjectFinder<USoundBase>
 		SFX_IVANFIRE(TEXT("/Game/MIRA/Audio/SQ_SFX_IvanFire.SQ_SFX_IvanFire"));
 	if (SFX_IVANFIRE.Succeeded())
@@ -124,13 +128,16 @@ AMIRABossIvan::AMIRABossIvan()
 	{
 		SFX_EndVanish = SFX_ENDVANISH.Object;
 	}
-
+#pragma endregion
 
 	// collision setting
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
 
 	// enemy index
 	EnemyIndex = 3;
+
+	//
+	OnBossAliveOrDeath.Broadcast(true);
 }
 
 void AMIRABossIvan::PostInitializeComponents()
@@ -140,6 +147,33 @@ void AMIRABossIvan::PostInitializeComponents()
 	IvanAnim = Cast<UIvanAnimInstance>(GetMesh()->GetAnimInstance());
 	MIRACHECK(nullptr != IvanAnim);
 	if (!IvanAnim) return;
+}
+
+void AMIRABossIvan::SetCharacterState(ECharacterState NewState)
+{
+	Super::SetCharacterState(NewState);
+
+	switch (CurrentState)
+	{
+	case ECharacterState::LOADING:
+	{
+		MIRALOG(Warning, TEXT("LOADING : HPBar->SetHiddenInGame(true)"));
+		break;
+	}
+	case ECharacterState::READY:
+	{
+		MIRALOG(Warning, TEXT("READY : HPBar->SetHiddenInGame(false)"));
+		break;
+	}
+	case ECharacterState::DEAD:
+	{
+		if (IvanAnim)	IvanAnim->SetDeadAnim();
+		OnBossAliveOrDeath.Broadcast(false);
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void AMIRABossIvan::FireHomings()

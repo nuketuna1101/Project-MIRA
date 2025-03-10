@@ -44,6 +44,8 @@ protected:
 public:
     void PlayMontage(EBossState NewState);
 
+    void SetDeadAnim() { IsDead = true; }
+
 #pragma region delegates
 
     UPROPERTY(BlueprintAssignable, Category = "Event")

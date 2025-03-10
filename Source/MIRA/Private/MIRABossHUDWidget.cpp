@@ -2,16 +2,17 @@
 
 
 #include "MIRABossHUDWidget.h"
+#include "MIRABossIvan.h"
+#include "MIRAEnemyStatComponent.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 
-void UMIRABossHUDWidget::BindBossStat(UMIRAEnemyStatComponent* CharacterStat)
+void UMIRABossHUDWidget::BindBossStat(UMIRAEnemyStatComponent* BossStat)
 {
+	MIRACHECK(nullptr != BossStat);
+	CurrentBossStat = BossStat;
+	BossStat->OnEnemyHPChanged.AddUObject(this, &UMIRABossHUDWidget::UpdateBossStat);
 }
-
-//void UMIRABossHUDWidget::BindBossState(AMIRAPlayerState* PlayerState)
-//{
-//}
 
 void UMIRABossHUDWidget::NativeConstruct()
 {
@@ -25,4 +26,10 @@ void UMIRABossHUDWidget::NativeConstruct()
 
 	BossAlias = Cast<UTextBlock>(GetWidgetFromName(TEXT("txtBossAlias")));
 	MIRACHECK(nullptr != BossAlias);
+}
+
+void UMIRABossHUDWidget::UpdateBossStat()
+{
+	MIRACHECK(CurrentBossStat.IsValid());
+	HPBar->SetPercent(CurrentBossStat->GetHPRatio());
 }

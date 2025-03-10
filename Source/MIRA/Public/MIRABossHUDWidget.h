@@ -15,13 +15,16 @@ class MIRA_API UMIRABossHUDWidget : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-	void BindBossStat(class UMIRAEnemyStatComponent* CharacterStat);
+	void BindBossStat(class UMIRAEnemyStatComponent* BossStat);
 	//void BindBossState(class AMIRAPlayerState* PlayerState);
 
 protected:
 	virtual void NativeConstruct() override;
 
+	void UpdateBossStat();
+
 private:
+	TWeakObjectPtr<class UMIRAEnemyStatComponent> CurrentBossStat;
 
 	UPROPERTY()
 	class UProgressBar* HPBar;
