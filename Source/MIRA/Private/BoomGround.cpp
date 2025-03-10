@@ -10,7 +10,7 @@ ABoomGround::ABoomGround()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
+	
 	// component setting
 	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
@@ -26,7 +26,7 @@ ABoomGround::ABoomGround()
 	// timer setting
 	ElapsedTime = 0.0f;
 	UpdateTime = 0.01f;
-	BoomTime = 5.0f;
+	BoomTime = 3.0f;
 
 	//
 	bIsBoomed = false;
@@ -87,5 +87,21 @@ void ABoomGround::BoomExplode()
 		ParticleComp->Activate(true);
 	}
 	MeshComp->SetVisibility(false);
-	UGameplayStatics::ApplyRadialDamage(GetWorld(), DamageAmount, GetActorLocation(), DamageRadius, UDamageType::StaticClass(), TArray<AActor*>(), this, GetInstigatorController(), true);
+
+	AActor* OwnerActor = GetOwner();
+	TArray<AActor*> IgnoreActors;
+	if (OwnerActor) IgnoreActors.Add(OwnerActor);
+
+
+
+	UGameplayStatics::ApplyRadialDamage(
+		GetWorld(), 
+		DamageAmount, 
+		GetActorLocation(), 
+		DamageRadius, 
+		UDamageType::StaticClass(), 
+		IgnoreActors,
+		OwnerActor,
+		GetInstigatorController(), 
+		true);
 }

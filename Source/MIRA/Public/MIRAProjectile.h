@@ -60,7 +60,6 @@ public:
     
 #pragma endregion
 
-
 #pragma region SubComponents
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
     UStaticMeshComponent* MeshComp;

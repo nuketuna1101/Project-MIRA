@@ -192,6 +192,7 @@ void AMIRABossIvan::LaunchBoomGrounds()
 		{
 			FVector SpawnLocation = HitResult.ImpactPoint;
 			ABoomGround* Bomb = GetWorld()->SpawnActor<ABoomGround>(BGClass, SpawnLocation, FRotator::ZeroRotator);
+			Bomb->Owner = this;
 		}
 		else
 		{
