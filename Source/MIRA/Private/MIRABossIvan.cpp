@@ -140,6 +140,8 @@ void AMIRABossIvan::PostInitializeComponents()
 
 void AMIRABossIvan::FireHomings()
 {
+	if (!Target) return;
+
 	// bullet
 	auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(BulletClass));
 	Bullet->Owner = this;
@@ -206,6 +208,8 @@ void AMIRABossIvan::CastDeathStare()
 
 void AMIRABossIvan::DeathStare()
 {
+	if (!Target) return;
+
 	// FX: EFX and SFX
 	FVector DeathStareLocation = GetMesh()->GetSocketLocation(TEXT("Muzzle_04"));
 
@@ -231,6 +235,8 @@ void AMIRABossIvan::StartVanish()
 
 void AMIRABossIvan::EndVanish()
 {
+	if (!Target) return;
+
 	// FX: EFX and SFX
 	FVector TargetLocation = Target->GetActorLocation();
 	FVector RandomOffset = FVector(FMath::RandRange(-200.0f, 200.0f), FMath::RandRange(-200.0f, 200.0f), 0.0f);
