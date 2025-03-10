@@ -200,25 +200,22 @@ void AMIRAMarksmanTrooper::FireProjectile()
 {
 	// bullet
 	auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(BulletClass));
-	// set owner
-	Bullet->Owner = this;
+	auto BulletProjectile = Cast<AMIRAProjectile>(Bullet);
+	if (nullptr == BulletProjectile) return;
 
 	auto TargetPlayer = GetWorld()->GetFirstPlayerController()->GetPawn();
 	if (nullptr == TargetPlayer)	return;
-
 	FVector BulletSpawnLocation = GetMesh()->GetSocketLocation(TEXT("Muzzle_01"));
 	FVector TargetLocation = TargetPlayer->GetActorLocation();
 	TargetLocation.Z = BulletSpawnLocation.Z;
 	FVector BulletDir = (TargetLocation - BulletSpawnLocation).GetSafeNormal();
 
-	Bullet->SetActorLocation(BulletSpawnLocation);
-
-	UProjectileMovementComponent* ProjectileMovement = Bullet->FindComponentByClass<UProjectileMovementComponent>();
-	if (ProjectileMovement)
-	{
-		FVector BulletVel = BulletDir * 800.0f;
-		ProjectileMovement->SetVelocityInLocalSpace(BulletVel);
-	}
+	BulletProjectile->SetProjectileProperties(
+		this,
+		EnemyStat->GetPower(),
+		BulletSpawnLocation,
+		BulletDir
+	);
 
 	// FX: EFX and SFX
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), EFX_MuzzleFire, BulletSpawnLocation, BulletDir.Rotation());

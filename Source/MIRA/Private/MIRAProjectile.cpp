@@ -6,6 +6,7 @@
 #include "Components/ArrowComponent.h"
 #include "Engine/DamageEvents.h"
 #include "CollisionQueryParams.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AMIRAProjectile::AMIRAProjectile()
@@ -133,3 +134,10 @@ void AMIRAProjectile::Tick(float DeltaTime)
 	}
 }
 
+void AMIRAProjectile::SetProjectileProperties(AActor* OwnerActor, float PDamage, FVector SpawnLocation, FVector DirectionVector)
+{
+	Owner = OwnerActor;
+	ProjectileDamage = PDamage;
+	SetActorLocation(SpawnLocation);
+	ProjectileMovement->SetVelocityInLocalSpace(DirectionVector.GetSafeNormal() * ProjectileMovement->InitialSpeed);
+}

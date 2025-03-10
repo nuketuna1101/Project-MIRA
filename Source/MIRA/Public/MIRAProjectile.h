@@ -26,6 +26,8 @@ protected:
 
     float CurLifeCount;
 
+    float ProjectileDamage = 0.0f;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
     bool bIsMIRAHoming;
 
@@ -35,6 +37,9 @@ protected:
 public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
+
+    void SetProjectileProperties
+    (AActor* OwnerActor, float PDamage, FVector SpawnLocation, FVector DirectionVector);
 
     UPROPERTY(EditAnywhere, Category = "Projectile")
     float LifeSpan = 3.0f;

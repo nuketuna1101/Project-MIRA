@@ -6,6 +6,7 @@
 #include "MIRAAIController.h"
 #include "MIRAProjectile.h"
 #include "MIRACharacterSetting.h"
+#include "MIRAEnemyStatComponent.h"
 #include "IvanAnimInstance.h"
 #include "BoomGround.h"
 #include "GameFramework/ProjectileMovementComponent.h"
@@ -144,23 +145,23 @@ void AMIRABossIvan::PostInitializeComponents()
 void AMIRABossIvan::FireHomings()
 {
 	if (!Target) return;
-
-	// bullet
+	
 	auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(BulletClass));
-	Bullet->Owner = this;
+	auto BulletProjectile = Cast<AMIRAProjectile>(Bullet);
+	if (nullptr == BulletProjectile) return;
 
 	FVector BulletSpawnLocation = GetMesh()->GetSocketLocation(TEXT("Muzzle_02"));
 	FVector TargetLocation = Target->GetActorLocation();
 	TargetLocation.Z = BulletSpawnLocation.Z;
 	FVector BulletDir = (TargetLocation - BulletSpawnLocation).GetSafeNormal();
 
-	Bullet->SetActorLocation(BulletSpawnLocation);
-	UProjectileMovementComponent* ProjectileMovement = Bullet->FindComponentByClass<UProjectileMovementComponent>();
-	if (ProjectileMovement)
-	{
-		FVector BulletVel = BulletDir * 800.0f;
-		ProjectileMovement->SetVelocityInLocalSpace(BulletVel);
-	}
+	BulletProjectile->SetProjectileProperties(
+		this,
+		EnemyStat->GetPower(),
+		BulletSpawnLocation,
+		BulletDir
+	);
+
 	// FX: EFX and SFX
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), EFX_MuzzleFire, BulletSpawnLocation, BulletDir.Rotation());
 	UGameplayStatics::PlaySoundAtLocation(this, SFX_IvanFire, BulletSpawnLocation);	

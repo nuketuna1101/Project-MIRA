@@ -5,6 +5,7 @@
 #include "MIRABlade.h"
 #include "MIRAAnimInstance.h"
 #include "MIRACharacterSetting.h"
+#include "MIRAProjectile.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
@@ -355,24 +356,17 @@ void AMIRAPlayerCharacter::ThrowRanged()
 
 	// bullet
 	auto Bullet = Cast<AActor>(GetWorld()->SpawnActor(BulletClass));
-
-	// set owner
-	Bullet->Owner = this;
-
-	auto TargetPlayer = GetWorld()->GetFirstPlayerController()->GetPawn();
-	if (nullptr == TargetPlayer)	return;
+	auto BulletProjectile = Cast<AMIRAProjectile>(Bullet);
+	if (nullptr == BulletProjectile) return;
 
 	FVector BulletSpawnLocation = GetActorLocation() + GetActorForwardVector() * 50.0f;
-	BulletSpawnLocation.Z += 50.0f;
-	FVector BulletDir = GetActorForwardVector();
 
-	Bullet->SetActorLocation(BulletSpawnLocation);
-	UProjectileMovementComponent* ProjectileMovement = Bullet->FindComponentByClass<UProjectileMovementComponent>();
-	if (ProjectileMovement)
-	{
-		FVector BulletVel = BulletDir * 2000.0f;
-		ProjectileMovement->SetVelocityInLocalSpace(BulletVel);
-	}
+	BulletProjectile->SetProjectileProperties(
+		this,
+		CharacterStat->GetPower(),
+		BulletSpawnLocation,
+		GetActorForwardVector()
+	);
 }
 
 void AMIRAPlayerCharacter::UpDown(float NewAxisValue)
