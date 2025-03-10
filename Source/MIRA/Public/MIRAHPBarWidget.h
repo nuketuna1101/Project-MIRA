@@ -15,7 +15,7 @@ class MIRA_API UMIRAHPBarWidget : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-	void BindCharacterStat(class UMIRACharacterStatComponent* NewCharaterStat);
+	void BindCharacterStat(class UMIRAEnemyStatComponent* NewEnemyStat);
 
 protected:
 	virtual void NativeConstruct() override;
@@ -25,7 +25,7 @@ protected:
 
 private:
 #pragma region HPBar Basic components
-	TWeakObjectPtr<class UMIRACharacterStatComponent> CurrentCharacterStat;
+	TWeakObjectPtr<class UMIRAEnemyStatComponent> CurrentEnemyStat;
 
 	UPROPERTY()
 	class UProgressBar* PBHPBar;

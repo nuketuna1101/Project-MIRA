@@ -43,9 +43,9 @@ public:
 private:
 	struct FMIRACharacterData* CurrentStatData = nullptr;
 
-	UPROPERTY(EditInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditInstanceOnly, Category = "Character Stat", Meta = (AllowPrivateAccess = true))
 	int32 Level;
 
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Character Stat", Meta = (AllowPrivateAccess = true))
 	float CurrentHP;
 };

@@ -5,13 +5,13 @@
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 
-void UMIRABossHUDWidget::BindBossStat(UMIRACharacterStatComponent* CharacterStat)
+void UMIRABossHUDWidget::BindBossStat(UMIRAEnemyStatComponent* CharacterStat)
 {
 }
 
-void UMIRABossHUDWidget::BindBossState(AMIRAPlayerState* PlayerState)
-{
-}
+//void UMIRABossHUDWidget::BindBossState(AMIRAPlayerState* PlayerState)
+//{
+//}
 
 void UMIRABossHUDWidget::NativeConstruct()
 {

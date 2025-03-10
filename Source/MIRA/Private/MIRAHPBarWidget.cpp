@@ -2,24 +2,24 @@
 
 
 #include "MIRAHPBarWidget.h"
-#include "MIRACharacterStatComponent.h"
+#include "MIRAEnemyStatComponent.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 #include "Internationalization/Text.h"
 
-void UMIRAHPBarWidget::BindCharacterStat(UMIRACharacterStatComponent* NewCharaterStat)
+void UMIRAHPBarWidget::BindCharacterStat(UMIRAEnemyStatComponent* NewEnemyStat)
 {
-	MIRACHECK(nullptr != NewCharaterStat);
+	MIRACHECK(nullptr != NewEnemyStat);
 
 	// Bind HP
-	CurrentCharacterStat = NewCharaterStat;
-	CurrentDisplayedHP = CurrentCharacterStat->GetHPRatio();
+	CurrentEnemyStat = NewEnemyStat;
+	CurrentDisplayedHP = CurrentEnemyStat->GetHPRatio();
 	// bind events-delegates for HP update
-	NewCharaterStat->OnHPChanged.AddUObject(this, &UMIRAHPBarWidget::UpdateHPWidget);
-	NewCharaterStat->OnZeroHP.AddUObject(this, &UMIRAHPBarWidget::UpdateHPVisible);
+	NewEnemyStat->OnEnemyHPChanged.AddUObject(this, &UMIRAHPBarWidget::UpdateHPWidget);
+	NewEnemyStat->OnEnemyHPZero.AddUObject(this, &UMIRAHPBarWidget::UpdateHPVisible);
 
 	// set text for actor name
-	//TextActorName->SetText(FText::FromString(FString::FromInt(CurrentCharacterStat->GetLevel())));
+	TextActorName->SetText(FText::FromString(NewEnemyStat->GetEnemyName() + " " + NewEnemyStat->GetEnemyAlias()));
 }
 
 void UMIRAHPBarWidget::NativeConstruct()
@@ -34,7 +34,7 @@ void UMIRAHPBarWidget::NativeConstruct()
 void UMIRAHPBarWidget::UpdateHPWidget()
 {
 	// timer for HP update interpolation
-	if (CurrentCharacterStat.IsValid())
+	if (CurrentEnemyStat.IsValid())
 	{
 		GetWorld()->GetTimerManager().ClearTimer(HPUpdateTimerHandle);
 		GetWorld()->GetTimerManager().SetTimer(
@@ -54,10 +54,10 @@ void UMIRAHPBarWidget::UpdateHPVisible()
 
 void UMIRAHPBarWidget::InterpolatedHPUpdate()
 {
-	if (!CurrentCharacterStat.IsValid() || !PBHPBar) return;
+	if (!CurrentEnemyStat.IsValid() || !PBHPBar) return;
 
 	// HP amount
-	float TargetHP = CurrentCharacterStat->GetHPRatio();
+	float TargetHP = CurrentEnemyStat->GetHPRatio();
 	CurrentDisplayedHP = FMath::FInterpTo(CurrentDisplayedHP, TargetHP, UpdateInterval, InterpSpeed);
 	PBHPBar->SetPercent(CurrentDisplayedHP);
 	// HP display color

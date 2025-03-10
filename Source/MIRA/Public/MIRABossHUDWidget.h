@@ -15,8 +15,8 @@ class MIRA_API UMIRABossHUDWidget : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-	void BindBossStat(class UMIRACharacterStatComponent* CharacterStat);
-	void BindBossState(class AMIRAPlayerState* PlayerState);
+	void BindBossStat(class UMIRAEnemyStatComponent* CharacterStat);
+	//void BindBossState(class AMIRAPlayerState* PlayerState);
 
 protected:
 	virtual void NativeConstruct() override;

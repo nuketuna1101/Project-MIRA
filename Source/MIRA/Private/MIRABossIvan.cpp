@@ -127,6 +127,9 @@ AMIRABossIvan::AMIRABossIvan()
 
 	// collision setting
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
+
+	// enemy index
+	EnemyIndex = 3;
 }
 
 void AMIRABossIvan::PostInitializeComponents()

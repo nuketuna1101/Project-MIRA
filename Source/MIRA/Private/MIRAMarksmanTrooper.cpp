@@ -8,6 +8,7 @@
 #include "MIRAAIController.h"
 #include "MIRAHPBarWidget.h"
 #include "MIRAProjectile.h"
+#include "MIRAEnemyStatComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -82,6 +83,9 @@ AMIRAMarksmanTrooper::AMIRAMarksmanTrooper()
 
 	//
 	IsAttacking = false;
+
+	// enemy index
+	EnemyIndex = FMath::RandRange(0, 2);
 }
 
 void AMIRAMarksmanTrooper::PostInitializeComponents()
@@ -98,7 +102,6 @@ float AMIRAMarksmanTrooper::TakeDamage(float DamageAmount, FDamageEvent const& D
 {
 	float FinalDamage = Super::Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-
 	// if dmg valid, play hit anim
 	if (FinalDamage > 0.0f)
 	{
@@ -106,7 +109,7 @@ float AMIRAMarksmanTrooper::TakeDamage(float DamageAmount, FDamageEvent const& D
 	}
 
 	// TO DO: STAT 기반 판별해서
-	CharacterStat->SetDamage(FinalDamage);
+	EnemyStat->SetDamage(FinalDamage);
 	if (CurrentState == ECharacterState::DEAD)
 	{
 		OnDead.Broadcast(DamageCauser);
@@ -160,7 +163,7 @@ void AMIRAMarksmanTrooper::SetCharacterState(ECharacterState NewState)
 		UMIRAHPBarWidget* CharacterWidget = Cast<UMIRAHPBarWidget>(HPBar->GetUserWidgetObject());
 		if (nullptr != CharacterWidget)
 		{
-			CharacterWidget->BindCharacterStat(CharacterStat);
+			CharacterWidget->BindCharacterStat(EnemyStat);
 		}
 		break;
 	}

@@ -4,6 +4,7 @@
 #include "MIRABaseCharacter.h"
 #include "MIRAAnimInstance.h"
 #include "MIRAPlayerState.h"
+#include "MIRAEnemyStatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Engine/DamageEvents.h"
@@ -21,6 +22,7 @@ AMIRABaseCharacter::AMIRABaseCharacter()
 
 	// create defaultsubobject
 	CharacterStat = CreateDefaultSubobject<UMIRACharacterStatComponent>(TEXT("CharacterStat"));
+	EnemyStat = CreateDefaultSubobject<UMIRAEnemyStatComponent>(TEXT("EnemyStat"));
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 
 	// [TO DO] springarm and camera
@@ -145,7 +147,12 @@ float AMIRABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 	}
 
 	// TO DO: STAT 기반 판별해서
-	CharacterStat->SetDamage(FinalDamage);
+	if (bIsPlayer)
+		CharacterStat->SetDamage(FinalDamage);
+	else
+		EnemyStat->SetDamage(FinalDamage);
+
+
 	if (CurrentState == ECharacterState::DEAD)
 	{
 		OnDead.Broadcast(DamageCauser);
@@ -158,7 +165,6 @@ float AMIRABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 				//MIRAPlayerController->NPCKill(this);
 			}
 		}
-
 	}
 	return FinalDamage;
 }
@@ -184,10 +190,9 @@ void AMIRABaseCharacter::SetCharacterState(ECharacterState NewState)
 		}
 		else
 		{
+			EnemyStat->SetNewStat(EnemyIndex);
 			auto MIRAGameMode = Cast<AMIRAGameMode>(GetWorld()->GetAuthGameMode());
 			MIRACHECK(nullptr != MIRAGameMode);
-			// 임시 하드코딩
-			CharacterStat->SetNewLevel(1);
 		}
 
 		SetActorHiddenInGame(true);
@@ -203,16 +208,18 @@ void AMIRABaseCharacter::SetCharacterState(ECharacterState NewState)
 			{
 				SetCharacterState(ECharacterState::DEAD);
 			});
+		EnemyStat->OnEnemyHPZero.AddLambda([this]()->void
+			{
+				SetCharacterState(ECharacterState::DEAD);
+			});
 
 		if (bIsPlayer)
 		{
-			//SetCameraMode(ECameraMode::FreeTPS);
 			GetCharacterMovement()->MaxWalkSpeed = 600.0f;
 			EnableInput(MIRAPlayerController);
 		}
 		else
 		{
-			//SetControlMode(EControlMode::NPC);
 			GetCharacterMovement()->MaxWalkSpeed = 400.0f;
 			if (MIRAAIController)
 				MIRAAIController->RunAI();
@@ -223,7 +230,6 @@ void AMIRABaseCharacter::SetCharacterState(ECharacterState NewState)
 	{
 		SetActorEnableCollision(false);
 		GetMesh()->SetHiddenInGame(false);
-		//HPBarWidget->SetHiddenInGame(true);
 		if (MIRAAnim)	MIRAAnim->SetDeadAnim();
 		SetCanBeDamaged(false);
 
@@ -283,7 +289,6 @@ void AMIRABaseCharacter::BeginPlay()
 	SetCharacterState(ECharacterState::LOADING);
 
 	// [TO DO] Asset Loading
-
 }
 
 void AMIRABaseCharacter::PossessedBy(AController* NewController)

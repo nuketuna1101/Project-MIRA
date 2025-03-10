@@ -41,6 +41,9 @@ public:
 #pragma region CharacterStat
 	UPROPERTY(VisibleAnywhere, Category = "Character Data")
 	class UMIRACharacterStatComponent* CharacterStat;
+
+	UPROPERTY(VisibleAnywhere, Category = "Character Data")
+	class UMIRAEnemyStatComponent* EnemyStat;
 #pragma endregion
 
 #pragma region [TO DO] Actions
@@ -163,4 +166,5 @@ protected:
 	FTimerHandle DeadTimerHandle = {};
 #pragma endregion
 
+	int32 EnemyIndex = 0;
 };
