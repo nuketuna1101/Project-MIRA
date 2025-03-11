@@ -4,6 +4,7 @@
 #include "MIRAHUDWidget.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
+#include "Components/Image.h"
 #include "MIRACharacterStatComponent.h"
 #include "MIRAPlayerState.h"
 
@@ -11,7 +12,8 @@ void UMIRAHUDWidget::BindCharacterStat(UMIRACharacterStatComponent* CharacterSta
 {
 	MIRACHECK(nullptr != CharacterStat);
 	CurrentCharacterStat = CharacterStat;
-	CharacterStat->OnHPChanged.AddUObject(this, &UMIRAHUDWidget::UpdateCharacterStat);
+	CharacterStat->OnHPChanged.AddUObject(this, &UMIRAHUDWidget::UpdateCharacterHP);
+	CharacterStat->OnBulletChanged.AddUObject(this, &UMIRAHUDWidget::UpdatePlayerBullets);
 }
 
 void UMIRAHUDWidget::BindPlayerState(AMIRAPlayerState* PlayerState)
@@ -52,10 +54,27 @@ void UMIRAHUDWidget::NativeConstruct()
 		BossHUDWidget->SetVisibility(ESlateVisibility::Hidden);
 		//BossHUDWidget->SetVisibility(ESlateVisibility::Visible);
 	}
+
+	BulletImages.Empty();
+	for (int32 i = 0; i < 3; ++i)
+	{
+		FString WidgetName = FString::Printf(TEXT("imgBullet%d"), i);
+		auto BulletImage = Cast<UImage>(GetWidgetFromName(FName(*WidgetName)));
+		if (BulletImage)
+		{
+			BulletImages.Add(BulletImage);
+		}
+		else
+		{
+			MIRALOG(Warning, TEXT("BulletImage %s not found!"), *WidgetName);
+		}
+	}
+	MIRACHECK(BulletImages.Num() > 0);
 }
 
-void UMIRAHUDWidget::UpdateCharacterStat()
+void UMIRAHUDWidget::UpdateCharacterHP()
 {
+	// stat data updates
 	MIRACHECK(CurrentCharacterStat.IsValid());
 	HPBar->SetPercent(CurrentCharacterStat->GetHPRatio());
 }
@@ -67,4 +86,18 @@ void UMIRAHUDWidget::UpdatePlayerState()
 	PlayerName->SetText(FText::FromString(CurrentPlayerState->GetPlayerName()));
 	PlayerLevel->SetText(FText::FromString(
 		FString::FromInt(CurrentPlayerState->GetCharacterLevel())));
+}
+
+void UMIRAHUDWidget::UpdatePlayerBullets()
+{
+	MIRACHECK(CurrentCharacterStat.IsValid());
+	int32 AvailableBulletConstraint = CurrentCharacterStat->GetCurrentBullets() - 1;
+	for (int i = 0; i < CurrentCharacterStat->GetMaxBullets(); ++i)
+	{
+		BulletImages[i]->SetColorAndOpacity((
+			(i <= AvailableBulletConstraint) ?
+			AvailableBulletColor :
+			EmptyBulletColor
+			));
+	}
 }

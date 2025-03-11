@@ -111,7 +111,6 @@ protected:
 #pragma region [TO DO] Projectile
 	// attack logics
 	UClass* BulletClass;
-
 #pragma endregion
 
 

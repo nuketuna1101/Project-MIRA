@@ -286,8 +286,16 @@ void AMIRAPlayerCharacter::AttackRange()
 	// ranged attack logic
 	/* play attack range anim */
 	/* reduce projectile count */
-	if (MIRAAnim) MIRAAnim->PlayRangedAttackMontage();
-	bCannotMove = true;
+	if (CharacterStat->GetCurrentBullets() > 0)
+	{
+		if (MIRAAnim) MIRAAnim->PlayRangedAttackMontage();
+		bCannotMove = true;
+	}
+	else
+	{
+		// not enough bullets
+	}
+
 }
 
 void AMIRAPlayerCharacter::PerformAttackCombo()
@@ -350,6 +358,9 @@ void AMIRAPlayerCharacter::AttackCheck()
 void AMIRAPlayerCharacter::ThrowRanged()
 {
 	OnPlayerAction.Broadcast(1);
+
+	// consume one bullet
+	CharacterStat->ConsumeBullets();
 
 	MIRALOG(Warning, TEXT("ThrowRanged"));
 	bCannotMove = false;

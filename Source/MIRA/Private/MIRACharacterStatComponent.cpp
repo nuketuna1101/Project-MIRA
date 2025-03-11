@@ -13,6 +13,8 @@ UMIRACharacterStatComponent::UMIRACharacterStatComponent()
 	bWantsInitializeComponent = true;
 	
 	Level = 1;
+	MaxBullets = 3;
+	CurrentBullets = MaxBullets;
 }
 
 // Called when the game starts
@@ -40,6 +42,8 @@ void UMIRACharacterStatComponent::SetNewLevel(int32 NewLevel)
 		Level = NewLevel;
 		SetHP(CurrentStatData->MaxHP);
 		CurrentHP = CurrentStatData->MaxHP;
+		MaxBullets = 3;
+		CurrentBullets = MaxBullets;
 	}
 	else
 	{
@@ -60,6 +64,64 @@ void UMIRACharacterStatComponent::SetHP(float NewHP)
 	{
 		CurrentHP = 0.0f;
 		OnZeroHP.Broadcast();
+	}
+}
+
+void UMIRACharacterStatComponent::SetBullets(float NewAmount)
+{
+	CurrentBullets = NewAmount;
+	OnBulletChanged.Broadcast();
+	if (CurrentBullets <= 0)
+	{
+		OnBulletEmpty.Broadcast();
+	}
+}
+
+void UMIRACharacterStatComponent::ConsumeBullets()
+{
+	CurrentBullets--;
+	OnBulletChanged.Broadcast();
+	if (CurrentBullets <= 0)
+	{
+		OnBulletEmpty.Broadcast();
+	}
+
+	if (!IsValid(GetWorld()))
+	{
+		MIRALOG(Error, TEXT("뭐지씨발"));
+	}
+
+
+	// bullet auto reload
+	if (GetWorld()->GetTimerManager().IsTimerActive(BulletReloadTimer))
+	{
+		float RemainingTime = GetWorld()->GetTimerManager().GetTimerRemaining(BulletReloadTimer);
+		GetWorld()->GetTimerManager().SetTimer(BulletReloadTimer, this, &UMIRACharacterStatComponent::AutoReloadSingleBullet, RemainingTime, false);
+	}
+	else
+	{
+		GetWorld()->GetTimerManager().SetTimer(BulletReloadTimer, this, &UMIRACharacterStatComponent::AutoReloadSingleBullet, BulletReloadDuration, false);
+	}
+}
+
+void UMIRACharacterStatComponent::SetMaxBullets(float NewAmount)
+{
+	MaxBullets = NewAmount;
+}
+
+void UMIRACharacterStatComponent::AutoReloadSingleBullet()
+{
+	if (CurrentBullets < MaxBullets)
+	{
+		CurrentBullets++;
+		OnBulletChanged.Broadcast();
+	}
+	// 타이머 핸들 초기화 (선택 사항)
+	//GetWorld()->GetTimerManager().ClearTimer(BulletReloadTimer);
+	// 추가 소모가 있을 경우 다시 타이머 설정
+	if (CurrentBullets < MaxBullets)
+	{
+		GetWorld()->GetTimerManager().SetTimer(BulletReloadTimer, this, &UMIRACharacterStatComponent::AutoReloadSingleBullet, BulletReloadDuration, false);
 	}
 }
 

@@ -9,6 +9,9 @@
 DECLARE_MULTICAST_DELEGATE(FOnZeroHPDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
 
+DECLARE_MULTICAST_DELEGATE(FOnBulletChanged);
+DECLARE_MULTICAST_DELEGATE(FOnBulletEmpty);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MIRA_API UMIRACharacterStatComponent : public UActorComponent
 {
@@ -28,16 +31,25 @@ public:
 	void SetNewLevel(int32 NewLevel);
 	void SetDamage(float NewDamage);
 	void SetHP(float NewHP);
+	void SetBullets(float NewAmount);
+	void ConsumeBullets();
+	void SetMaxBullets(float NewAmount);
+	void AutoReloadSingleBullet();
 
 	// getter
 	float GetPower();
 	float GetHPRatio();
-	int GetLevel() { return Level; }
 	float GetHP() { return CurrentHP; }
+	int32 GetLevel() { return Level; }
+	int32 GetCurrentBullets() { return CurrentBullets; }
+	int32 GetMaxBullets() { return MaxBullets; }
 
 #pragma region Delegates
 	FOnZeroHPDelegate OnZeroHP;
 	FOnHPChangedDelegate OnHPChanged;
+
+	FOnBulletChanged OnBulletChanged;
+	FOnBulletEmpty OnBulletEmpty;
 #pragma endregion
 
 private:
@@ -48,4 +60,18 @@ private:
 
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Character Stat", Meta = (AllowPrivateAccess = true))
 	float CurrentHP;
+
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Character Stat", Meta = (AllowPrivateAccess = true))
+	int32 CurrentBullets;
+
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Character Stat", Meta = (AllowPrivateAccess = true))
+	int32 MaxBullets;
+
+
+#pragma region Bullet reloading
+
+	FTimerHandle BulletReloadTimer;
+	float BulletReloadDuration = 10.0f;
+
+#pragma endregion
 };

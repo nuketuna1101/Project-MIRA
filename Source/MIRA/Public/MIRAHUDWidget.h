@@ -23,12 +23,16 @@ public:
 
 protected:
 	virtual void NativeConstruct()override;
-	void UpdateCharacterStat();
+	void UpdateCharacterHP();
 	void UpdatePlayerState();
+	void UpdatePlayerBullets();
 
 private:
 	TWeakObjectPtr<class UMIRACharacterStatComponent> CurrentCharacterStat;
 	TWeakObjectPtr<class AMIRAPlayerState> CurrentPlayerState;
+
+	const FLinearColor AvailableBulletColor = FLinearColor(1.0f, 0.15f, 0.3f, 1.0f);
+	const FLinearColor EmptyBulletColor = FLinearColor(0.15f, 0.0f, 0.0f, 1.0f);
 
 	UPROPERTY()
 	class UProgressBar* HPBar;
@@ -44,4 +48,7 @@ private:
 
 	UPROPERTY()
 	UMIRABossHUDWidget* BossHUDWidget;
+
+	UPROPERTY()
+	TArray<class UImage*> BulletImages;
 };
