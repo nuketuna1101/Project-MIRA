@@ -37,7 +37,7 @@ protected:
 #pragma region Damage Frameworks varaibles
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-	float DamageAmount = 50.0f;
+	float DamageAmount = 60.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
 	float DamageRadius = 500.0f;

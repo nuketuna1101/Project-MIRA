@@ -89,6 +89,7 @@ void UMIRACharacterStatComponent::ConsumeBullets()
 	if (!IsValid(GetWorld()))
 	{
 		MIRALOG(Error, TEXT("뭐지씨발"));
+		return;
 	}
 
 

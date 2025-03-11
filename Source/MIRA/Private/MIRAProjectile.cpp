@@ -106,7 +106,7 @@ void AMIRAProjectile::Tick(float DeltaTime)
 				{
 					// player take damage
 					FDamageEvent DamageEvent;
-					HitActor->TakeDamage(20.0f, DamageEvent, nullptr, this);
+					HitActor->TakeDamage(ProjectileDamage, DamageEvent, nullptr, this);
 
 					// fx for impact location
 					POnHitTargetBP.Broadcast(ImpactLocation);

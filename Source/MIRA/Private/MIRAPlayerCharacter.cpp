@@ -342,7 +342,7 @@ void AMIRAPlayerCharacter::AttackCheck()
 			MIRALOG(Warning, TEXT("[AttackCheck]"));
 
 			FDamageEvent DamageEvent;
-			Enemy->TakeDamage(80.0f, DamageEvent, nullptr, this);
+			Enemy->TakeDamage(CharacterStat->GetPower(), DamageEvent, nullptr, this);
 
 			// get expected impact point 
 			FVector EnemyLocation = Enemy->GetActorLocation();
@@ -374,7 +374,7 @@ void AMIRAPlayerCharacter::ThrowRanged()
 
 	BulletProjectile->SetProjectileProperties(
 		this,
-		CharacterStat->GetPower(),
+		CharacterStat->GetPower() * 2.0f,
 		BulletSpawnLocation,
 		GetActorForwardVector()
 	);
