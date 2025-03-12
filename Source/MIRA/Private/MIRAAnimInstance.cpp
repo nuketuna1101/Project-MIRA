@@ -9,6 +9,7 @@ UMIRAAnimInstance::UMIRAAnimInstance()
 	CurrentPawnSpeed = 0.0f;
 	IsInAir = false;
 	IsDead = false;
+	bIsKnockbacked = false;
 
 	// set montage : attack
 	static ConstructorHelpers::FObjectFinder<UAnimMontage>
@@ -191,7 +192,6 @@ void UMIRAAnimInstance::PlayRangedAttackMontage()
 
 void UMIRAAnimInstance::JumpToAttackMontageSection(int32 NewSection)
 {
-	//
 	//Montage_JumpToSection(GetAttackMontageSectionName(NewSection), );
 }
 

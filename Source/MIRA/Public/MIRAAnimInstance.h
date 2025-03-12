@@ -44,6 +44,7 @@ public:
 	FOnThrowRangedDelegate OnThrowRangedCheck;
 
 	void SetDeadAnim() { IsDead = true;	}
+	void SetKnockbackAnim(bool bFlag) { bIsKnockbacked = bFlag; }
 
 private:
 
@@ -74,6 +75,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
 	bool IsDead;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = true))
+	bool bIsKnockbacked;
 
 #pragma region Anim Montage assets
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Anim Montage", meta = (AllowPrivateAccess = true))

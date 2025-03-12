@@ -44,6 +44,7 @@ public:
 	void StartVanish();
 
 	void EndVanish();
+
 #pragma endregion
 
 
@@ -75,4 +76,6 @@ protected:
 	USoundBase* SFX_EndVanish;
 
 #pragma endregion
+
+	void ApplyShockwave();
 };

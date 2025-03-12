@@ -13,6 +13,7 @@
 #include "Components/WidgetComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Math/UnrealMathUtility.h"
+#include "Engine/DamageEvents.h"
 
 AMIRABossIvan::AMIRABossIvan()
 {
@@ -287,6 +288,31 @@ void AMIRABossIvan::EndVanish()
 	UGameplayStatics::PlaySoundAtLocation(this, SFX_EndVanish, EndVanishLocation);
 
 	SetActorHiddenInGame(false);
+
+	ApplyShockwave();
+}
+
+void AMIRABossIvan::ApplyShockwave()
+{
+	if (Target)
+	{
+		FVector BossLocation = GetActorLocation();
+		FVector TargetLocation = Target->GetActorLocation();
+		FVector KnockbackDirection = (TargetLocation - BossLocation).GetSafeNormal();
+		float Distance = FVector::Dist(BossLocation, TargetLocation);
+
+		if (Distance <= 200.0f)
+		{
+			MIRALOG(Warning, TEXT("ApplyShockwave succeed"));
+
+			FDamageEvent DamageEvent;
+			Target->TakeDamage(EnemyStat->GetPower(), DamageEvent, nullptr, this);
+
+			Target->GetKnockback(KnockbackDirection);
+		}
+
+		DrawDebugSphere(GetWorld(), BossLocation, 200.0f, 32, FColor::Red, false, 5.0f);
+	}
 }
 
 void AMIRABossIvan::BeginPlay()

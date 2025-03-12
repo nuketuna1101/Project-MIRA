@@ -78,6 +78,8 @@ public:
 	void StartAim();
 	void StopAim();
 	void StartDash();
+
+	void GetKnockback(FVector KnockbackDirection);
 #pragma endregion
 
 

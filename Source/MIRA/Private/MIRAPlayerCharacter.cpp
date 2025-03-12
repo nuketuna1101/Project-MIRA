@@ -215,6 +215,24 @@ void AMIRAPlayerCharacter::StartDash()
 	OnStartDashBP.Broadcast(GetActorLocation());
 }
 
+void AMIRAPlayerCharacter::GetKnockback(FVector KnockbackDirection)
+{
+	if (MIRAAnim) MIRAAnim->SetKnockbackAnim(true);
+	GetCharacterMovement()->DisableMovement();
+	//GetMesh()->SetSimulatePhysics(true);
+	//GetMesh()->AddImpulse(KnockbackDirection * 400.0f, NAME_None, true);
+	SetActorLocation(GetActorLocation() + FVector(0.0f, 0.0f, 1.0f));
+	LaunchCharacter(KnockbackDirection * 2000.0f, false, false);
+
+	FTimerHandle KnockbackTimerHandle;
+	GetWorldTimerManager().SetTimer(KnockbackTimerHandle, FTimerDelegate::CreateLambda([this]()
+		{
+			GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+			//GetMesh()->SetSimulatePhysics(false);
+			if (MIRAAnim) MIRAAnim->SetKnockbackAnim(false);
+		}), 2.0f, false);
+}
+
 void AMIRAPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
