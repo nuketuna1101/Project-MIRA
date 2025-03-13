@@ -224,13 +224,12 @@ void AMIRAPlayerCharacter::GetKnockback(FVector KnockbackDirection)
 	SetActorLocation(GetActorLocation() + FVector(0.0f, 0.0f, 1.0f));
 	LaunchCharacter(KnockbackDirection * 2000.0f, false, false);
 
-	FTimerHandle KnockbackTimerHandle;
 	GetWorldTimerManager().SetTimer(KnockbackTimerHandle, FTimerDelegate::CreateLambda([this]()
 		{
 			GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 			//GetMesh()->SetSimulatePhysics(false);
 			if (MIRAAnim) MIRAAnim->SetKnockbackAnim(false);
-		}), 2.0f, false);
+		}), KnockbackCooltime, false);
 }
 
 void AMIRAPlayerCharacter::BeginPlay()
@@ -312,9 +311,17 @@ void AMIRAPlayerCharacter::AttackRange()
 	else
 	{
 		// not enough bullets
-		OnPlayerAction.Broadcast(3);
-	}
+		//OnPlayerAction.Broadcast(3);
 
+		if (!GetWorldTimerManager().IsTimerActive(SoundAlertTimer))
+		{
+			OnPlayerAction.Broadcast(3);
+			GetWorldTimerManager().SetTimer(SoundAlertTimer, FTimerDelegate::CreateLambda([this]() 
+				{
+					MIRALOG(Warning, TEXT("Sound Alert is running now"));
+				}), SoundAlertCooltime, false);
+		}
+	}
 }
 
 void AMIRAPlayerCharacter::PerformAttackCombo()
