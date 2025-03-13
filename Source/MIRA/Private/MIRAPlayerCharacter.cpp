@@ -224,7 +224,7 @@ void AMIRAPlayerCharacter::GetKnockback(FVector KnockbackDirection)
 	SetActorLocation(GetActorLocation() + FVector(0.0f, 0.0f, 1.0f));
 	LaunchCharacter(KnockbackDirection * 2000.0f, false, false);
 
-	GetWorldTimerManager().SetTimer(KnockbackTimerHandle, FTimerDelegate::CreateLambda([this]()
+	GetWorldTimerManager().SetTimer(KnockbackTimer, FTimerDelegate::CreateLambda([this]()
 		{
 			GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 			//GetMesh()->SetSimulatePhysics(false);
@@ -311,8 +311,6 @@ void AMIRAPlayerCharacter::AttackRange()
 	else
 	{
 		// not enough bullets
-		//OnPlayerAction.Broadcast(3);
-
 		if (!GetWorldTimerManager().IsTimerActive(SoundAlertTimer))
 		{
 			OnPlayerAction.Broadcast(3);
@@ -332,6 +330,48 @@ void AMIRAPlayerCharacter::PerformAttackCombo()
 	CurrentComboCount = (CurrentComboCount + 1) % 5;
 	MIRACHECK(nullptr != MIRAAnim);
 	if(MIRAAnim) MIRAAnim->PlayAttackComboMontage(CurrentComboCount);
+
+	//GetWorldTimerManager().SetTimer(ResetComboTimer, 
+	//	FTimerDelegate::CreateLambda([this]()
+	//		{
+	//			bCannotMove = false;
+	//			CurrentComboCount = 0;
+	//			bIsAttacking = false;
+	//			bSaveAttack = false;
+	//		}),
+	//	ResetComboDelay, false);
+
+	if (CurrentComboCount == 0) 
+	{
+		MIRALOG(Warning, TEXT("니미씨발"));
+		GetWorldTimerManager().SetTimer(ResetComboTimer,
+			FTimerDelegate::CreateLambda([this]()
+				{
+					bCannotMove = false;
+					CurrentComboCount = 0;
+				}),
+			1.5f, false);
+
+		GetWorldTimerManager().SetTimer(ResetComboTimer,
+			FTimerDelegate::CreateLambda([this]()
+				{
+					bSaveAttack = false;
+					bIsAttacking = false;
+				}),
+			3.0f, false);
+	}
+	else
+	{
+		GetWorldTimerManager().SetTimer(ResetComboTimer,
+			FTimerDelegate::CreateLambda([this]()
+				{
+					bCannotMove = false;
+					CurrentComboCount = 0;
+					bIsAttacking = false;
+					bSaveAttack = false;
+				}),
+			ResetComboDelay, false);
+	}
 }
 
 void AMIRAPlayerCharacter::SaveAttackCombo()
@@ -345,10 +385,10 @@ void AMIRAPlayerCharacter::SaveAttackCombo()
 
 void AMIRAPlayerCharacter::ResetAttackCombo()
 {
-	bCannotMove = false;
-	CurrentComboCount = 0;
-	bIsAttacking = false;
-	bSaveAttack = false;
+	//bCannotMove = false;
+	//CurrentComboCount = 0;
+	//bIsAttacking = false;
+	//bSaveAttack = false;
 }
 
 void AMIRAPlayerCharacter::AttackCheck()

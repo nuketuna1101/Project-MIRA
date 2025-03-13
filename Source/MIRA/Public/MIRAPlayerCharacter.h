@@ -133,10 +133,13 @@ private:
 
 #pragma region [PlayerOnly] Timer Handler Variables
 
-	FTimerHandle KnockbackTimerHandle;
-	float KnockbackCooltime = 1.5f;
+	FTimerHandle ResetComboTimer;
+	float ResetComboDelay = 1.0f;
+
+	FTimerHandle KnockbackTimer;
+	const float KnockbackCooltime = 1.5f;
 	FTimerHandle SoundAlertTimer;
-	float SoundAlertCooltime = 2.0f;
+	const float SoundAlertCooltime = 2.0f;
 
 #pragma endregion
 
