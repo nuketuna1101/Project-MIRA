@@ -312,6 +312,7 @@ void AMIRAPlayerCharacter::AttackRange()
 	else
 	{
 		// not enough bullets
+		OnPlayerAction.Broadcast(3);
 	}
 
 }

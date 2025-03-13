@@ -271,6 +271,9 @@ void AMIRABossIvan::StartVanish()
 	UGameplayStatics::PlaySoundAtLocation(this, SFX_StartVanish, StartVanishLocation);
 
 	SetActorHiddenInGame(true);
+
+	// set invincible
+	SetCanBeDamaged(false);
 }
 
 void AMIRABossIvan::EndVanish()
@@ -288,6 +291,8 @@ void AMIRABossIvan::EndVanish()
 	UGameplayStatics::PlaySoundAtLocation(this, SFX_EndVanish, EndVanishLocation);
 
 	SetActorHiddenInGame(false);
+
+	SetCanBeDamaged(true);
 
 	ApplyShockwave();
 }

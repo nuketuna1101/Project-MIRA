@@ -86,13 +86,6 @@ void UMIRACharacterStatComponent::ConsumeBullets()
 		OnBulletEmpty.Broadcast();
 	}
 
-	if (!IsValid(GetWorld()))
-	{
-		MIRALOG(Error, TEXT("뭐지씨발"));
-		return;
-	}
-
-
 	// bullet auto reload
 	if (GetWorld()->GetTimerManager().IsTimerActive(BulletReloadTimer))
 	{
