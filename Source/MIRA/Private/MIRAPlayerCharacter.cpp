@@ -4,10 +4,12 @@
 #include "MIRAPlayerCharacter.h"
 #include "MIRABlade.h"
 #include "MIRAAnimInstance.h"
+#include "MIRAPlayerController.h"
 #include "MIRACharacterSetting.h"
 #include "MIRAProjectile.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Components/PostProcessComponent.h"
 
 AMIRAPlayerCharacter::AMIRAPlayerCharacter()
 {
@@ -43,6 +45,17 @@ AMIRAPlayerCharacter::AMIRAPlayerCharacter()
 	static ConstructorHelpers::FObjectFinder<UBlueprint>
 		blueprint_finder(TEXT("Blueprint'/Game/MIRA/Characters/Blueprints/BP_MIRAPlayerProjectile.BP_MIRAPlayerProjectile'"));
 	BulletClass = (UClass*)blueprint_finder.Object->GeneratedClass;
+
+
+
+#pragma region PostProcessComponent for Hit Efx
+
+	PostProcessComponent = CreateDefaultSubobject<UPostProcessComponent>(TEXT("PostProcessComponent"));
+	PostProcessComponent->SetupAttachment(GetMesh());
+	PostProcessComponent->Settings.bOverride_VignetteIntensity = true;
+
+#pragma endregion
+
 }
 
 void AMIRAPlayerCharacter::Tick(float DeltaTime)
@@ -76,9 +89,7 @@ void AMIRAPlayerCharacter::PostInitializeComponents()
 
 	if (AnimInstance)
 	{
-		// 애니메이션 인스턴스의 클래스 이름 출력
 		MIRALOG(Warning, TEXT("Animation Instance Class: %s"), *AnimInstance->GetClass()->GetName());
-		// 애니메이션 인스턴스가 UMIRAAnimInstance 타입인지 확인
 		if (AnimInstance->IsA<UMIRAAnimInstance>())
 		{
 			MIRALOG(Warning, TEXT("Animation Instance is UMIRAAnimInstance"));
@@ -152,6 +163,13 @@ float AMIRAPlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& D
 
 	// player hit sfx
 	OnPlayerAction.Broadcast(2);
+
+	// post processing component efx
+	PostProcessComponent->Settings.VignetteIntensity = 0.75f;
+	GetWorldTimerManager().SetTimer(DamageEffectTimerHandle, FTimerDelegate::CreateLambda([this]()
+		{
+			PostProcessComponent->Settings.VignetteIntensity = 0.4f;
+		}), 0.1f, false);
 
 	return FinalDamage;
 }

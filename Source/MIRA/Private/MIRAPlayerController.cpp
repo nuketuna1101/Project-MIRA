@@ -30,6 +30,10 @@ AMIRAPlayerController::AMIRAPlayerController()
 	{
 		MIRALOG(Error, TEXT("Failed to find UI_GAMEPLAY class!"));
 	}
+
+
+
+
 }
 
 void AMIRAPlayerController::BeginPlay()
@@ -95,4 +99,3 @@ void AMIRAPlayerController::OnGamePause()
 	SetPause(true);
 	ChangeInputMode(false);
 }
-

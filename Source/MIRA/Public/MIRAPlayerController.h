@@ -29,7 +29,6 @@ public:
 
 	void ChangeInputMode(bool bGameMode = true);
 
-
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<class UMIRAHUDWidget> HUDWidgetClass;

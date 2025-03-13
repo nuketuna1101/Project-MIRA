@@ -117,6 +117,17 @@ protected:
 #pragma endregion
 
 
+#pragma region PostProcessComponent for Hit Efx
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PostProcessing")
+	class UPostProcessComponent* PostProcessComponent;
+
+	FTimerHandle DamageEffectTimerHandle;
+
+#pragma endregion
+
+
 private:
 
 #pragma region [PlayerOnly] Input Action by axis and action mappings
