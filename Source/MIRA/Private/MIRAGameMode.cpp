@@ -5,6 +5,7 @@
 #include "MIRAPawn.h"
 #include "MIRAPlayerController.h"
 #include "MIRAPlayerState.h"
+#include "MIRAGameState.h"
 #include "UObject/ConstructorHelpers.h"
 
 AMIRAGameMode::AMIRAGameMode()
@@ -13,6 +14,14 @@ AMIRAGameMode::AMIRAGameMode()
 	DefaultPawnClass = AMIRAPlayerCharacter::StaticClass();
 	PlayerControllerClass = AMIRAPlayerController::StaticClass();
 	PlayerStateClass = AMIRAPlayerState::StaticClass();
+	GameStateClass = AMIRAGameState::StaticClass();
+}
+
+void AMIRAGameMode::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	MIRAGameState = Cast<AMIRAGameState>(GameState);
 }
 
 void AMIRAGameMode::PostLogin(APlayerController* NewPlayer)

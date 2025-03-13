@@ -14,5 +14,11 @@ class AMIRAGameMode : public AGameModeBase
 public:
 	AMIRAGameMode();
 
+	virtual void PostInitializeComponents() override;
+
 	virtual void PostLogin(APlayerController* NewPlayer) override;
+
+private:
+	UPROPERTY()
+	class AMIRAGameState* MIRAGameState;
 };

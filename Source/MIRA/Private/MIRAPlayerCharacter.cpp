@@ -146,6 +146,16 @@ void AMIRAPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AMIRAPlayerCharacter::LookUp);
 }
 
+float AMIRAPlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	// player hit sfx
+	OnPlayerAction.Broadcast(2);
+
+	return FinalDamage;
+}
+
 void AMIRAPlayerCharacter::Jump()
 {
 	ACharacter::Jump();
@@ -331,47 +341,15 @@ void AMIRAPlayerCharacter::PerformAttackCombo()
 	MIRACHECK(nullptr != MIRAAnim);
 	if(MIRAAnim) MIRAAnim->PlayAttackComboMontage(CurrentComboCount);
 
-	//GetWorldTimerManager().SetTimer(ResetComboTimer, 
-	//	FTimerDelegate::CreateLambda([this]()
-	//		{
-	//			bCannotMove = false;
-	//			CurrentComboCount = 0;
-	//			bIsAttacking = false;
-	//			bSaveAttack = false;
-	//		}),
-	//	ResetComboDelay, false);
-
-	if (CurrentComboCount == 0) 
-	{
-		MIRALOG(Warning, TEXT("니미씨발"));
-		GetWorldTimerManager().SetTimer(ResetComboTimer,
-			FTimerDelegate::CreateLambda([this]()
-				{
-					bCannotMove = false;
-					CurrentComboCount = 0;
-				}),
-			1.5f, false);
-
-		GetWorldTimerManager().SetTimer(ResetComboTimer,
-			FTimerDelegate::CreateLambda([this]()
-				{
-					bSaveAttack = false;
-					bIsAttacking = false;
-				}),
-			3.0f, false);
-	}
-	else
-	{
-		GetWorldTimerManager().SetTimer(ResetComboTimer,
-			FTimerDelegate::CreateLambda([this]()
-				{
-					bCannotMove = false;
-					CurrentComboCount = 0;
-					bIsAttacking = false;
-					bSaveAttack = false;
-				}),
-			ResetComboDelay, false);
-	}
+	GetWorldTimerManager().SetTimer(ResetComboTimer, 
+		FTimerDelegate::CreateLambda([this]()
+			{
+				bCannotMove = false;
+				CurrentComboCount = 0;
+				bIsAttacking = false;
+				bSaveAttack = false;
+			}),
+		ResetComboDelay, false);
 }
 
 void AMIRAPlayerCharacter::SaveAttackCombo()

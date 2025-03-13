@@ -152,7 +152,7 @@ float AMIRABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 	else
 		EnemyStat->SetDamage(FinalDamage);
 
-
+	// dead 시 처리
 	if (CurrentState == ECharacterState::DEAD)
 	{
 		OnDead.Broadcast(DamageCauser);
