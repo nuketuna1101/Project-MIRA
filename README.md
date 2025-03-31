@@ -1,5 +1,10 @@
 # Project MIRA
 
+## CHECK THE BROCHURE ON THIS NOTION LINK ! (some demo video clips added)
+https://jyko1101.notion.site/Project-MIRA-1c77b7a8fa7780949c96c2122a174320?pvs=4
+
+
+
 ![](https://velog.velcdn.com/images/nuketuna/post/b15a9848-028d-4f13-b9c6-f198501a815d/image.png)
 
 ![](https://velog.velcdn.com/images/nuketuna/post/8d4914bb-53a2-4489-acc5-7045fab42b78/image.png)
